@@ -1,8 +1,32 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
+import 'dart:io' show Platform;
 
-void main() => runApp(new MyApp());
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
+
+
+Future<void> main() async {
+  final FirebaseApp app = await FirebaseApp.configure(
+    name: 'resident',
+    options: const FirebaseOptions(
+            googleAppID: '1:371558675525:android:f3f9323fc4060503',
+            apiKey: 'AIzaSyC9yvU5sn4h4W113fFtHbRdoPCFVAU_z9g',
+            databaseURL: 'https://resident-cadu.firebaseio.com',
+          ),
+  );
+  runApp(new MaterialApp(
+    title: 'Flutter Database Example',
+    home: new MyApp(app: app),
+  ));
+}
 
 class MyApp extends StatelessWidget {
+
+  MyApp({this.app});
+  final FirebaseApp app;
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -19,13 +43,14 @@ class MyApp extends StatelessWidget {
         // counter didn't reset back to zero; the application is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: new MyHomePage(title: 'Flutter Demo Home Page'),
+      home: new MyHomePage(title: 'Flutter Demo Home Page', app: app),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key key, this.title, this.app}) : super(key: key);
+  final FirebaseApp app;
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -53,6 +78,8 @@ class _MyHomePageState extends State<MyHomePage> {
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
       _counter++;
+      final FirebaseDatabase database = new FirebaseDatabase(app: widget.app);
+      database.reference().child("teste").set(_counter);
     });
   }
 
