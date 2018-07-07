@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.br.oconselho.resident">
+    package="br.com.oconselho.resident">
 
     <!-- The INTERNET permission is required for development. Specifically,
          flutter needs it to communicate with the running application

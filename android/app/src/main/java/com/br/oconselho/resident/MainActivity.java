@@ -1,4 +1,4 @@
-package com.br.oconselho.resident;
+package br.com.oconselho.resident;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
