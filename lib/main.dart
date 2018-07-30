@@ -8,6 +8,7 @@ import 'package:resident/grupos_page.dart';
 import 'package:resident/login_page.dart';
 import 'package:resident/paciente.dart';
 import 'package:resident/pacientes.dart';
+import 'package:resident/usuarios.dart';
 
 Future<void> main() async {
   final FirebaseApp app = await FirebaseApp.configure(
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Usuarios.logado();
     SystemChrome.setEnabledSystemUIOverlays([]);
     return new MaterialApp(
       title: 'Resident',

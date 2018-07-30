@@ -1,9 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:resident/bubble.dart';
 import 'package:resident/mensagem.dart';
 import 'package:resident/paciente_class.dart';
+import 'package:resident/usuarios.dart';
 
 class PacientePage extends StatefulWidget {
   static String tag = 'paciente-page';
@@ -56,14 +59,12 @@ class _PacientePageState extends State<PacientePage> {
             child: ListView.builder(
               itemBuilder: (context, int indice) {
                 Mensagem msg = _mensagens[indice];
-                return Card(
-                    child: ListTile(
-                  title: Text(msg.texto),
-                  subtitle: msg.hora != null
-                      ? Text(new DateFormat('dd/MM/yyyy  HH:mm:ss')
-                          .format(msg.hora))
-                      : Text(''),
-                ));
+                return Bubble(
+                  message: msg.texto,
+                  time: msg.hora != null ? msg.hora.toString() : '',
+                  isMe: msg.autor == Usuarios.logado(),
+                  delivered: true,
+                );
               },
               itemCount: _mensagens.length,
               reverse: true,
@@ -128,6 +129,7 @@ class _PacientePageState extends State<PacientePage> {
                   Mensagem mensagem = new Mensagem(
                     texto: _textController.text,
                     hora: DateTime.now(),
+                    autor: Usuarios.logado(),
                     chave: key,
                   );
                   db
@@ -135,6 +137,7 @@ class _PacientePageState extends State<PacientePage> {
                       .child('hora')
                       .set(mensagem.hora.millisecondsSinceEpoch);
                   db.child(key).child('texto').set(mensagem.texto);
+                  db.child(key).child('autor').set(mensagem.autor);
 
                   setState(() {
                     _mensagens.add(mensagem);
