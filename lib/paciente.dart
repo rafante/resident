@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:resident/mensagem.dart';
 import 'package:resident/paciente_class.dart';
 
@@ -22,17 +23,24 @@ class _PacientePageState extends State<PacientePage> {
 
   @override
   void initState() {
-    DatabaseReference db = FirebaseDatabase.instance.reference();
-    db
-        .child('pacientes')
-        .child(widget.pacienteKey)
-        .child('chat')
-        .onValue
-        .listen((Event evento) {
-          // Map mensagens = 
-        });
-
     super.initState();
+    DatabaseReference db = FirebaseDatabase.instance.reference();
+    db.child('chats').child(widget.pacienteKey).onValue.listen((Event evento) {
+      Map eventoMsgs = evento.snapshot.value;
+      List<Mensagem> mensagens = <Mensagem>[];
+      if (eventoMsgs != null) {
+        eventoMsgs.forEach((chave, valor) {
+          mensagens.add(new Mensagem(
+              chave: chave,
+              autor: valor['autor'],
+              hora: new DateTime.fromMillisecondsSinceEpoch(valor['hora']),
+              texto: valor['texto']));
+        });
+        setState(() {
+          _mensagens = mensagens;
+        });
+      }
+    });
   }
 
   @override
@@ -46,7 +54,17 @@ class _PacientePageState extends State<PacientePage> {
         children: <Widget>[
           Flexible(
             child: ListView.builder(
-              itemBuilder: (context, int indice) => _mensagens[indice],
+              itemBuilder: (context, int indice) {
+                Mensagem msg = _mensagens[indice];
+                return Card(
+                    child: ListTile(
+                  title: Text(msg.texto),
+                  subtitle: msg.hora != null
+                      ? Text(new DateFormat('dd/MM/yyyy  HH:mm:ss')
+                          .format(msg.hora))
+                      : Text(''),
+                ));
+              },
               itemCount: _mensagens.length,
               reverse: true,
               padding: EdgeInsets.all(10.0),
@@ -91,11 +109,7 @@ class _PacientePageState extends State<PacientePage> {
             new Flexible(
               child: TextField(
                   controller: _textController,
-                  onChanged: (String textoDigitado) {
-                    setState(() {
-                      _isWriting = textoDigitado.length > 0;
-                    });
-                  },
+                  onChanged: (String textoDigitado) {},
                   decoration:
                       InputDecoration.collapsed(hintText: 'Digite aqui')),
             ),
@@ -107,12 +121,25 @@ class _PacientePageState extends State<PacientePage> {
                   color: Colors.white,
                 ),
                 onPressed: () {
+                  DatabaseReference db = FirebaseDatabase.instance.reference();
+                  db = db.child('chats').child(widget.pacienteKey);
+                  String key = db.push().key;
+
                   Mensagem mensagem = new Mensagem(
-                      texto: _textController.text, hora: DateTime.now());
-                  _textController.text = '';
+                    texto: _textController.text,
+                    hora: DateTime.now(),
+                    chave: key,
+                  );
+                  db
+                      .child(key)
+                      .child('hora')
+                      .set(mensagem.hora.millisecondsSinceEpoch);
+                  db.child(key).child('texto').set(mensagem.texto);
+
                   setState(() {
                     _mensagens.add(mensagem);
                     _mensagens = _mensagens.reversed.toList();
+                    _textController.text = '';
                   });
                 },
               ),
