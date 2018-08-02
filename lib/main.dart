@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
@@ -29,8 +30,39 @@ class MyApp extends StatelessWidget {
   MyApp({this.app});
   final FirebaseApp app;
 
+  MobileAdTargetingInfo targetingInfo = new MobileAdTargetingInfo(
+    keywords: <String>['flutterio', 'beautiful apps'],
+    contentUrl: 'https://flutter.io',
+    birthday: new DateTime.now(),
+    childDirected: false,
+    designedForFamilies: false,
+    gender:
+        MobileAdGender.male, // or MobileAdGender.female, MobileAdGender.unknown
+    testDevices: <String>[], // Android emulators are considered test devices
+  );
+
+  BannerAd baner() {
+    return new BannerAd(
+      // Replace the testAdUnitId with an ad unit id from the AdMob dash.
+      // https://developers.google.com/admob/android/test-ads
+      // https://developers.google.com/admob/ios/test-ads
+      adUnitId: 'ca-app-pub-1343647000894788/4156042098',
+      size: AdSize.banner,
+      targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print("BannerAd event is $event");
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    FirebaseAdMob.instance
+        .initialize(appId: 'ca-app-pub-1343647000894788~8781257788');
+
+    baner()
+      ..load()
+      ..show(anchorType: AnchorType.top, anchorOffset: 0.0);
     Usuarios.logado();
     SystemChrome.setEnabledSystemUIOverlays([]);
     return new MaterialApp(

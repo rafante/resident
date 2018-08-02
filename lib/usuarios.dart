@@ -7,7 +7,7 @@ class Usuarios {
   static String logado() {
     if(_logado == null){
       FirebaseAuth.instance.currentUser().then((FirebaseUser user){
-        _logado = user.uid;
+        _logado = user.displayName;
       });
     }
     return _logado;

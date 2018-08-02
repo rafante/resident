@@ -39,6 +39,9 @@ class _PacientePageState extends State<PacientePage> {
               hora: new DateTime.fromMillisecondsSinceEpoch(valor['hora']),
               texto: valor['texto']));
         });
+        mensagens.sort((msg1, msg2) {
+          return msg2.hora.compareTo(msg1.hora);
+        });
         setState(() {
           _mensagens = mensagens;
         });
@@ -59,11 +62,12 @@ class _PacientePageState extends State<PacientePage> {
             child: ListView.builder(
               itemBuilder: (context, int indice) {
                 Mensagem msg = _mensagens[indice];
+                String horaFormatada = DateFormat('HH:mm').format(msg.hora);
                 return Bubble(
                   message: msg.texto,
-                  time: msg.hora != null ? msg.hora.toString() : '',
+                  time: msg.hora != null ? horaFormatada : '',
                   isMe: msg.autor == Usuarios.logado(),
-                  delivered: true,
+                  delivered: true
                 );
               },
               itemCount: _mensagens.length,
@@ -122,6 +126,7 @@ class _PacientePageState extends State<PacientePage> {
                   color: Colors.white,
                 ),
                 onPressed: () {
+                  if (_textController.text == '') return;
                   DatabaseReference db = FirebaseDatabase.instance.reference();
                   db = db.child('chats').child(widget.pacienteKey);
                   String key = db.push().key;
@@ -140,8 +145,8 @@ class _PacientePageState extends State<PacientePage> {
                   db.child(key).child('autor').set(mensagem.autor);
 
                   setState(() {
-                    _mensagens.add(mensagem);
-                    _mensagens = _mensagens.reversed.toList();
+                    // _mensagens.add(mensagem);
+                    // _mensagens = _mensagens.reversed.toList();
                     _textController.text = '';
                   });
                 },

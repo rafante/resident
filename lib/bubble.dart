@@ -8,7 +8,7 @@ class Bubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = isMe ? Colors.white : Colors.greenAccent.shade100;
+    final bg = isMe ? Colors.greenAccent.shade100 : Colors.white;
     final align = isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start;
     final icon = delivered ? Icons.done_all : Icons.done;
     final radius = isMe
