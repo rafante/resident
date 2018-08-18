@@ -4,12 +4,14 @@ import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
-import 'package:resident/criar_usuario_page.dart';
-import 'package:resident/grupos_page.dart';
-import 'package:resident/login_page.dart';
-import 'package:resident/paciente.dart';
-import 'package:resident/pacientes.dart';
-import 'package:resident/usuarios.dart';
+import 'package:resident/entidades/usuarios.dart';
+import 'package:resident/paginas/base.dart';
+import 'package:resident/paginas/criar_usuario_page.dart';
+import 'package:resident/paginas/exames.dart';
+import 'package:resident/paginas/grupos_page.dart';
+import 'package:resident/paginas/login_page.dart';
+import 'package:resident/paginas/paciente.dart';
+import 'package:resident/paginas/pacientes.dart';
 
 Future<void> main() async {
   final FirebaseApp app = await FirebaseApp.configure(
@@ -22,12 +24,12 @@ Future<void> main() async {
   );
   runApp(new MaterialApp(
     title: 'Resident',
-    home: new MyApp(app: app),
+    home: new AppResident(app: app),
   ));
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({this.app});
+class AppResident extends StatelessWidget {
+  AppResident({this.app});
   final FirebaseApp app;
 
   MobileAdTargetingInfo targetingInfo = new MobileAdTargetingInfo(
@@ -46,7 +48,8 @@ class MyApp extends StatelessWidget {
       // Replace the testAdUnitId with an ad unit id from the AdMob dash.
       // https://developers.google.com/admob/android/test-ads
       // https://developers.google.com/admob/ios/test-ads
-      adUnitId: 'ca-app-pub-1343647000894788/4156042098',
+      adUnitId: BannerAd.testAdUnitId,
+      // adUnitId: 'ca-app-pub-1343647000894788/4156042098',
       size: AdSize.banner,
       targetingInfo: targetingInfo,
       listener: (MobileAdEvent event) {
@@ -60,9 +63,9 @@ class MyApp extends StatelessWidget {
     FirebaseAdMob.instance
         .initialize(appId: 'ca-app-pub-1343647000894788~8781257788');
 
-    baner()
-      ..load()
-      ..show(anchorType: AnchorType.top, anchorOffset: 0.0);
+    // baner()
+    //   ..load()
+    //   ..show(anchorType: AnchorType.top, anchorOffset: 0.0);
     Usuarios.logado();
     SystemChrome.setEnabledSystemUIOverlays([]);
     return new MaterialApp(
@@ -70,13 +73,21 @@ class MyApp extends StatelessWidget {
       theme: new ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: new GruposPage(app: app),
+      // home: new MyApp(),
+      home: new BaseWindow(conteudo: GruposPage(app: app)),
       routes: <String, WidgetBuilder>{
-        LoginPage.tag: (context) => LoginPage(app: app),
-        GruposPage.tag: (context) => GruposPage(app: app),
-        PacientesPage.tag: (context) => PacientesPage(app: app),
-        PacientePage.tag: (context) => PacientePage(app: app),
-        CriarUsuarioPage.tag: (context) => CriarUsuarioPage(app: app)
+        LoginPage.tag: (context) =>
+            new BaseWindow(conteudo: LoginPage(app: app)),
+        GruposPage.tag: (context) =>
+            new BaseWindow(conteudo: GruposPage(app: app)),
+        PacientesPage.tag: (context) =>
+            new BaseWindow(conteudo: PacientesPage(app: app)),
+        ExamesPage.tag: (context) =>
+            new BaseWindow(conteudo: ExamesPage(app: app)),
+        PacientePage.tag: (context) =>
+            new BaseWindow(conteudo: PacientePage(app: app)),
+        CriarUsuarioPage.tag: (context) =>
+            new BaseWindow(conteudo: CriarUsuarioPage(app: app))
       },
     );
   }
