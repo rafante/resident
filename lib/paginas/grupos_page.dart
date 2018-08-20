@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:resident/entidades/grupos_class.dart';
+import 'package:resident/paginas/action/novo_grupo.dart';
 import 'package:resident/paginas/base.dart';
 import 'package:resident/paginas/criar_usuario_page.dart';
 import 'package:resident/paginas/drawers/grupo/configuracoes.dart';
@@ -217,7 +218,12 @@ class _GruposPageState extends State<GruposPage> {
         child: getDrawer(),
       ),
       floatingActionButton: new FloatingActionButton(
-        onPressed: _criaGrupo,
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return new NovoGrupoPage(app: widget.app);
+          }));
+        },
+        backgroundColor: Colors.blueAccent,
         tooltip: 'Increment',
         child: new Icon(Icons.add),
       ),
