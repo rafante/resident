@@ -1,17 +1,23 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:resident/entidades/dados_grupo.dart';
 
 //Classe que mostra as coisas
-class NovoGrupoPage extends StatefulWidget {
+class DadosGrupoPage extends StatefulWidget {
   final FirebaseApp app;
-  NovoGrupoPage({this.app});
+  final String grupoChave;
+  DadosGrupoPage({this.app, this.grupoChave = ''});
+
   @override
-  _NovoGrupoPageState createState() => _NovoGrupoPageState();
+  State<StatefulWidget> createState() {
+    return _DadosGrupoPageState();
+  }
 }
 
 //Classe que controla a classe que mostra as coisas (Principal)
-class _NovoGrupoPageState extends State<NovoGrupoPage> {
+class _DadosGrupoPageState extends State<DadosGrupoPage> {
   DadosGrupo _dadosGrupo;
   String titulo = 'Novo grupo';
   TextEditingController _nomeDoGrupo = TextEditingController(text: '');
@@ -19,20 +25,29 @@ class _NovoGrupoPageState extends State<NovoGrupoPage> {
   List<Map> _contatos;
   bool _marcado = true;
   List<MapEntry> lista = [
-      MapEntry('Juscelino', false),
-      MapEntry('Warley', false),
-      MapEntry('Lindsey', false),
-      MapEntry('Melanucha', false),
-      MapEntry('Bruno', false),
-      MapEntry('Fulano', false),
-      MapEntry('Jaunio', false),
-    ];
+    MapEntry('Juscelino', false),
+    MapEntry('Warley', false),
+    MapEntry('Lindsey', false),
+    MapEntry('Melanucha', false),
+    MapEntry('Bruno', false),
+    MapEntry('Fulano', false),
+    MapEntry('Jaunio', false),
+  ];
 
   @override
   void initState() {
     super.initState();
     _contatos = [];
-    _dadosGrupo = new DadosGrupo(nome: '', descricao: '', contatos: []);
+    if (widget.grupoChave == null || widget.grupoChave == '')
+      _dadosGrupo = new DadosGrupo();
+    else
+      _dadosGrupo = new DadosGrupo(chave: widget.grupoChave);
+    _dadosGrupo.getDados().then((DadosGrupo dados) {
+      setState(() {
+        _nomeDoGrupo.text = dados.nome;
+        _descricao.text = dados.descricao;
+      });
+    });
   }
 
   void setar(String nome, String descricao) {
@@ -73,6 +88,7 @@ class _NovoGrupoPageState extends State<NovoGrupoPage> {
           setState(() {
             titulo = _nomeDoGrupo.text;
             setar(_nomeDoGrupo.text, _descricao.text);
+            Navigator.pop(context);
           });
         },
       ),

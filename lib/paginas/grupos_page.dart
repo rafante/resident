@@ -35,7 +35,14 @@ class _GruposPageState extends State<GruposPage> {
     _grupos.forEach((Grupo grupo) {
       lista.add(new Card(
         child: new ListTile(
-          trailing: new Icon(Icons.group),
+          trailing: IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return DadosGrupoPage(app: widget.app, grupoChave: grupo.key,);
+              }));
+            },
+          ),
           dense: true,
           contentPadding: EdgeInsets.all(20.0),
           title: new Text(grupo.nome),
@@ -193,7 +200,9 @@ class _GruposPageState extends State<GruposPage> {
       final Map<dynamic, dynamic> grupos = evento.snapshot.value;
       if (grupos != null) {
         grupos.forEach((chave, valor) {
-          gruposLista.add(new Grupo(nome: valor['nome'], key: chave));
+          final String grupoChave = chave;
+          print('a chave do grupo clicado foi a: $grupoChave');
+          gruposLista.add(new Grupo(nome: valor['nome'], key: grupoChave));
         });
       }
       setState(() {
@@ -220,7 +229,7 @@ class _GruposPageState extends State<GruposPage> {
       floatingActionButton: new FloatingActionButton(
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return new NovoGrupoPage(app: widget.app);
+            return new DadosGrupoPage(app: widget.app);
           }));
         },
         backgroundColor: Colors.blueAccent,

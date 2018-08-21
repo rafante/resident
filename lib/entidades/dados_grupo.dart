@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_database/firebase_database.dart';
 
 class DadosGrupo {
@@ -8,11 +10,37 @@ class DadosGrupo {
   DatabaseReference _ref;
 
   void salvar() {
-    if (_ref == null) _ref = FirebaseDatabase.instance.reference();
     if (chave == null || chave == "") chave = _ref.child('grupos').push().key;
     _ref.child('grupos').child(chave).child('nome').set(nome.trim());
     _ref.child('grupos').child(chave).child('descricao').set(descricao.trim());
   }
 
-  DadosGrupo({this.nome, this.descricao, this.contatos});
+  void getRef(){
+    if (_ref == null) _ref = FirebaseDatabase.instance.reference();
+  }
+
+  Future<DadosGrupo> getDados() async{
+    await _ref.child('grupos').child(chave).once().then((DataSnapshot snapshot){
+      Map dados = snapshot.value;
+      nome = dados['nome'];
+      descricao = dados['descricao'];
+    });
+    return this;
+  }
+
+  Future<bool> deletar() async {
+    await _ref.child('grupos').child('chave').remove();
+    return true;
+  }
+
+  DadosGrupo({this.chave = ''}) {
+    if(chave == ''){
+      nome = '';
+      descricao = '';
+      contatos = [];
+      getRef();
+    }else{
+      getRef();
+    }
+  }
 }
