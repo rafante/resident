@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "371558675525",
+    "firebase_url": "https://resident-cadu.firebaseio.com",
+    "project_id": "resident-cadu",
+    "storage_bucket": "resident-cadu.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:371558675525:android:f3f9323fc4060503",
+        "android_client_info": {
+          "package_name": "br.com.oconselho.resident"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "371558675525-ptng7t7s95g5j2kibmfqanh22bpslrbq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALgCciEuzBzQeG8Hw7iXUA-Ctdxs_9u_M"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
