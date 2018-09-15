@@ -13,7 +13,8 @@ class Paciente {
     }else{
       ref.child('pacientes').child(key).once().then((snapshot){
         Map paciente = snapshot.value;
-        nome = paciente['nome'];
+        if(paciente != null)
+          nome = paciente['nome'];
 
       });
     }

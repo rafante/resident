@@ -1,5 +1,6 @@
 class Anexo {
   String nome;
   String downloadLink;
-  Anexo({this.nome, this.downloadLink});
+  int tamanho;
+  Anexo({this.nome, this.downloadLink, this.tamanho});
 }

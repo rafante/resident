@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:open_file/open_file.dart';
 import 'package:resident/entidades/anexo.dart';
 import 'package:resident/entidades/usuarios.dart';
 
@@ -32,34 +33,16 @@ class _ExamesPageState extends State<ExamesPage> {
         .child(widget.pacienteKey)
         .onValue
         .listen((Event evento) async {
-      Map registros = evento.snapshot.value;
+      Map registro = evento.snapshot.value;
       List<Anexo> anexos = [];
-      registros.values.toList().forEach((registro) {
-        anexos.add(
-            new Anexo(nome: registro['nome'], downloadLink: registro['link']));
-      });
+      anexos.add(new Anexo(
+          nome: registro['nome'],
+          downloadLink: registro['link'],
+          tamanho: registro['tamanho']));
       setState(() {
         _anexos = anexos;
       });
     });
-  }
-
-  Future<Null> popupExibeImagem(String link) async {
-    Usuarios.logado();
-    await showDialog(
-        context: context,
-        builder: (context) {
-          return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 35.0, vertical: 35.0),
-            child: new Container(
-              width: 100.0,
-              height: 100.0,
-              color: Colors.amberAccent,
-              child: Image.asset(link),
-            ),
-          );
-        });
-    return null;
   }
 
   Widget body() {
@@ -67,49 +50,38 @@ class _ExamesPageState extends State<ExamesPage> {
     for (Anexo anexo in _anexos) {
       rows.add(new DataRow(cells: [
         DataCell(Text(anexo.nome)),
-        DataCell(Text('')),
-        DataCell(Text('')),
-        DataCell(Text(anexo.downloadLink), onTap: () async {
-          final Directory temp = Directory.systemTemp;
-          final File file = new File('${temp.path}/${widget.pacienteKey}.png');
+        DataCell(Text(anexo.tamanho.toString())),
+        // DataCell(Text('cba')),
+        DataCell(IconButton(
+            icon: Icon(Icons.pageview),
+            onPressed: () async {
+              String path = '${Directory.systemTemp.path}/${anexo.nome}.png';
+              File arquivo = new File(path);
+              print('o path do arquivo é $path');
+              bool existe = arquivo.existsSync();
+              print('o arquivo ${existe ? "existe" : "não existe"}');
+              int tamanho = existe ? arquivo.readAsBytesSync().length : 0;
+              print('o tamanho do arquivo é $tamanho');
+              if (existe && (tamanho == 0 || tamanho != tamanho)) {
+                arquivo.deleteSync();
+              }
+              if (tamanho == 0 || tamanho != anexo.tamanho) {
+                await arquivo.create();
+                assert(await arquivo.readAsString() == "");
+                StorageReference ref = FirebaseStorage.instance
+                    .ref()
+                    .child('anexos')
+                    .child('${anexo.nome}.png');
 
-          StorageReference ref = FirebaseStorage.instance
-              .ref()
-              .child('anexos')
-              .child('${widget.pacienteKey}.png');
-          StorageFileDownloadTask downloadTask = ref.writeToFile(file);
-
-          final int totalBytes = (await downloadTask.future).totalByteCount;
-          print(totalBytes);
-
-          await popupExibeImagem(file.path);
-
-          // final http.Response downloadData = await http.get(anexo.downloadLink);
-          // final String name = await ref.getName();
-          // final String bucket = await ref.getBucket();
-          // final String path = await ref.getPath();
-          // final Directory systemTempDir = Directory.systemTemp;
-          // final File tempFile = new File('$systemTempDir/tmp.png');
-          // if (tempFile.existsSync()) {
-          //   await tempFile.delete();
-          // }
-          // await tempFile.create();
-          // assert(await tempFile.readAsString() == "");
-          // final StorageFileDownloadTask task = ref.writeToFile(tempFile);
-          // final int byteCount = (await task.future).totalByteCount;
-          // final String tempFileContents = await tempFile.readAsString();
-          // String kTestString = "Hello world";
-          // assert(tempFileContents == kTestString);
-          // assert(byteCount == kTestString.length);
-
-          // setState(() {
-          //   _fileContents = downloadData.body;
-          //   _name = name;
-          //   _path = path;
-          //   _bucket = bucket;
-          //   _tempFileContents = tempFileContents;
-          // });
-        }),
+                print('iniciando o download');
+                StorageFileDownloadTask dTask = ref.writeToFile(arquivo);
+                dTask.future.then((snapshot) {
+                  abrirArquivo(path);
+                });
+              } else if (existe && tamanho == anexo.tamanho) {
+                abrirArquivo(path);
+              }
+            }))
       ]));
     }
     return DataTable(
@@ -117,12 +89,16 @@ class _ExamesPageState extends State<ExamesPage> {
         DataColumn(
           label: Text('Descrição'),
         ),
-        DataColumn(label: Text('Data/Hora')),
-        DataColumn(label: Text('Formato')),
+        DataColumn(label: Text('Tamanho')),
+        // DataColumn(label: Text('Formato')),
         DataColumn(label: Text('Ações')),
       ],
       rows: rows,
     );
+  }
+
+  void abrirArquivo(String path) async {
+    await OpenFile.open(path);
   }
 
   @override
@@ -131,11 +107,8 @@ class _ExamesPageState extends State<ExamesPage> {
       appBar: AppBar(
         title: Text('Exames'),
       ),
-      body: SingleChildScrollView(
-        child: SingleChildScrollView(
-            scrollDirection: Axis.vertical, child: body()),
-        scrollDirection: Axis.horizontal,
-      ),
+      body:
+          SingleChildScrollView(scrollDirection: Axis.vertical, child: body()),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.add), title: Text('')),

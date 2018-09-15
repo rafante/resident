@@ -14,6 +14,7 @@ import 'package:resident/entidades/paciente_class.dart';
 import 'exames.dart';
 import 'package:resident/entidades/usuarios.dart';
 import 'package:resident/paginas/base.dart';
+import 'package:http/http.dart' as http;
 
 class PacientePage extends StatefulWidget {
   static String tag = 'paciente-page';
@@ -131,40 +132,40 @@ class _PacientePageState extends State<PacientePage> {
   void criarAnexo() {
     ImagePicker.pickImage(source: ImageSource.camera).then((File imagem) async {
       if (imagem == null) return;
-      File arquivo = new File(imagem.path);
+
       Mensagem linkMsg = criarMensagem(
           Usuarios.logado(), 'carregando arquivo...', DateTime.now());
       salvarMensagem(linkMsg);
+
       DatabaseReference ref = FirebaseDatabase.instance
           .reference()
           .child('anexos')
           .child(widget.pacienteKey);
       String chave = ref.push().key;
+
       StorageReference sRef =
           FirebaseStorage.instance.ref().child('anexos').child('$chave.png');
-      StorageUploadTask task = sRef.putFile(arquivo);
-      task.future.then((UploadTaskSnapshot snapshot) async {
-        Uri downloadLink = snapshot.downloadUrl;
-        ref.child(chave).child('link').set(downloadLink.toString());
-        ref.child(chave).child('nome').set('foto');
-        // DatabaseReference chats = FirebaseDatabase.instance.reference().child('chats').child(widget.pacienteKey);
-        // String msgKey = chats.push().key;
-        linkMsg.texto = downloadLink.toString();
-        salvarMensagem(linkMsg);
-        // int anexos;
-        // await ref.once().then((DataSnapshot snapshot) {
-        //   Map<dynamic, dynamic> map = snapshot.value;
-        //   List list = map.values.toList();
-        //   anexos = snapshot.value != null ? snapshot.value.keys.length : 0;
-        // });
-        // if (anexos == 0) {
-        //   String chave = ref.push().key;
 
-        //   ref.child(chave).child('link').set(downloadLink.toString());
-        //   ref.child(chave).child('nome').set('foto');
-        // }
-      });
-    }).catchError((erro) {});
+      final File arquivo =
+          await new File('${Directory.systemTemp.path}/$chave.png').create();
+          
+      List<int> imagemBytes = imagem.readAsBytesSync();
+
+      arquivo.writeAsBytesSync(imagemBytes);
+
+      StorageUploadTask task = sRef.putFile(arquivo);
+      final Uri downloadUrl = (await task.future).downloadUrl;
+      final File downloadFile = new File('${Directory.systemTemp.path}/$chave.png');
+      StorageFileDownloadTask dTask = sRef.writeToFile(downloadFile);
+      int byteCount = (await dTask.future).totalByteCount;
+      print('Deu $byteCount bytes no arquivo ${downloadFile.path.toString()}');
+      ref.child('tamanho').set(byteCount);
+      ref.child('link').set(downloadUrl.toString());
+      ref.child('nome').set(chave);
+      
+    }).catchError((erro) {
+      print(erro.toString());
+    });
   }
 
   Mensagem criarMensagem(String autor, String texto, DateTime hora) {

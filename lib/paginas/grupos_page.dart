@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -14,6 +15,7 @@ import 'package:resident/paginas/drawers/grupo/contatos.dart';
 import 'package:resident/paginas/drawers/grupo/perfil.dart';
 import 'package:resident/paginas/drawers/grupo/premium.dart';
 import 'package:resident/paginas/pacientes.dart';
+import 'package:open_file/open_file.dart';
 
 class GruposPage extends StatefulWidget {
   static String tag = 'home-page';
@@ -246,4 +248,5 @@ class _GruposPageState extends State<GruposPage> {
       ),
     );
   }
+
 }

@@ -1,7 +1,7 @@
-#Sat Aug 25 18:08:02 BRT 2018
-base.0=C\:\\dev\\flutter_apps\\externos\\resident\\build\\app\\intermediates\\transforms\\dexMerger\\debug\\0
+#Sat Sep 15 13:58:25 BRT 2018
+base.0=C\:\\dev\\Pessoal\\resident\\build\\app\\intermediates\\transforms\\dexMerger\\debug\\0
 path.1=classes2.dex
 renamed.1=classes2.dex
 path.0=classes.dex
 renamed.0=classes.dex
-base.1=C\:\\dev\\flutter_apps\\externos\\resident\\build\\app\\intermediates\\transforms\\dexMerger\\debug\\0
+base.1=C\:\\dev\\Pessoal\\resident\\build\\app\\intermediates\\transforms\\dexMerger\\debug\\0
