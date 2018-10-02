@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:resident/entidades/paciente_class.dart';
 import 'package:resident/paginas/base.dart';
 import 'package:resident/paginas/paciente.dart';
+import 'package:resident/paginas/paciente_detalhe.dart';
 
 class PacientesPage extends StatefulWidget {
   static String tag = 'pacientes-page';
@@ -31,9 +32,12 @@ class _PacientesPageState extends State<PacientesPage> {
         .listen((Event evento) {
       Map pacientes = evento.snapshot.value;
       List<Paciente> lista = <Paciente>[];
-      pacientes.forEach((chave, valor) {
-        lista.add(new Paciente(key: chave, nome: valor['nome']));
-      });
+      if (pacientes != null && pacientes.length > 0) {
+        pacientes.forEach((chave, valor) {
+          lista.add(new Paciente(key: chave, nome: valor['nome']));
+        });
+      }
+
       setState(() {
         _pacientes = lista;
       });
@@ -85,17 +89,20 @@ class _PacientesPageState extends State<PacientesPage> {
         });
   }
 
-  void _criaPaciente() async {
-    await _popupCriaPaciente().then((Paciente paciente) {
-      DatabaseReference db = FirebaseDatabase.instance.reference();
-      db = db.child('grupos').child(widget.grupoKey).child('pacientes');
-      String chave = db.push().key;
-      db.child(chave).child('nome').set(paciente.nome);
-      paciente.key = chave;
-      setState(() {
-        _pacientes.add(paciente);
-      });
-    });
+  void _criaPaciente() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return new PacienteDetalhe();
+    }));
+    // await _popupCriaPaciente().then((Paciente paciente) {
+    //   DatabaseReference db = FirebaseDatabase.instance.reference();
+    //   db = db.child('grupos').child(widget.grupoKey).child('pacientes');
+    //   String chave = db.push().key;
+    //   db.child(chave).child('nome').set(paciente.nome);
+    //   paciente.key = chave;
+    //   setState(() {
+    //     _pacientes.add(paciente);
+    //   });
+    // });
   }
 
   List<Card> _pacientesCard() {

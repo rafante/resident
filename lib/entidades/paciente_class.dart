@@ -5,6 +5,10 @@ class Paciente {
   String key;
   DatabaseReference ref;
 
+  void salvar(){
+    
+  }
+
   Paciente({this.key, this.nome}) {
     if (ref == null) ref = FirebaseDatabase.instance.reference();
     if (key == null || key == "") {
