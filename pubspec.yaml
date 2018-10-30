@@ -22,6 +22,8 @@ dependencies:
   contacts_service: ^0.0.8
   open_file: ^1.0.7
   datetime_picker_formfield: ^0.1.3
+  font_awesome_flutter: ^8.1.0
+  shared_preferences: ^0.4.3
 
 dev_dependencies:
   flutter_test:

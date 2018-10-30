@@ -7,9 +7,10 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
 class PacienteDetalhe extends StatefulWidget {
   final FirebaseApp app;
+  final String grupoKey;
   final String pacienteKey;
 
-  PacienteDetalhe({this.app, this.pacienteKey});
+  PacienteDetalhe({this.app, this.grupoKey, this.pacienteKey});
 
   @override
   _PacienteDetalheState createState() => _PacienteDetalheState();
@@ -18,14 +19,17 @@ class PacienteDetalhe extends StatefulWidget {
 class _PacienteDetalheState extends State<PacienteDetalhe> {
   TextEditingController _nome = TextEditingController(text: '');
   TextEditingController _data = TextEditingController(text: '');
+  TextEditingController _telefone = TextEditingController(text: '');
 
-  DateFormat dateFormat = DateFormat("d, MMMM, yyyy 'at' h:mma");
+  DateFormat dateFormat = DateFormat("dd/MM/yyyy hh:mm:ss");
+  DateTime dataEntrada;
   Paciente paciente;
 
   @override
   void initState() {
     super.initState();
-    paciente = Paciente(key: widget.pacienteKey);
+    paciente = Paciente(key: widget.pacienteKey, grupoKey: widget.grupoKey);
+    print(paciente.grupoKey);
   }
 
   @override
@@ -40,6 +44,12 @@ class _PacienteDetalheState extends State<PacienteDetalhe> {
           padding: EdgeInsets.all(20.0),
           child: TextFormField(
             controller: _nome,
+            onEditingComplete: () {
+              setState(() {
+                print(_nome.text);
+                paciente.salvaNome(_nome.text);
+              });
+            },
             decoration: InputDecoration(
                 contentPadding: EdgeInsets.all(15.0),
                 hintText: 'Digite o nome',
@@ -50,11 +60,34 @@ class _PacienteDetalheState extends State<PacienteDetalhe> {
         Padding(
           padding: EdgeInsets.all(20.0),
           child: DateTimePickerFormField(
-            controller: _nome,
+            controller: _data,
             format: dateFormat,
+            onChanged: (DateTime novaData) {
+              setState(() {
+                dataEntrada = novaData;
+              });
+            },
             decoration: InputDecoration(
                 contentPadding: EdgeInsets.all(15.0),
                 hintText: 'Data de entrada',
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(15.0)))),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.all(20.0),
+          child: TextFormField(
+            keyboardType: TextInputType.phone,
+            controller: _telefone,
+            onEditingComplete: () {
+              setState(() {
+                print(_telefone.text);
+                paciente.salvaTelefone(_telefone.text);
+              });
+            },
+            decoration: InputDecoration(
+                contentPadding: EdgeInsets.all(15.0),
+                hintText: 'Telefone',
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(15.0)))),
           ),
@@ -65,11 +98,13 @@ class _PacienteDetalheState extends State<PacienteDetalhe> {
         child: Icon(Icons.done_outline),
         onPressed: () {
           setState(() {
-            // paciente.nome = nome.digitado;
+            paciente.salvaNome(_nome.text);
+            paciente.salvaEntrada(dataEntrada);
+            paciente.salvaTelefone(_telefone.text);
+            paciente.salvar();
             print('salvou o cliente');
           });
-
-          paciente.salvar();
+          Navigator.pop(context);
         },
       ),
     );

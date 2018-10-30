@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:resident/entidades/usuarios.dart';
 import 'package:resident/paginas/grupos_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -25,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
     final FirebaseUser user = await FirebaseAuth.instance.signInAnonymously();
     assert(user != null);
     assert(user.isAnonymous);
-    assert(!user.isEmailVerified);
+    assert(!user.isEmailVerified);  
     assert(await user.getIdToken() != null);
     if (Platform.isIOS) {
       // Anonymous auth doesn't show up as a provider on iOS
@@ -49,6 +50,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<FirebaseUser> _loginEmail() async {
     FirebaseUser usuario = await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: _email.text, password: _senha.text);
+    Usuarios.setLogado(usuario);
     return usuario;
   }
 

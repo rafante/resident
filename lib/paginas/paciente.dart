@@ -11,17 +11,25 @@ import 'package:resident/componentes/mensagem.dart';
 import 'dart:io';
 
 import 'package:resident/entidades/paciente_class.dart';
+import 'package:resident/paginas/alta_paciente.dart';
+import 'package:resident/paginas/hipotese_diagnostica.dart';
+import 'package:resident/paginas/historia_doenca_atual.dart';
+import 'package:resident/paginas/historia_pregressa.dart';
+import 'package:resident/paginas/medicamentos.dart';
+import 'package:resident/utilitarios/shared_prefs.dart';
 import 'exames.dart';
 import 'package:resident/entidades/usuarios.dart';
 import 'package:resident/paginas/base.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 
 class PacientePage extends StatefulWidget {
   static String tag = 'paciente-page';
   final Paciente paciente;
+  final String grupoKey;
   final FirebaseApp app;
   final String pacienteKey;
-  PacientePage({this.app, this.paciente, this.pacienteKey});
+  PacientePage({this.app, this.paciente, this.grupoKey, this.pacienteKey});
   @override
   _PacientePageState createState() => _PacientePageState();
 }
@@ -60,6 +68,7 @@ class _PacientePageState extends State<PacientePage> {
 
   @override
   Widget build(BuildContext context) {
+    Prefs.lerNotificacao(widget.grupoKey, widget.pacienteKey);
     return Scaffold(
       appBar: AppBar(
           elevation: 1.0,
@@ -106,11 +115,73 @@ class _PacientePageState extends State<PacientePage> {
                 Navigator.push(context, MaterialPageRoute(builder: ((context) {
                   return BaseWindow(
                     conteudo: ExamesPage(
-                        app: widget.app, pacienteKey: widget.pacienteKey),
+                        app: widget.app, pacienteKey: widget.pacienteKey, grupoKey: widget.grupoKey),
                   );
                 })));
               },
-            )
+            ),
+            ListTile(
+              trailing: Icon(FontAwesomeIcons.pills),
+              title: Text('Medicamentos'),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: ((context) {
+                  return BaseWindow(
+                    conteudo: MedicamentosPage(
+                        app: widget.app,
+                        grupoKey: widget.grupoKey,
+                        pacienteKey: widget.pacienteKey),
+                  );
+                })));
+              },
+            ),
+            ListTile(
+              trailing: Icon(FontAwesomeIcons.stethoscope),
+              title: Text('História de Doença Atual'),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: ((context) {
+                  return BaseWindow(
+                    conteudo: HistoriaDoencaAtualPage(
+                        app: widget.app, pacienteKey: widget.pacienteKey, grupoKey: widget.grupoKey),
+                  );
+                })));
+              },
+            ),
+            ListTile(
+              trailing: Icon(FontAwesomeIcons.scroll),
+              title: Text('História Pregressa'),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: ((context) {
+                  return BaseWindow(
+                    conteudo: HistoriaPregressaPage(
+                        app: widget.app, pacienteKey: widget.pacienteKey, grupoKey: widget.grupoKey),
+                  );
+                })));
+              },
+            ),
+            ListTile(
+              trailing: Icon(FontAwesomeIcons.edit),
+              title: Text('Hipótese Diagnóstica'),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: ((context) {
+                  return BaseWindow(
+                    conteudo: HipoteseDiagnosticaPage(
+                        app: widget.app, pacienteKey: widget.pacienteKey, grupoKey: widget.grupoKey),
+                  );
+                })));
+              },
+            ),
+            ListTile(
+              trailing: Icon(FontAwesomeIcons.hospital),
+              title: Text('Alta do paciente'),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: ((context) {
+                  return BaseWindow(
+                    conteudo: AltaPacientePage(
+                        app: widget.app, pacienteKey: widget.pacienteKey, grupoKey: widget.grupoKey),
+                  );
+                })));
+              },
+            ),
           ],
         ),
       ),
@@ -148,21 +219,21 @@ class _PacientePageState extends State<PacientePage> {
 
       final File arquivo =
           await new File('${Directory.systemTemp.path}/$chave.png').create();
-          
+
       List<int> imagemBytes = imagem.readAsBytesSync();
 
       arquivo.writeAsBytesSync(imagemBytes);
 
       StorageUploadTask task = sRef.putFile(arquivo);
       final Uri downloadUrl = (await task.future).downloadUrl;
-      final File downloadFile = new File('${Directory.systemTemp.path}/$chave.png');
+      final File downloadFile =
+          new File('${Directory.systemTemp.path}/$chave.png');
       StorageFileDownloadTask dTask = sRef.writeToFile(downloadFile);
       int byteCount = (await dTask.future).totalByteCount;
       print('Deu $byteCount bytes no arquivo ${downloadFile.path.toString()}');
       ref.child('tamanho').set(byteCount);
       ref.child('link').set(downloadUrl.toString());
       ref.child('nome').set(chave);
-      
     }).catchError((erro) {
       print(erro.toString());
     });

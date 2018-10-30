@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:resident/entidades/usuarios.dart';
 import 'package:resident/paginas/grupos_page.dart';
 import 'package:resident/paginas/login_page.dart';
 
@@ -118,6 +119,7 @@ class _CriarUsuarioPageState extends State<CriarUsuarioPage> {
                     return;
                   }
                   criarUsuario().then((user) {
+                    Usuarios.setLogado(user);
                     Navigator.of(context).pushNamed(GruposPage.tag);
                   }).catchError((erro) {
                     setState(() {

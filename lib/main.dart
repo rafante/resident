@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:firebase_admob/firebase_admob.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
@@ -10,8 +12,11 @@ import 'package:resident/paginas/criar_usuario_page.dart';
 import 'package:resident/paginas/exames.dart';
 import 'package:resident/paginas/grupos_page.dart';
 import 'package:resident/paginas/login_page.dart';
+import 'package:resident/paginas/medicamentos.dart';
 import 'package:resident/paginas/paciente.dart';
 import 'package:resident/paginas/pacientes.dart';
+import 'package:resident/utilitarios/shared_prefs.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   final FirebaseApp app = await FirebaseApp.configure(
@@ -22,18 +27,27 @@ Future<void> main() async {
       databaseURL: 'https://resident-cadu.firebaseio.com',
     ),
   );
-  runApp(new MaterialApp(
-    title: 'Resident',
-    home: new AppResident(app: app),
-  ));
+
+  runApp(new MaterialApp(title: 'Resident', home: new AppResident(app: app)));
 }
 
 class AppResident extends StatelessWidget {
   AppResident({this.app});
   final FirebaseApp app;
+  bool firstTime = true;
+  final FirebaseMessaging mensageiro = FirebaseMessaging();
 
   MobileAdTargetingInfo targetingInfo = new MobileAdTargetingInfo(
-    keywords: <String>['flutterio', 'beautiful apps'],
+    keywords: <String>[
+      'hospital',
+      'hospitalar',
+      'médico',
+      'instrumentação',
+      'cirúrgico',
+      'bisturi',
+      'medicina',
+      'estetoscópio'
+    ],
     contentUrl: 'https://flutter.io',
     birthday: new DateTime.now(),
     childDirected: false,
@@ -58,6 +72,43 @@ class AppResident extends StatelessWidget {
     );
   }
 
+  void notificacoes() {
+    mensageiro.configure(onMessage: (Map<String, dynamic> mensagem) {
+      print('caiu no mensageiro:\n $mensagem');
+      if (mensagem.containsKey('grupo') && mensagem.containsKey('paciente')) {
+        Prefs.salvarNotificacao(mensagem['grupo'], mensagem['paciente']);
+      }
+    }, onLaunch: (Map<String, dynamic> mensagem) {
+      print('caiu no mensageiro:\n $mensagem');
+      if (mensagem.containsKey('grupo') && mensagem.containsKey('paciente')) {
+        Prefs.salvarNotificacao(mensagem['grupo'], mensagem['paciente']);
+      }
+    }, onResume: (Map<String, dynamic> mensagem) {
+      print('caiu no mensageiro:\n $mensagem');
+      if (mensagem.containsKey('grupo') && mensagem.containsKey('paciente')) {
+        Prefs.salvarNotificacao(mensagem['grupo'], mensagem['paciente']);
+      }
+    });
+    mensageiro.requestNotificationPermissions();
+    mensageiro.subscribeToTopic('paciente');
+    mensageiro.getToken().then((String token) {
+      assert(token != null);
+      salvarToken(token);
+    });
+  }
+
+  Future<Null> salvarToken(String token) async {
+    var tokenNode = FirebaseDatabase.instance.reference().child('tokens');
+    bool contem = false;
+    await tokenNode.once().then((snapshot) {
+      Map tokens = snapshot.value;
+      contem = tokens.containsValue(token);
+    });
+    if (!contem) {
+      tokenNode.push().set(token);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     FirebaseAdMob.instance
@@ -68,6 +119,7 @@ class AppResident extends StatelessWidget {
     //   ..show(anchorType: AnchorType.top, anchorOffset: 0.0);
     Usuarios.logado();
     SystemChrome.setEnabledSystemUIOverlays([]);
+    notificacoes();
     return new MaterialApp(
       title: 'Resident',
       theme: new ThemeData(
@@ -87,7 +139,9 @@ class AppResident extends StatelessWidget {
         PacientePage.tag: (context) =>
             new BaseWindow(conteudo: PacientePage(app: app)),
         CriarUsuarioPage.tag: (context) =>
-            new BaseWindow(conteudo: CriarUsuarioPage(app: app))
+            new BaseWindow(conteudo: CriarUsuarioPage(app: app)),
+        MedicamentosPage.tag: (context) =>
+            new BaseWindow(conteudo: MedicamentosPage(app: app))
       },
     );
   }

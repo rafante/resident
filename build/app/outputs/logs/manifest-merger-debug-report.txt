@@ -29,6 +29,7 @@ MERGED from [:firebase_messaging] C:\dev\Pessoal\resident\build\firebase_messagi
 MERGED from [:firebase_analytics] C:\dev\Pessoal\resident\build\firebase_analytics\intermediates\manifests\full\debug\AndroidManifest.xml:2:1-11:12
 MERGED from [:path_provider] C:\dev\Pessoal\resident\build\path_provider\intermediates\manifests\full\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:firebase_database] C:\dev\Pessoal\resident\build\firebase_database\intermediates\manifests\full\debug\AndroidManifest.xml:2:1-7:12
+MERGED from [:shared_preferences] C:\dev\Pessoal\resident\build\shared_preferences\intermediates\manifests\full\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:image_picker] C:\dev\Pessoal\resident\build\image_picker\intermediates\manifests\full\debug\AndroidManifest.xml:2:1-23:12
 MERGED from [:firebase_core] C:\dev\Pessoal\resident\build\firebase_core\intermediates\manifests\full\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:firebase_auth] C:\dev\Pessoal\resident\build\firebase_auth\intermediates\manifests\full\debug\AndroidManifest.xml:2:1-7:12
@@ -241,6 +242,8 @@ MERGED from [:path_provider] C:\dev\Pessoal\resident\build\path_provider\interme
 MERGED from [:path_provider] C:\dev\Pessoal\resident\build\path_provider\intermediates\manifests\full\debug\AndroidManifest.xml:5:5-44
 MERGED from [:firebase_database] C:\dev\Pessoal\resident\build\firebase_database\intermediates\manifests\full\debug\AndroidManifest.xml:5:5-44
 MERGED from [:firebase_database] C:\dev\Pessoal\resident\build\firebase_database\intermediates\manifests\full\debug\AndroidManifest.xml:5:5-44
+MERGED from [:shared_preferences] C:\dev\Pessoal\resident\build\shared_preferences\intermediates\manifests\full\debug\AndroidManifest.xml:5:5-44
+MERGED from [:shared_preferences] C:\dev\Pessoal\resident\build\shared_preferences\intermediates\manifests\full\debug\AndroidManifest.xml:5:5-44
 MERGED from [:image_picker] C:\dev\Pessoal\resident\build\image_picker\intermediates\manifests\full\debug\AndroidManifest.xml:5:5-44
 MERGED from [:image_picker] C:\dev\Pessoal\resident\build\image_picker\intermediates\manifests\full\debug\AndroidManifest.xml:5:5-44
 MERGED from [:firebase_core] C:\dev\Pessoal\resident\build\firebase_core\intermediates\manifests\full\debug\AndroidManifest.xml:5:5-44

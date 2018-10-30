@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:resident/entidades/grupos_class.dart';
 import 'package:resident/entidades/usuarios.dart';
@@ -16,6 +17,7 @@ import 'package:resident/paginas/drawers/grupo/perfil.dart';
 import 'package:resident/paginas/drawers/grupo/premium.dart';
 import 'package:resident/paginas/pacientes.dart';
 import 'package:open_file/open_file.dart';
+import 'package:resident/utilitarios/shared_prefs.dart';
 
 class GruposPage extends StatefulWidget {
   static String tag = 'home-page';
@@ -36,16 +38,48 @@ class _GruposPageState extends State<GruposPage> {
   List<Card> _gruposCards() {
     List<Card> lista = <Card>[];
     _grupos.forEach((Grupo grupo) {
+      Prefs.checarNotificacoes(grupo: grupo.key).then((numeroNotificacoes) {
+        if (numeroNotificacoes != grupo.notificacoes) {
+          setState(() {
+            grupo.notificacoes = numeroNotificacoes;
+          });
+        }
+      });
       lista.add(new Card(
         child: new ListTile(
           trailing: IconButton(
-            icon: Icon(Icons.settings),
+            icon: Stack(
+              children: <Widget>[
+                Icon(Icons.settings),
+                Positioned(
+                  left: 10.0,
+                  child: grupo.notificacoes > 0
+                      ? ClipOval(
+                          child: Container(
+                            color: Colors.amberAccent,
+                            height: 15.0,
+                            width: 13.0,
+                            child: Center(
+                                child: Text(
+                                  grupo.notificacoes.toString(),
+                                  style: TextStyle(
+                                    color: Colors.blueAccent,
+                                    fontWeight: FontWeight.bold
+                                  ),
+                                  )),
+                          ),
+                        )
+                      : new Container(),
+                )
+              ],
+            ),
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return DadosGrupoPage(
+                return BaseWindow(
+                    conteudo: DadosGrupoPage(
                   app: widget.app,
                   grupoChave: grupo.key,
-                );
+                ));
               }));
             },
           ),
@@ -239,7 +273,9 @@ class _GruposPageState extends State<GruposPage> {
       floatingActionButton: new FloatingActionButton(
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return new DadosGrupoPage(app: widget.app);
+            return new BaseWindow(
+              conteudo: DadosGrupoPage(app: widget.app),
+            );
           }));
         },
         backgroundColor: Colors.blueAccent,
@@ -248,5 +284,4 @@ class _GruposPageState extends State<GruposPage> {
       ),
     );
   }
-
 }

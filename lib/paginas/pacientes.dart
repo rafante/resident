@@ -7,6 +7,7 @@ import 'package:resident/entidades/paciente_class.dart';
 import 'package:resident/paginas/base.dart';
 import 'package:resident/paginas/paciente.dart';
 import 'package:resident/paginas/paciente_detalhe.dart';
+import 'package:resident/utilitarios/shared_prefs.dart';
 
 class PacientesPage extends StatefulWidget {
   static String tag = 'pacientes-page';
@@ -34,7 +35,12 @@ class _PacientesPageState extends State<PacientesPage> {
       List<Paciente> lista = <Paciente>[];
       if (pacientes != null && pacientes.length > 0) {
         pacientes.forEach((chave, valor) {
-          lista.add(new Paciente(key: chave, nome: valor['nome']));
+          lista.add(new Paciente(
+              key: chave,
+              grupoKey: widget.grupoKey,
+              entrada: DateTime.fromMillisecondsSinceEpoch(valor['entrada']),
+              nome: valor['nome'],
+              telefone: valor['telefone']));
         });
       }
 
@@ -91,7 +97,9 @@ class _PacientesPageState extends State<PacientesPage> {
 
   void _criaPaciente() {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return new PacienteDetalhe();
+      return BaseWindow(
+        conteudo: PacienteDetalhe(grupoKey: widget.grupoKey, pacienteKey: null),
+      );
     }));
     // await _popupCriaPaciente().then((Paciente paciente) {
     //   DatabaseReference db = FirebaseDatabase.instance.reference();
@@ -108,11 +116,41 @@ class _PacientesPageState extends State<PacientesPage> {
   List<Card> _pacientesCard() {
     List<Card> lista = <Card>[];
     _pacientes.forEach((Paciente paciente) {
+      Prefs.checarNotificacoes(grupo: paciente.grupoKey, paciente: paciente.key)
+          .then((int nots) {
+        if (nots != paciente.notificacoes) {
+          setState(() {
+            paciente.notificacoes = nots;
+          });
+        }
+      });
       lista.add(new Card(
         elevation: 2.0,
         child: ListTile(
             contentPadding: EdgeInsets.all(20.0),
-            trailing: new Icon(Icons.airline_seat_flat_angled),
+            trailing: paciente.notificacoes == 0
+                ? null
+                : Stack(
+                    children: <Widget>[
+                      new Icon(Icons.airline_seat_flat_angled),
+                      Positioned(
+                        width: 13.0,
+                        height: 15.0,
+                        left: 10.0,
+                        child: ClipOval(
+                          child: Container(
+                            color: Colors.amberAccent,
+                            child: Center(
+                              child: Text(paciente.notificacoes.toString(),
+                                  style: TextStyle(
+                                      color: Colors.blueAccent,
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
             title: new Text(paciente.nome),
             onTap: () {
               setState(() {
@@ -123,6 +161,7 @@ class _PacientesPageState extends State<PacientesPage> {
                                 conteudo: PacientePage(
                               app: widget.app,
                               paciente: paciente,
+                              grupoKey: widget.grupoKey,
                               pacienteKey: paciente.key,
                             ))));
               });

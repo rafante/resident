@@ -13,8 +13,9 @@ class ExamesPage extends StatefulWidget {
   static String tag = 'exames';
   final FirebaseApp app;
   final String pacienteKey;
+  final String grupoKey;
 
-  ExamesPage({this.app, this.pacienteKey});
+  ExamesPage({this.app, this.pacienteKey, this.grupoKey});
 
   @override
   _ExamesPageState createState() => _ExamesPageState();
@@ -84,16 +85,28 @@ class _ExamesPageState extends State<ExamesPage> {
             }))
       ]));
     }
-    return DataTable(
-      columns: <DataColumn>[
-        DataColumn(
-          label: Text('Descrição'),
-        ),
-        DataColumn(label: Text('Tamanho')),
-        // DataColumn(label: Text('Formato')),
-        DataColumn(label: Text('Ações')),
+    return ListView(
+      children: <Widget>[
+        Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+            child: Text(
+              'Paciente: teste',
+              style: TextStyle(
+                fontSize: 15.0
+              ),
+            )),
+        DataTable(
+          columns: <DataColumn>[
+            DataColumn(
+              label: Text('Descrição'),
+            ),
+            DataColumn(label: Text('Tamanho')),
+            // DataColumn(label: Text('Formato')),
+            DataColumn(label: Text('Ações')),
+          ],
+          rows: rows,
+        )
       ],
-      rows: rows,
     );
   }
 
@@ -104,17 +117,18 @@ class _ExamesPageState extends State<ExamesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Exames'),
-      ),
-      body:
-          SingleChildScrollView(scrollDirection: Axis.vertical, child: body()),
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.add), title: Text('')),
-          BottomNavigationBarItem(icon: Icon(Icons.flag), title: Text('')),
-        ],
-      ),
-    );
+        appBar: AppBar(
+          title: Text('Exames'),
+        ),
+        body: Padding(padding: EdgeInsets.all(10.0), child: body())
+        // SingleChildScrollView(scrollDirection: Axis.vertical, child: body()),
+
+        // bottomNavigationBar: BottomNavigationBar(
+        //   items: <BottomNavigationBarItem>[
+        //     BottomNavigationBarItem(icon: Icon(Icons.add), title: Text('')),
+        //     BottomNavigationBarItem(icon: Icon(Icons.flag), title: Text('')),
+        //   ],
+        // ),
+        );
   }
 }
