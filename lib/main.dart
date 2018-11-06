@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:firebase_admob/firebase_admob.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
+import 'package:resident/entidades/banco.dart';
 import 'package:resident/entidades/usuarios.dart';
 import 'package:resident/paginas/base.dart';
 import 'package:resident/paginas/criar_usuario_page.dart';
@@ -98,7 +100,7 @@ class AppResident extends StatelessWidget {
   }
 
   Future<Null> salvarToken(String token) async {
-    var tokenNode = FirebaseDatabase.instance.reference().child('tokens');
+    var tokenNode = Banco.ref().child('tokens');
     bool contem = false;
     await tokenNode.once().then((snapshot) {
       Map tokens = snapshot.value;
@@ -117,9 +119,16 @@ class AppResident extends StatelessWidget {
     // baner()
     //   ..load()
     //   ..show(anchorType: AnchorType.top, anchorOffset: 0.0);
-    Usuarios.logado();
+    
+    Usuario eu = Usuario.logado();
+    Usuario.carregar().catchError((erro){
+      print(erro);
+    }).then((evento){
+      eu = Usuario.logado();
+    });
+    
     SystemChrome.setEnabledSystemUIOverlays([]);
-    notificacoes();
+    //notificacoes();
     return new MaterialApp(
       title: 'Resident',
       theme: new ThemeData(

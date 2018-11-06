@@ -476,12 +476,12 @@
         "source": "C:\\Users\\rafan\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.1.aar\\191ece2a9056fb7be96f425357a1237c\\res\\drawable-xxxhdpi-v4\\abc_ic_star_black_36dp.png"
     },
     {
-        "merged": "C:\\dev\\Pessoal\\resident\\build\\app\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4_common_google_signin_btn_icon_dark_normal_background.9.png.flat",
-        "source": "C:\\Users\\rafan\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-15.0.1.aar\\6f39f5d638cb6a0fbd59f840109b0c92\\res\\drawable-xhdpi-v4\\common_google_signin_btn_icon_dark_normal_background.9.png"
-    },
-    {
         "merged": "C:\\dev\\Pessoal\\resident\\build\\app\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_notify_panel_notification_icon_bg.png.flat",
         "source": "C:\\Users\\rafan\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-27.1.1.aar\\dddbd1c3eda7c66f720ce50d074c755e\\res\\drawable-hdpi-v4\\notify_panel_notification_icon_bg.png"
+    },
+    {
+        "merged": "C:\\dev\\Pessoal\\resident\\build\\app\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4_common_google_signin_btn_icon_dark_normal_background.9.png.flat",
+        "source": "C:\\Users\\rafan\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-15.0.1.aar\\6f39f5d638cb6a0fbd59f840109b0c92\\res\\drawable-xhdpi-v4\\common_google_signin_btn_icon_dark_normal_background.9.png"
     },
     {
         "merged": "C:\\dev\\Pessoal\\resident\\build\\app\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4_abc_ic_menu_cut_mtrl_alpha.png.flat",
@@ -686,6 +686,10 @@
     {
         "merged": "C:\\dev\\Pessoal\\resident\\build\\app\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4_common_google_signin_btn_icon_light_normal_background.9.png.flat",
         "source": "C:\\Users\\rafan\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-15.0.1.aar\\6f39f5d638cb6a0fbd59f840109b0c92\\res\\drawable-xhdpi-v4\\common_google_signin_btn_icon_light_normal_background.9.png"
+    },
+    {
+        "merged": "C:\\dev\\Pessoal\\resident\\build\\app\\intermediates\\res\\merged\\debug\\drawable-watch-v20_common_google_signin_btn_text_dark_normal.xml.flat",
+        "source": "C:\\Users\\rafan\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-auth-15.0.1.aar\\a137e95644a738094803eaeb2a810b03\\res\\drawable-watch-v20\\common_google_signin_btn_text_dark_normal.xml"
     },
     {
         "merged": "C:\\dev\\Pessoal\\resident\\build\\app\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi-v4_abc_text_select_handle_right_mtrl_dark.png.flat",
@@ -1052,6 +1056,10 @@
         "source": "C:\\Users\\rafan\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.1.aar\\191ece2a9056fb7be96f425357a1237c\\res\\layout\\select_dialog_singlechoice_material.xml"
     },
     {
+        "merged": "C:\\dev\\Pessoal\\resident\\build\\app\\intermediates\\res\\merged\\debug\\drawable-watch-v20_common_google_signin_btn_text_disabled.xml.flat",
+        "source": "C:\\Users\\rafan\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-auth-15.0.1.aar\\a137e95644a738094803eaeb2a810b03\\res\\drawable-watch-v20\\common_google_signin_btn_text_disabled.xml"
+    },
+    {
         "merged": "C:\\dev\\Pessoal\\resident\\build\\app\\intermediates\\res\\merged\\debug\\color_abc_tint_default.xml.flat",
         "source": "C:\\Users\\rafan\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.1.aar\\191ece2a9056fb7be96f425357a1237c\\res\\color\\abc_tint_default.xml"
     },
@@ -1302,6 +1310,10 @@
     {
         "merged": "C:\\dev\\Pessoal\\resident\\build\\app\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4_abc_ab_share_pack_mtrl_alpha.9.png.flat",
         "source": "C:\\Users\\rafan\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.1.aar\\191ece2a9056fb7be96f425357a1237c\\res\\drawable-mdpi-v4\\abc_ab_share_pack_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "C:\\dev\\Pessoal\\resident\\build\\app\\intermediates\\res\\merged\\debug\\drawable-watch-v20_common_google_signin_btn_text_light_normal.xml.flat",
+        "source": "C:\\Users\\rafan\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-auth-15.0.1.aar\\a137e95644a738094803eaeb2a810b03\\res\\drawable-watch-v20\\common_google_signin_btn_text_light_normal.xml"
     },
     {
         "merged": "C:\\dev\\Pessoal\\resident\\build\\app\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4_abc_list_selector_disabled_holo_dark.9.png.flat",

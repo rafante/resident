@@ -29,6 +29,13 @@ class _PacienteDetalheState extends State<PacienteDetalhe> {
   void initState() {
     super.initState();
     paciente = Paciente(key: widget.pacienteKey, grupoKey: widget.grupoKey);
+    paciente.carregaDadosDoServidor().then((evento) {
+      setState(() {
+        _nome.text = paciente.nome;
+        _data.text = dateFormat.format(paciente.entrada);
+        _telefone.text = paciente.telefone;
+      });
+    });
     print(paciente.grupoKey);
   }
 

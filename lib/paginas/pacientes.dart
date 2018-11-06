@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:resident/entidades/banco.dart';
 import 'package:resident/entidades/paciente_class.dart';
 import 'package:resident/paginas/base.dart';
 import 'package:resident/paginas/paciente.dart';
@@ -24,7 +25,7 @@ class _PacientesPageState extends State<PacientesPage> {
 
   @override
   void initState() {
-    DatabaseReference db = FirebaseDatabase.instance.reference();
+    DatabaseReference db = Banco.ref();
     db
         .child('grupos')
         .child(widget.grupoKey)
@@ -102,7 +103,7 @@ class _PacientesPageState extends State<PacientesPage> {
       );
     }));
     // await _popupCriaPaciente().then((Paciente paciente) {
-    //   DatabaseReference db = FirebaseDatabase.instance.reference();
+    //   DatabaseReference db = Banco.ref();
     //   db = db.child('grupos').child(widget.grupoKey).child('pacientes');
     //   String chave = db.push().key;
     //   db.child(chave).child('nome').set(paciente.nome);
@@ -128,29 +129,39 @@ class _PacientesPageState extends State<PacientesPage> {
         elevation: 2.0,
         child: ListTile(
             contentPadding: EdgeInsets.all(20.0),
-            trailing: paciente.notificacoes == 0
-                ? null
-                : Stack(
-                    children: <Widget>[
-                      new Icon(Icons.airline_seat_flat_angled),
-                      Positioned(
-                        width: 13.0,
-                        height: 15.0,
-                        left: 10.0,
-                        child: ClipOval(
-                          child: Container(
-                            color: Colors.amberAccent,
-                            child: Center(
-                              child: Text(paciente.notificacoes.toString(),
-                                  style: TextStyle(
-                                      color: Colors.blueAccent,
-                                      fontWeight: FontWeight.bold)),
+            trailing: IconButton(
+              icon: paciente.notificacoes == 0
+                  ? new Icon(Icons.settings)
+                  : Stack(
+                      children: <Widget>[
+                        new Icon(Icons.settings),
+                        Positioned(
+                          width: 13.0,
+                          height: 15.0,
+                          left: 10.0,
+                          child: ClipOval(
+                            child: Container(
+                              color: Colors.amberAccent,
+                              child: Center(
+                                child: Text(paciente.notificacoes.toString(),
+                                    style: TextStyle(
+                                        color: Colors.blueAccent,
+                                        fontWeight: FontWeight.bold)),
+                              ),
                             ),
                           ),
-                        ),
-                      )
-                    ],
-                  ),
+                        )
+                      ],
+                    ),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return BaseWindow(
+                    conteudo: PacienteDetalhe(
+                        grupoKey: widget.grupoKey, pacienteKey: paciente.key),
+                  );
+                }));
+              },
+            ),
             title: new Text(paciente.nome),
             onTap: () {
               setState(() {

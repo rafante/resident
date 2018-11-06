@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_database/firebase_database.dart';
+import 'package:resident/entidades/banco.dart';
 
 class AplicacaoMedicamento {
   String key;
@@ -44,7 +45,7 @@ class AplicacaoMedicamento {
       this.descricao,
       this.tipo,
       this.horario}) {
-    if (ref == null) ref = FirebaseDatabase.instance.reference();
+    if (ref == null) ref = Banco.ref();
     if (key == null || key == '') {
       key = ref
           .child('pacientes')

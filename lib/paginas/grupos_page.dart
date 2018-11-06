@@ -1,11 +1,10 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:resident/entidades/banco.dart';
 import 'package:resident/entidades/grupos_class.dart';
 import 'package:resident/entidades/usuarios.dart';
 import 'package:resident/paginas/action/novo_grupo.dart';
@@ -16,7 +15,6 @@ import 'package:resident/paginas/drawers/grupo/contatos.dart';
 import 'package:resident/paginas/drawers/grupo/perfil.dart';
 import 'package:resident/paginas/drawers/grupo/premium.dart';
 import 'package:resident/paginas/pacientes.dart';
-import 'package:open_file/open_file.dart';
 import 'package:resident/utilitarios/shared_prefs.dart';
 
 class GruposPage extends StatefulWidget {
@@ -53,6 +51,7 @@ class _GruposPageState extends State<GruposPage> {
                 Icon(Icons.settings),
                 Positioned(
                   left: 10.0,
+                  top: 10.0,
                   child: grupo.notificacoes > 0
                       ? ClipOval(
                           child: Container(
@@ -238,7 +237,7 @@ class _GruposPageState extends State<GruposPage> {
   void initState() {
     super.initState();
     _validarUsuario();
-    db = FirebaseDatabase.instance.reference();
+    db = Banco.ref();
     db.child('grupos').onValue.listen((Event evento) {
       List<Grupo> gruposLista = <Grupo>[];
       final Map<dynamic, dynamic> grupos = evento.snapshot.value;
@@ -272,6 +271,8 @@ class _GruposPageState extends State<GruposPage> {
       ),
       floatingActionButton: new FloatingActionButton(
         onPressed: () {
+          String contato = 'n22rS32VKsb4Ne4wEDRZaAGKCyi1';
+          Usuario.adicionarContato(contato);
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return new BaseWindow(
               conteudo: DadosGrupoPage(app: widget.app),

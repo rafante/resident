@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:open_file/open_file.dart';
 import 'package:resident/entidades/anexo.dart';
+import 'package:resident/entidades/banco.dart';
 import 'package:resident/entidades/usuarios.dart';
 
 class ExamesPage extends StatefulWidget {
@@ -28,7 +29,7 @@ class _ExamesPageState extends State<ExamesPage> {
   void initState() {
     super.initState();
     if (_anexos == null) _anexos = [];
-    DatabaseReference ref = FirebaseDatabase.instance.reference();
+    DatabaseReference ref = Banco.ref();
     ref
         .child('anexos')
         .child(widget.pacienteKey)

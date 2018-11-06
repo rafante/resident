@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:resident/componentes/bubble.dart';
 import 'package:resident/componentes/mensagem.dart';
+import 'package:resident/entidades/banco.dart';
 import 'dart:io';
 
 import 'package:resident/entidades/paciente_class.dart';
@@ -44,7 +45,7 @@ class _PacientePageState extends State<PacientePage> {
   @override
   void initState() {
     super.initState();
-    DatabaseReference db = FirebaseDatabase.instance.reference();
+    DatabaseReference db = Banco.ref();
     db.child('chats').child(widget.pacienteKey).onValue.listen((Event evento) {
       Map eventoMsgs = evento.snapshot.value;
       List<Mensagem> mensagens = <Mensagem>[];
@@ -208,8 +209,7 @@ class _PacientePageState extends State<PacientePage> {
           Usuarios.logado(), 'carregando arquivo...', DateTime.now());
       salvarMensagem(linkMsg);
 
-      DatabaseReference ref = FirebaseDatabase.instance
-          .reference()
+      DatabaseReference ref = Banco.ref()
           .child('anexos')
           .child(widget.pacienteKey);
       String chave = ref.push().key;
@@ -241,8 +241,7 @@ class _PacientePageState extends State<PacientePage> {
 
   Mensagem criarMensagem(String autor, String texto, DateTime hora) {
     Mensagem mensagem = new Mensagem(texto: texto, hora: hora, autor: autor);
-    DatabaseReference ref = FirebaseDatabase.instance
-        .reference()
+    DatabaseReference ref = Banco.ref()
         .child('chats')
         .child(widget.pacienteKey);
     mensagem.chave = ref.push().key;
@@ -250,10 +249,11 @@ class _PacientePageState extends State<PacientePage> {
   }
 
   void salvarMensagem(Mensagem mensagem) {
-    DatabaseReference db = FirebaseDatabase.instance.reference();
+    DatabaseReference db = Banco.ref();
     db = db.child('chats').child(widget.pacienteKey).child(mensagem.chave);
-    db.child('hora').set(mensagem.hora.millisecondsSinceEpoch);
+    
     db.child('texto').set(mensagem.texto);
+    db.child('hora').set(mensagem.hora.millisecondsSinceEpoch);
     db.child('autor').set(mensagem.autor);
   }
 
@@ -284,7 +284,7 @@ class _PacientePageState extends State<PacientePage> {
                     onPressed: () {
                       if (_textController.text == '') return;
                       DatabaseReference db =
-                          FirebaseDatabase.instance.reference();
+                          Banco.ref();
                       db = db.child('chats').child(widget.pacienteKey);
                       String key = db.push().key;
 

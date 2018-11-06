@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_database/firebase_database.dart';
+import 'package:resident/entidades/banco.dart';
 
 class Paciente {
   String nome;
@@ -108,7 +109,7 @@ class Paciente {
       this.entrada,
       this.telefone,
       bool forcarOnline = false}) {
-    if (ref == null) ref = FirebaseDatabase.instance.reference();
+    if (ref == null) ref = Banco.ref();
     if (key == null || key == "") {
       key = ref.child('grupos').child(grupoKey).child('pacientes').push().key;
     } else {

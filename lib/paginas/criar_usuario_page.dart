@@ -21,6 +21,7 @@ class _CriarUsuarioPageState extends State<CriarUsuarioPage> {
   TextEditingController _email = TextEditingController(text: '');
   TextEditingController _senha1 = TextEditingController(text: '');
   TextEditingController _senha2 = TextEditingController(text: '');
+
   bool _errado = false;
   int _exception;
   String _erroTxt;
@@ -38,7 +39,7 @@ class _CriarUsuarioPageState extends State<CriarUsuarioPage> {
             email: _email.text, password: _senha1.text);
     return user;
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

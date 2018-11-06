@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:resident/entidades/contato.dart';
 import 'package:resident/entidades/dados_grupo.dart';
+import 'package:resident/entidades/usuarios.dart';
 
 //Classe que mostra as coisas
 class DadosGrupoPage extends StatefulWidget {
@@ -16,6 +18,12 @@ class DadosGrupoPage extends StatefulWidget {
   }
 }
 
+class ContatoCard {
+  Contato contato;
+  bool adicionado = false;
+  ContatoCard({this.contato, this.adicionado});
+}
+
 //Classe que controla a classe que mostra as coisas (Principal)
 class _DadosGrupoPageState extends State<DadosGrupoPage> {
   DadosGrupo _dadosGrupo;
@@ -24,15 +32,7 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
   TextEditingController _descricao = TextEditingController(text: '');
   List<Map> _contatos;
   bool _marcado = true;
-  List<MapEntry> lista = [
-    MapEntry('Juscelino', false),
-    MapEntry('Warley', false),
-    MapEntry('Lindsey', false),
-    MapEntry('Melanucha', false),
-    MapEntry('Bruno', false),
-    MapEntry('Fulano', false),
-    MapEntry('Jaunio', false),
-  ];
+  List<ContatoCard> lista = [];
 
   @override
   void initState() {
@@ -56,25 +56,44 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
     _dadosGrupo.salvar();
   }
 
-  List<Widget> _getContatos() {
-    List<Card> cartoes = [];
-    lista.forEach((MapEntry contato) {
-      cartoes.add(new Card(
-        child: ListTile(
-          leading: Checkbox(
-            onChanged: (bool marcado) {
-              setState(() {
-                contato = MapEntry(contato.key, marcado);
-              });
-            },
-            value: contato.value,
-          ),
-          title: Text(contato.key),
-        ),
-      ));
-    });
-    return cartoes;
+  Future<List<Usuario>> listaContatos() async {
+    return showDialog<List<Usuario>>(
+        context: context,
+        builder: (context) {
+          List<Usuario> lista = [];
+          return Padding(
+            padding: EdgeInsets.all(25.0),
+            child: Center(
+              child: Container(
+                color: Colors.amberAccent,
+                child: ListView(
+                  children: <Widget>[],
+                ),
+              ),
+            ),
+          );
+        });
   }
+
+  // List<Widget> _getContatos() {
+  //   List<Card> cartoes = [];
+  //   lista.forEach((ContatoCard contato) {
+  //     cartoes.add(new Card(
+  //       child: ListTile(
+  //         leading: Checkbox(
+  //           onChanged: (bool marcado) {
+  //             setState(() {
+  //               contato = ContatoCard(contato, marcado);
+  //             });
+  //           },
+  //           value: contato.value,
+  //         ),
+  //         title: Text(contato.key),
+  //       ),
+  //     ));
+  //   });
+  //   return cartoes;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -86,9 +105,10 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
         child: Icon(Icons.done_outline),
         onPressed: () {
           setState(() {
-            titulo = _nomeDoGrupo.text;
-            setar(_nomeDoGrupo.text, _descricao.text);
-            Navigator.pop(context);
+            listaContatos();
+            // titulo = _nomeDoGrupo.text;
+            // setar(_nomeDoGrupo.text, _descricao.text);
+            // Navigator.pop(context);
           });
         },
       ),
@@ -126,7 +146,7 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
               height: 300.0,
               child: Container(
                 child: ListView(
-                  children: _getContatos(),
+                  children: [],
                 ),
               ),
             ),

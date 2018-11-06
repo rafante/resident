@@ -4,8 +4,10 @@ import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:resident/entidades/usuarios.dart';
 import 'package:resident/paginas/grupos_page.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginPage extends StatefulWidget {
   static String tag = 'login-page';
@@ -20,13 +22,27 @@ class _LoginPageState extends State<LoginPage> {
   final logo = new Icon(Icons.account_circle, size: 120.0, color: Colors.black);
   TextEditingController _email = TextEditingController(text: '');
   TextEditingController _senha = TextEditingController(text: '');
+  final GoogleSignIn googleSignIn = new GoogleSignIn();
   String _erroMsg;
+
+  Future<FirebaseUser> _signIn() async {
+    GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+    GoogleSignInAuthentication authentication =
+        await googleSignInAccount.authentication;
+
+    FirebaseUser user = await FirebaseAuth.instance.signInWithGoogle(
+        idToken: authentication.idToken,
+        accessToken: authentication.accessToken);
+
+    print("Username: ${user.displayName}");
+    return user;
+  }
 
   static Future<String> _testSignInAnonymously() async {
     final FirebaseUser user = await FirebaseAuth.instance.signInAnonymously();
     assert(user != null);
     assert(user.isAnonymous);
-    assert(!user.isEmailVerified);  
+    assert(!user.isEmailVerified);
     assert(await user.getIdToken() != null);
     if (Platform.isIOS) {
       // Anonymous auth doesn't show up as a provider on iOS
@@ -111,13 +127,28 @@ class _LoginPageState extends State<LoginPage> {
                   minWidth: 200.0,
                   height: 52.0,
                   onPressed: () {
-                    _loginEmail().then((FirebaseUser usuario) {
+                    _signIn().then((user) {
+                      Fluttertoast.showToast(
+                          msg: "Usuario ${user.displayName} logado",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIos: 1,
+                          bgcolor: "#e74c3c",
+                          textcolor: '#ffffff');
+
                       Navigator.of(context).pushNamed(GruposPage.tag);
+                      Usuarios.setLogado(user);
+                      
                     }).catchError((erro) {
-                      setState(() {
-                        _erroMsg = erro.message;
-                      });
+                      print(erro.toString());
                     });
+                    // _loginEmail().then((FirebaseUser usuario) {
+                    //   Navigator.of(context).pushNamed(GruposPage.tag);
+                    // }).catchError((erro) {
+                    //   setState(() {
+                    //     _erroMsg = erro.message;
+                    //   });
+                    // });
                   },
                   color: Colors.blueAccent,
                   child: Text(

@@ -1,12 +1,14 @@
 import 'dart:async';
 
 import 'package:firebase_database/firebase_database.dart';
+import 'package:resident/entidades/banco.dart';
+import 'package:resident/entidades/usuarios.dart';
 
 class DadosGrupo {
   String chave;
   String nome;
   String descricao;
-  List<String> contatos;
+  List<Usuario> contatos;
   DatabaseReference _ref;
 
   void salvar() {
@@ -16,7 +18,7 @@ class DadosGrupo {
   }
 
   void getRef(){
-    if (_ref == null) _ref = FirebaseDatabase.instance.reference();
+    if (_ref == null) _ref = Banco.ref();
   }
 
   Future<DadosGrupo> getDados() async{

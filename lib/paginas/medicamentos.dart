@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:resident/entidades/aplicacao_medicamento.dart';
+import 'package:resident/entidades/banco.dart';
 import 'package:resident/entidades/paciente_class.dart';
 import 'package:resident/paginas/base.dart';
 import 'package:resident/paginas/medicamento.dart';
@@ -58,7 +59,7 @@ class _MedicamentosPageState extends State<MedicamentosPage> {
         nomePaciente = _paciente.nome;
       });
     });
-    var ref = FirebaseDatabase.instance.reference();
+    var ref = Banco.ref();
     ref
         .child('pacientes')
         .child(widget.pacienteKey)
