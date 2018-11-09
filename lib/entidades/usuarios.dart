@@ -36,6 +36,7 @@ class Usuario {
         .child('usuarios')
         .child(_logado.chave)
         .child('contatos')
+        .child(chave)
         .child('uid')
         .set(chave);
     return null;
@@ -48,8 +49,8 @@ class Usuario {
         return null;
       }
       var uid = user.uid;
-      Banco.ref().child('usuarios').child(uid).once().then((snapshot) {
-        Map usuario = snapshot.value;
+      Banco.ref().child('usuarios').child(uid).onValue.listen((evento) {
+        Map usuario = evento.snapshot.value;
         if (usuario == null) {
           FirebaseAuth.instance.signOut();
           return null;
@@ -59,13 +60,17 @@ class Usuario {
             nome: usuario['displayName'],
             email: usuario['email'],
             telefone: usuario['telefone'],
-            urlFoto: usuario['urlFoto']);
+            urlFoto: usuario['photoURL']);
         _logado.contatos = [];
-        List contatos = usuario['contatos'];
+        Map contatos = usuario['contatos'];
         if (contatos != null) {
-          contatos.forEach((cont) {
+          contatos.forEach((contKey, contValue) {
             var contato = Usuario(
-                chave: cont['uid'], nome: cont['nome'], email: cont['email']);
+                chave: contValue['uid'],
+                nome: contValue['displayName'],
+                email: contValue['email'],
+                urlFoto: contValue['photoURL'],
+                telefone: contValue['telefone']);
             _logado.contatos.add(contato);
           });
         }

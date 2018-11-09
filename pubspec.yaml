@@ -26,6 +26,7 @@ dependencies:
   font_awesome_flutter: ^8.1.0
   shared_preferences: ^0.4.3
   fluttertoast: ^2.0.9
+  # cached_network_image: "^0.3.0"
   
 dev_dependencies:
   flutter_test:

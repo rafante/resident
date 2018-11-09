@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:resident/entidades/usuarios.dart';
 
 class PerfilPage extends StatefulWidget {
   final FirebaseApp app;
@@ -28,7 +29,7 @@ class _PerfilPageState extends State<PerfilPage> {
           Padding(
               padding: EdgeInsets.symmetric(horizontal: 100.0),
               child: ClipOval(
-                child: Image.network('https://www.updateordie.com/wp-content/uploads/2013/10/rosto.jpg'),
+                child: Image.network(Usuario.logado().contatos[0].urlFoto),
               )),
           SizedBox(height: 30.0),
           Center(
