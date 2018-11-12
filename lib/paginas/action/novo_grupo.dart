@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:resident/componentes/card_contato.dart';
 import 'package:resident/entidades/contato.dart';
 import 'package:resident/entidades/dados_grupo.dart';
 import 'package:resident/entidades/usuarios.dart';
@@ -30,14 +32,12 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
   String titulo = 'Novo grupo';
   TextEditingController _nomeDoGrupo = TextEditingController(text: '');
   TextEditingController _descricao = TextEditingController(text: '');
-  List<Map> _contatos;
-  bool _marcado = true;
+  List<Usuario> contatos = [];
   List<ContatoCard> lista = [];
 
   @override
   void initState() {
     super.initState();
-    _contatos = [];
     if (widget.grupoChave == null || widget.grupoChave == '')
       _dadosGrupo = new DadosGrupo();
     else
@@ -50,9 +50,10 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
     });
   }
 
-  void setar(String nome, String descricao) {
+  void setar(String nome, String descricao, List<Usuario> contatos) {
     _dadosGrupo.nome = nome;
     _dadosGrupo.descricao = descricao;
+    _dadosGrupo.contatos = contatos;
     _dadosGrupo.salvar();
   }
 
@@ -75,25 +76,73 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
         });
   }
 
-  // List<Widget> _getContatos() {
-  //   List<Card> cartoes = [];
-  //   lista.forEach((ContatoCard contato) {
-  //     cartoes.add(new Card(
-  //       child: ListTile(
-  //         leading: Checkbox(
-  //           onChanged: (bool marcado) {
-  //             setState(() {
-  //               contato = ContatoCard(contato, marcado);
-  //             });
-  //           },
-  //           value: contato.value,
-  //         ),
-  //         title: Text(contato.key),
-  //       ),
-  //     ));
-  //   });
-  //   return cartoes;
-  // }
+  Future<Null> abrirSelecaoContatos() async {
+    List<Widget> lista = [];
+    var todosOsContatos = Usuario.logado().contatos;
+    todosOsContatos.forEach((Usuario contato) {
+      lista.add(CardSelecionaContato(
+        contato: contato,
+        selecao: true,
+      ));
+    });
+    List<Usuario> _contatos = await showDialog(
+        context: context,
+        builder: (context) {
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 120.0),
+            child: Container(
+              color: Colors.white,
+              child: Column(children: [
+                Expanded(
+                    child: Container(
+                  child: ListView(
+                    children: lista,
+                  ),
+                )),
+                SizedBox(
+                  height: 50.0,
+                  child: FloatingActionButton(
+                    child: Icon(Icons.done),
+                    onPressed: () {
+                      List<Usuario> _contatos = [];
+                      lista.forEach((Widget cont) {
+                        CardSelecionaContato cardCont = cont;
+                        if (cardCont != null && cardCont.marcado) {
+                          _contatos.add(cardCont.contato);
+                        }
+                      });
+                      if (_contatos == null) _contatos = [];
+                      Navigator.pop(context, _contatos);
+                    },
+                  ),
+                )
+              ]),
+            ),
+          ); 
+        });
+
+    setState(() {
+      if (_contatos != null) contatos = _contatos;
+    });
+  }
+
+  List<Widget> contatosSelecionadosCards() {
+    List<Widget> lista = [];
+    lista.add(MaterialButton(
+      onPressed: () {
+        abrirSelecaoContatos();
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[Icon(Icons.add), Text('Add contato')],
+      ),
+    ));
+    contatos.forEach((Usuario contato) {
+      lista.add(CardSelecionaContato(contato: contato));
+    });
+
+    return lista;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,16 +150,21 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
       appBar: AppBar(
         title: Text(titulo),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.done_outline),
-        onPressed: () {
-          setState(() {
-            listaContatos();
-            // titulo = _nomeDoGrupo.text;
-            // setar(_nomeDoGrupo.text, _descricao.text);
-            // Navigator.pop(context);
-          });
-        },
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          SizedBox(height: 10.0),
+          FloatingActionButton(
+            child: Icon(Icons.done_outline),
+            onPressed: () {
+              setState(() {
+                titulo = _nomeDoGrupo.text;
+                setar(_nomeDoGrupo.text, _descricao.text, contatos);
+                Navigator.pop(context);
+              });
+            },
+          )
+        ],
       ),
       body: ListView(
         children: <Widget>[
@@ -145,9 +199,7 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
             child: SizedBox(
               height: 300.0,
               child: Container(
-                child: ListView(
-                  children: [],
-                ),
+                child: ListView(children: contatosSelecionadosCards()),
               ),
             ),
           )

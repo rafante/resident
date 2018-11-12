@@ -15,17 +15,34 @@ class DadosGrupo {
     if (chave == null || chave == "") chave = _ref.child('grupos').push().key;
     _ref.child('grupos').child(chave).child('nome').set(nome.trim());
     _ref.child('grupos').child(chave).child('descricao').set(descricao.trim());
+    if (contatos != null) {
+      contatos.forEach((contato) {
+        _ref
+            .child('grupos')
+            .child(chave)
+            .child('contatos')
+            .push()
+            .child('uid')
+            .set(contato.chave);
+      });
+    }
   }
 
-  void getRef(){
+  void getRef() {
     if (_ref == null) _ref = Banco.ref();
   }
 
-  Future<DadosGrupo> getDados() async{
-    await _ref.child('grupos').child(chave).once().then((DataSnapshot snapshot){
+  Future<DadosGrupo> getDados() async {
+    await _ref
+        .child('grupos')
+        .child(chave)
+        .once()
+        .then((DataSnapshot snapshot) {
       Map dados = snapshot.value;
-      nome = dados['nome'];
-      descricao = dados['descricao'];
+      if (dados != null) {
+        nome = dados['nome'];
+        descricao = dados['descricao'];
+      }
     });
     return this;
   }
@@ -36,12 +53,12 @@ class DadosGrupo {
   }
 
   DadosGrupo({this.chave = ''}) {
-    if(chave == ''){
+    if (chave == '') {
       nome = '';
       descricao = '';
       contatos = [];
       getRef();
-    }else{
+    } else {
       getRef();
     }
   }

@@ -66,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<FirebaseUser> _loginEmail() async {
     FirebaseUser usuario = await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: _email.text, password: _senha.text);
-    Usuarios.setLogado(usuario);
+    Usuario.setLogado(usuario);
     return usuario;
   }
 
@@ -128,17 +128,18 @@ class _LoginPageState extends State<LoginPage> {
                   height: 52.0,
                   onPressed: () {
                     _signIn().then((user) {
-                      Fluttertoast.showToast(
-                          msg: "Usuario ${user.displayName} logado",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          timeInSecForIos: 1,
-                          bgcolor: "#e74c3c",
-                          textcolor: '#ffffff');
-
-                      Navigator.of(context).pushNamed(GruposPage.tag);
-                      Usuarios.setLogado(user);
-                      
+                      Usuario.setLogado(user).then((evento) {
+                        Fluttertoast.showToast(
+                                msg: "Usuario ${user.displayName} logado",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER,
+                                timeInSecForIos: 1,
+                                bgcolor: "#e74c3c",
+                                textcolor: '#ffffff')
+                            .then((evento) {
+                          Navigator.of(context).pushNamed(GruposPage.tag);
+                        });
+                      });
                     }).catchError((erro) {
                       print(erro.toString());
                     });

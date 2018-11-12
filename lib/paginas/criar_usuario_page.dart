@@ -120,7 +120,7 @@ class _CriarUsuarioPageState extends State<CriarUsuarioPage> {
                     return;
                   }
                   criarUsuario().then((user) {
-                    Usuarios.setLogado(user);
+                    Usuario.setLogado(user);
                     Navigator.of(context).pushNamed(GruposPage.tag);
                   }).catchError((erro) {
                     setState(() {

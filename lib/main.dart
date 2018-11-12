@@ -8,9 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:resident/entidades/banco.dart';
+import 'package:resident/entidades/navegador.dart';
 import 'package:resident/entidades/usuarios.dart';
 import 'package:resident/paginas/base.dart';
 import 'package:resident/paginas/criar_usuario_page.dart';
+import 'package:resident/paginas/drawers/grupo/perfil.dart';
 import 'package:resident/paginas/exames.dart';
 import 'package:resident/paginas/grupos_page.dart';
 import 'package:resident/paginas/login_page.dart';
@@ -74,6 +76,10 @@ class AppResident extends StatelessWidget {
     );
   }
 
+  NavigatorObserver navegador() {
+    return Navegador();
+  }
+
   void notificacoes() {
     mensageiro.configure(onMessage: (Map<String, dynamic> mensagem) {
       print('caiu no mensageiro:\n $mensagem');
@@ -119,22 +125,13 @@ class AppResident extends StatelessWidget {
     // baner()
     //   ..load()
     //   ..show(anchorType: AnchorType.top, anchorOffset: 0.0);
-    
-    Usuario eu = Usuario.logado();
-    Usuario.carregar().catchError((erro){
-      print(erro);
-    }).then((evento){
-      eu = Usuario.logado();
-    });
-    
-    SystemChrome.setEnabledSystemUIOverlays([]);
+
     //notificacoes();
     return new MaterialApp(
       title: 'Resident',
       theme: new ThemeData(
         primarySwatch: Colors.blue,
       ),
-      // home: new MyApp(),
       home: new BaseWindow(conteudo: GruposPage(app: app)),
       routes: <String, WidgetBuilder>{
         LoginPage.tag: (context) =>

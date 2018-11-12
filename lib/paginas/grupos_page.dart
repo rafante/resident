@@ -14,6 +14,7 @@ import 'package:resident/paginas/drawers/grupo/configuracoes.dart';
 import 'package:resident/paginas/drawers/grupo/contatos.dart';
 import 'package:resident/paginas/drawers/grupo/perfil.dart';
 import 'package:resident/paginas/drawers/grupo/premium.dart';
+import 'package:resident/paginas/login_page.dart';
 import 'package:resident/paginas/pacientes.dart';
 import 'package:resident/utilitarios/shared_prefs.dart';
 
@@ -60,12 +61,11 @@ class _GruposPageState extends State<GruposPage> {
                             width: 13.0,
                             child: Center(
                                 child: Text(
-                                  grupo.notificacoes.toString(),
-                                  style: TextStyle(
-                                    color: Colors.blueAccent,
-                                    fontWeight: FontWeight.bold
-                                  ),
-                                  )),
+                              grupo.notificacoes.toString(),
+                              style: TextStyle(
+                                  color: Colors.blueAccent,
+                                  fontWeight: FontWeight.bold),
+                            )),
                           ),
                         )
                       : new Container(),
@@ -228,7 +228,7 @@ class _GruposPageState extends State<GruposPage> {
   void _validarUsuario() {
     FirebaseAuth.instance.currentUser().then((FirebaseUser usuario) {
       if (usuario == null) {
-        Navigator.pushNamed(context, CriarUsuarioPage.tag);
+        Navigator.pushNamed(context, LoginPage.tag);
       }
     });
   }
@@ -252,10 +252,36 @@ class _GruposPageState extends State<GruposPage> {
         _grupos = gruposLista;
       });
     });
+    checarUsuario();
+  }
+
+  void checarUsuario() {
+    Usuario eu = Usuario.logado();
+    Usuario.carregar().catchError((erro) {
+      print(erro);
+    }).then((evento) {
+      eu = Usuario.logado();
+      if (eu != null) {
+        if (eu.idResidente == null || eu.idResidente == "") {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+            return BaseWindow(
+                conteudo: PerfilPage(
+              app: widget.app,
+            ));
+          }));
+        }
+      } else {
+        Future.delayed(Duration(seconds: 1)).then((evento) {
+          print('Não encontrou chave do usuário. Tentando de novo...');
+          checarUsuario();
+        });
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: new AppBar(
         title: Padding(
@@ -271,8 +297,6 @@ class _GruposPageState extends State<GruposPage> {
       ),
       floatingActionButton: new FloatingActionButton(
         onPressed: () {
-          String contato = 'n22rS32VKsb4Ne4wEDRZaAGKCyi1';
-          Usuario.adicionarContato(contato);
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return new BaseWindow(
               conteudo: DadosGrupoPage(app: widget.app),
