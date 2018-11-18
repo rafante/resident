@@ -1,22 +1,4 @@
-import 'dart:async';
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
-import 'package:resident/entidades/banco.dart';
-import 'package:resident/entidades/grupos_class.dart';
-import 'package:resident/entidades/usuarios.dart';
-import 'package:resident/paginas/action/novo_grupo.dart';
-import 'package:resident/paginas/base.dart';
-import 'package:resident/paginas/criar_usuario_page.dart';
-import 'package:resident/paginas/drawers/grupo/configuracoes.dart';
-import 'package:resident/paginas/drawers/grupo/contatos.dart';
-import 'package:resident/paginas/drawers/grupo/perfil.dart';
-import 'package:resident/paginas/drawers/grupo/premium.dart';
-import 'package:resident/paginas/login_page.dart';
-import 'package:resident/paginas/pacientes.dart';
-import 'package:resident/utilitarios/shared_prefs.dart';
+import 'package:resident/imports.dart';
 
 class GruposPage extends StatefulWidget {
   static String tag = 'home-page';
@@ -31,37 +13,40 @@ class GruposPage extends StatefulWidget {
 class _GruposPageState extends State<GruposPage> {
   DatabaseReference db;
 
-  List<Grupo> _grupos = <Grupo>[];
+  Map<String, dynamic> _grupos = Map();
+  Map<String, dynamic> _notificacoes = Map();
   TextEditingController _grupoNome = TextEditingController(text: '');
 
   List<Card> _gruposCards() {
     List<Card> lista = <Card>[];
-    _grupos.forEach((Grupo grupo) {
-      Prefs.checarNotificacoes(grupo: grupo.key).then((numeroNotificacoes) {
-        if (numeroNotificacoes != grupo.notificacoes) {
-          setState(() {
-            grupo.notificacoes = numeroNotificacoes;
-          });
-        }
-      });
+    _grupos.forEach((chave, grupo) {
+      // Prefs.checarNotificacoes(grupo: chave).then((numeroNotificacoes) {
+      //   if (numeroNotificacoes != grupo['notificacoes']) {
+      //     setState(() {
+      //       grupo['notificacoes'] = numeroNotificacoes;
+      //     });
+      //   }
+      // });
+
       lista.add(new Card(
         child: new ListTile(
+          leading: Icon(Icons.group),
           trailing: IconButton(
             icon: Stack(
               children: <Widget>[
                 Icon(Icons.settings),
                 Positioned(
-                  left: 10.0,
-                  top: 10.0,
-                  child: grupo.notificacoes > 0
+                  left: Tela.de(context).x(10.0),
+                  top: Tela.de(context).y(10.0),
+                  child: 1 > 0
                       ? ClipOval(
                           child: Container(
                             color: Colors.amberAccent,
-                            height: 15.0,
-                            width: 13.0,
+                            height: Tela.de(context).y(15.0),
+                            width: Tela.de(context).x(13.0),
                             child: Center(
                                 child: Text(
-                              grupo.notificacoes.toString(),
+                              grupo['notificacoes'].toString(),
                               style: TextStyle(
                                   color: Colors.blueAccent,
                                   fontWeight: FontWeight.bold),
@@ -77,21 +62,25 @@ class _GruposPageState extends State<GruposPage> {
                 return BaseWindow(
                     conteudo: DadosGrupoPage(
                   app: widget.app,
-                  grupoChave: grupo.key,
+                  grupoChave: grupo['key'],
                 ));
               }));
             },
           ),
           dense: true,
-          contentPadding: EdgeInsets.all(20.0),
-          title: new Text(grupo.nome),
+          contentPadding: EdgeInsets.fromLTRB(
+              Tela.de(context).x(20.0),
+              Tela.de(context).y(20.0),
+              Tela.de(context).x(20.0),
+              Tela.de(context).y(20.0)),
+          title: new Text(grupo['nome']),
           onTap: () {
             Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => BaseWindow(
                         conteudo: PacientesPage(
-                            app: widget.app, grupoKey: grupo.key))));
+                            app: widget.app, grupoKey: grupo['key']))));
           },
         ),
       ));
@@ -151,7 +140,7 @@ class _GruposPageState extends State<GruposPage> {
           onTap: () {
             Usuarios.deslogar().then((r) {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return CriarUsuarioPage(app: widget.app);
+                return LoginPage(app: widget.app);
               }));
             });
           },
@@ -167,20 +156,21 @@ class _GruposPageState extends State<GruposPage> {
     return lista;
   }
 
-  Future<Grupo> popCriaGrupo() async {
-    return await showDialog<Grupo>(
+  Future<Map<String, dynamic>> popCriaGrupo() async {
+    return await showDialog<Map<String, dynamic>>(
         context: context,
         builder: (BuildContext context) {
           return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30.0),
+            padding: EdgeInsets.symmetric(horizontal: Tela.de(context).x(30.0)),
             child: new SimpleDialog(
               title: const Text('Grupo'),
               children: <Widget>[
                 new Container(
-                  width: 400.0,
-                  height: 100.0,
+                  width: Tela.de(context).x(400.0),
+                  height: Tela.de(context).y(10.0),
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.0),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: Tela.de(context).x(20.0)),
                     child: ListView(
                       children: <Widget>[
                         TextFormField(
@@ -192,9 +182,14 @@ class _GruposPageState extends State<GruposPage> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: Tela.de(context).x(20.0)),
                   child: RaisedButton(
-                    padding: EdgeInsets.all(10.0),
+                    padding: EdgeInsets.fromLTRB(
+                        Tela.de(context).x(20.0),
+                        Tela.de(context).y(20.0),
+                        Tela.de(context).x(20.0),
+                        Tela.de(context).y(20.0)),
                     elevation: 1.0,
                     color: Colors.blueAccent,
                     onPressed: () {
@@ -213,13 +208,11 @@ class _GruposPageState extends State<GruposPage> {
   }
 
   void _criaGrupo() async {
-    await popCriaGrupo().then((Grupo grupo) {
+    await popCriaGrupo().then((Map<String, dynamic> grupo) {
       if (grupo != null) {
-        String grupoChave = db.child('grupos').push().key;
-        db.child('grupos').child(grupoChave).child('nome').set(grupo.nome);
         setState(() {
-          _grupos.add(new Grupo(nome: grupo.nome, key: grupoChave));
-          _grupoNome.text = '';
+          // Banco.colecao('grupos').add(grupo);
+          // _grupoNome.text = '';
         });
       }
     });
@@ -236,23 +229,37 @@ class _GruposPageState extends State<GruposPage> {
   @override
   void initState() {
     super.initState();
-    _validarUsuario();
-    db = Banco.ref();
-    db.child('grupos').onValue.listen((Event evento) {
-      List<Grupo> gruposLista = <Grupo>[];
-      final Map<dynamic, dynamic> grupos = evento.snapshot.value;
-      if (grupos != null) {
-        grupos.forEach((chave, valor) {
-          final String grupoChave = chave;
-          print('a chave do grupo clicado foi a: $grupoChave');
-          gruposLista.add(new Grupo(nome: valor['nome'], key: grupoChave));
-        });
-      }
+    Banco.assinarGrupos((Map<String, dynamic> grps) {
       setState(() {
-        _grupos = gruposLista;
+        if (grps != null) {
+          _grupos.addAll(grps);
+        }
       });
     });
-    checarUsuario();
+    Banco.assinarNotificacoes((Map<String, dynamic> nots) {
+      setState(() {
+        if (nots != null) {
+          _notificacoes.addAll(nots);
+        }
+      });
+    });
+    // _validarUsuario();
+    // db = Banco.ref();
+    // db.child('grupos').onValue.listen((Event evento) {
+    //   List<Grupo> gruposLista = <Grupo>[];
+    //   final Map<dynamic, dynamic> grupos = evento.snapshot.value;
+    //   if (grupos != null) {
+    //     grupos.forEach((chave, valor) {
+    //       final String grupoChave = chave;
+    //       print('a chave do grupo clicado foi a: $grupoChave');
+    //       gruposLista.add(new Grupo(nome: valor['nome'], key: grupoChave));
+    //     });
+    //   }
+    //   setState(() {
+    //     _grupos = gruposLista;
+    //   });
+    // });
+    // checarUsuario();
   }
 
   void checarUsuario() {
@@ -271,21 +278,22 @@ class _GruposPageState extends State<GruposPage> {
           }));
         }
       } else {
-        Future.delayed(Duration(seconds: 1)).then((evento) {
-          print('Não encontrou chave do usuário. Tentando de novo...');
-          checarUsuario();
-        });
+        if (Usuario.logado() != null) {
+          Future.delayed(Duration(seconds: 1)).then((evento) {
+            print('Não encontrou chave do usuário. Tentando de novo...');
+            checarUsuario();
+          });
+        }
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: new AppBar(
         title: Padding(
-          padding: EdgeInsets.only(top: 20.0),
+          padding: EdgeInsets.only(top: Tela.de(context).y(20.0)),
           child: new Text('Resident'),
         ),
       ),

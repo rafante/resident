@@ -1,5 +1,4 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
+import 'package:resident/imports.dart';
 
 class ConfiguracoesPage extends StatefulWidget {
   final FirebaseApp app;
@@ -24,28 +23,46 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
         body: ListView(
           children: <Widget>[
             Padding(
-                padding: EdgeInsets.fromLTRB(20.0, 120.0, 20.0, 0.0),
+                padding: EdgeInsets.fromLTRB(
+                  Tela.de(context).x(20.0),
+                  Tela.de(context).y(120.0),
+                  Tela.de(context).x(20.0),
+                  Tela.de(context).y(0.0),
+                ),
                 child: Center(
                     child: Text(
                   'Alteração de senha',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ))),
             Padding(
-              padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 0.0),
+              padding: EdgeInsets.fromLTRB(
+                  Tela.de(context).x(20.0),
+                  Tela.de(context).y(10.0),
+                  Tela.de(context).x(20.0),
+                  Tela.de(context).y(0.0)),
               child: Container(
-                  height: 150.0,
-                  decoration: BoxDecoration(border: Border.all(width: 1.0)),
+                  height: Tela.de(context).y(150.0),
+                  decoration: BoxDecoration(
+                      border: Border.all(width: Tela.de(context).x(1.0))),
                   child: Padding(
-                    padding: EdgeInsets.all(10.0),
+                    padding: EdgeInsets.fromLTRB(
+                        Tela.de(context).x(10.0),
+                        Tela.de(context).y(10.0),
+                        Tela.de(context).x(10.0),
+                        Tela.de(context).y(10.0)),
                     child: Form(
                       child: ListView(
                         children: <Widget>[
                           FormField(
-                            builder: (context) {
+                            builder: (context2) {
                               return TextFormField(
                                 decoration: InputDecoration(
                                     labelText: 'Senha atual',
-                                    contentPadding: EdgeInsets.all(10.0),
+                                    contentPadding: EdgeInsets.fromLTRB(
+                                        Tela.de(context).x(10.0),
+                                        Tela.de(context).y(10.0),
+                                        Tela.de(context).x(10.0),
+                                        Tela.de(context).y(10.0)),
                                     border: OutlineInputBorder(
                                         borderRadius:
                                             BorderRadius.circular(5.0))),
@@ -56,24 +73,32 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                             height: 10.0,
                           ),
                           FormField(
-                            builder: (context) {
+                            builder: (context3) {
                               return TextFormField(
                                 decoration: InputDecoration(
                                     labelText: 'Nova senha',
-                                    contentPadding: EdgeInsets.all(10.0),
+                                    contentPadding: EdgeInsets.fromLTRB(
+                                        Tela.de(context).x(10.0),
+                                        Tela.de(context).y(10.0),
+                                        Tela.de(context).x(10.0),
+                                        Tela.de(context).y(10.0)),
                                     border: OutlineInputBorder(
                                         borderRadius:
                                             BorderRadius.circular(5.0))),
                               );
                             },
                           ),
-                          SizedBox(height: 10.0),
+                          SizedBox(height: Tela.de(context).y(10.0)),
                           FormField(
-                            builder: (context) {
+                            builder: (context4) {
                               return TextFormField(
                                 decoration: InputDecoration(
                                     labelText: 'Confirmação da senha',
-                                    contentPadding: EdgeInsets.all(10.0),
+                                    contentPadding: EdgeInsets.fromLTRB(
+                                        Tela.de(context).x(10.0),
+                                        Tela.de(context).y(10.0),
+                                        Tela.de(context).x(10.0),
+                                        Tela.de(context).y(10.0)),
                                     border: OutlineInputBorder(
                                         borderRadius:
                                             BorderRadius.circular(5.0))),

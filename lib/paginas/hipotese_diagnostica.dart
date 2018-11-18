@@ -1,6 +1,4 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-import 'package:resident/entidades/paciente_class.dart';
+import 'package:resident/imports.dart';
 
 class HipoteseDiagnosticaPage extends StatefulWidget {
   final FirebaseApp app;
@@ -33,7 +31,11 @@ class _HipoteseDiagnosticaPageState extends State<HipoteseDiagnosticaPage> {
         body: ListView(
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.all(20.0),
+              padding: EdgeInsets.fromLTRB(
+                  Tela.de(context).x(20.0),
+                  Tela.de(context).y(20.0),
+                  Tela.de(context).x(20.0),
+                  Tela.de(context).y(20.0)),
               child: TextFormField(
                 controller: _hipoteseDiagnostica,
                 maxLines: 18,
@@ -44,7 +46,11 @@ class _HipoteseDiagnosticaPageState extends State<HipoteseDiagnosticaPage> {
                   });
                 },
                 decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(15.0),
+                    contentPadding: EdgeInsets.fromLTRB(
+                        Tela.de(context).x(15.0),
+                        Tela.de(context).y(15.0),
+                        Tela.de(context).x(15.0),
+                        Tela.de(context).y(15.0)),
                     hintText: 'Hipótese diagnóstica...',
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15.0)))),

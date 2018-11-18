@@ -29,7 +29,6 @@ class Prefs {
 
   static Future<int> checarNotificacoes({String grupo, String paciente = ''}) async {
     final prefs = await SharedPreferences.getInstance();
-    print('checando notificações para o grupo: $grupo paciente: $paciente');
     var chave = grupo;
     if(paciente != ""){
       chave += "|" + paciente;
@@ -37,7 +36,6 @@ class Prefs {
     var nots = await prefs.getInt(chave);
     if(nots == null)
       nots = 0;
-    print('número de notificações: $nots');
     return nots;
   }
 }

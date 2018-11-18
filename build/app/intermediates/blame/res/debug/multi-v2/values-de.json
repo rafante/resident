@@ -21,24 +21,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\rafan\\.gradle\\caches\\transforms-1\\files-1.1\\firebase-messaging-17.1.0.aar\\ecf61c0723b2de39138f49292ca4bead\\res\\values-de\\values.xml",
-                    "from": {
-                        "startLines": "4",
-                        "startColumns": "0",
-                        "startOffsets": "205",
-                        "endColumns": "103",
-                        "endOffsets": "308"
-                    },
-                    "to": {
-                        "startLines": "37",
-                        "startColumns": "4",
-                        "startOffsets": "4692",
-                        "endColumns": "107",
-                        "endOffsets": "4795"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\rafan\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-15.0.1.aar\\6f39f5d638cb6a0fbd59f840109b0c92\\res\\values-de\\values.xml",
+                    "source": "C:\\Users\\rafan\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-16.0.1.aar\\1b9d9b7c4a74ac6b815be81efcb2d927\\res\\values-de\\values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
                         "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
@@ -55,7 +38,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\rafan\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-basement-15.0.1.aar\\e6c8178e11f4d2db96cad4b9506db919\\res\\values-de\\values.xml",
+                    "source": "C:\\Users\\rafan\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-basement-16.0.1.aar\\0e2e4ca72f98bdc045f3889b33cf3faa\\res\\values-de\\values.xml",
                     "from": {
                         "startLines": "4",
                         "startColumns": "0",
@@ -86,6 +69,23 @@
                         "startOffsets": "5512",
                         "endColumns": "100",
                         "endOffsets": "5608"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\rafan\\.gradle\\caches\\transforms-1\\files-1.1\\firebase-messaging-17.3.3.aar\\9d270420cace26b71ec4f7531e2432fa\\res\\values-de\\values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "205",
+                        "endColumns": "103",
+                        "endOffsets": "308"
+                    },
+                    "to": {
+                        "startLines": "37",
+                        "startColumns": "4",
+                        "startOffsets": "4692",
+                        "endColumns": "107",
+                        "endOffsets": "4795"
                     }
                 },
                 {

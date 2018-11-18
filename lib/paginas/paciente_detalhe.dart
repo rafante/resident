@@ -1,9 +1,5 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:resident/entidades/paciente_class.dart';
-import 'package:resident/utilitarios/widgets.dart';
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:resident/imports.dart';
 
 class PacienteDetalhe extends StatefulWidget {
   final FirebaseApp app;
@@ -48,7 +44,11 @@ class _PacienteDetalheState extends State<PacienteDetalhe> {
       body: ListView(children: [
         //nome
         Padding(
-          padding: EdgeInsets.all(20.0),
+          padding: EdgeInsets.fromLTRB(
+              Tela.de(context).x(20.0),
+              Tela.de(context).y(20.0),
+              Tela.de(context).x(20.0),
+              Tela.de(context).y(20.0)),
           child: TextFormField(
             controller: _nome,
             onEditingComplete: () {
@@ -58,14 +58,24 @@ class _PacienteDetalheState extends State<PacienteDetalhe> {
               });
             },
             decoration: InputDecoration(
-                contentPadding: EdgeInsets.all(15.0),
+                contentPadding: EdgeInsets.fromLTRB(
+                  Tela.de(context).x(15.0),
+                  Tela.de(context).y(15.0),
+                  Tela.de(context).x(15.0),
+                  Tela.de(context).y(15.0),
+                ),
                 hintText: 'Digite o nome',
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(15.0)))),
           ),
         ),
         Padding(
-          padding: EdgeInsets.all(20.0),
+          padding: EdgeInsets.fromLTRB(
+            Tela.de(context).x(20.0),
+            Tela.de(context).y(20.0),
+            Tela.de(context).x(20.0),
+            Tela.de(context).y(20.0),
+          ),
           child: DateTimePickerFormField(
             controller: _data,
             format: dateFormat,
@@ -75,14 +85,22 @@ class _PacienteDetalheState extends State<PacienteDetalhe> {
               });
             },
             decoration: InputDecoration(
-                contentPadding: EdgeInsets.all(15.0),
+                contentPadding: EdgeInsets.fromLTRB(
+                    Tela.de(context).x(15.0),
+                    Tela.de(context).y(15.0),
+                    Tela.de(context).x(15.0),
+                    Tela.de(context).y(15.0)),
                 hintText: 'Data de entrada',
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(15.0)))),
           ),
         ),
         Padding(
-          padding: EdgeInsets.all(20.0),
+          padding: EdgeInsets.fromLTRB(
+              Tela.de(context).x(20.0),
+              Tela.de(context).y(20.0),
+              Tela.de(context).x(20.0),
+              Tela.de(context).y(20.0)),
           child: TextFormField(
             keyboardType: TextInputType.phone,
             controller: _telefone,
@@ -93,7 +111,11 @@ class _PacienteDetalheState extends State<PacienteDetalhe> {
               });
             },
             decoration: InputDecoration(
-                contentPadding: EdgeInsets.all(15.0),
+                contentPadding: EdgeInsets.fromLTRB(
+                    Tela.de(context).x(15.0),
+                    Tela.de(context).y(15.0),
+                    Tela.de(context).x(15.0),
+                    Tela.de(context).y(15.0)),
                 hintText: 'Telefone',
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(15.0)))),

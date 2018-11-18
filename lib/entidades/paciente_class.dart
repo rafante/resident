@@ -88,7 +88,7 @@ class Paciente {
         .then((snapshot) {
       Map paciente = snapshot.value;
       if (paciente != null) nome = paciente['nome'];
-      if (entrada != null)
+      if (paciente['entrada'] != null)
         entrada = DateTime.fromMillisecondsSinceEpoch(paciente['entrada']);
       telefone = paciente['telefone'];
     });

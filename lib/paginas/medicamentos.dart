@@ -1,12 +1,5 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:resident/entidades/aplicacao_medicamento.dart';
-import 'package:resident/entidades/banco.dart';
-import 'package:resident/entidades/paciente_class.dart';
-import 'package:resident/paginas/base.dart';
-import 'package:resident/paginas/medicamento.dart';
+import 'package:resident/imports.dart';
 
 class MedicamentosPage extends StatefulWidget {
   final FirebaseApp app;
@@ -98,7 +91,12 @@ class _MedicamentosPageState extends State<MedicamentosPage> {
       body: ListView(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.all(20.0),
+            padding: EdgeInsets.fromLTRB(
+              Tela.de(context).x(20.0),
+              Tela.de(context).y(20.0),
+              Tela.de(context).x(20.0),
+              Tela.de(context).y(20.0)
+            ),
             child: Text('Paciente: $nomePaciente'),
           ),
           tabela()

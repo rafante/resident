@@ -17,6 +17,7 @@ import 'package:resident/paginas/exames.dart';
 import 'package:resident/paginas/grupos_page.dart';
 import 'package:resident/paginas/login_page.dart';
 import 'package:resident/paginas/medicamentos.dart';
+import 'package:resident/paginas/ml.dart';
 import 'package:resident/paginas/paciente.dart';
 import 'package:resident/paginas/pacientes.dart';
 import 'package:resident/utilitarios/shared_prefs.dart';
@@ -127,11 +128,34 @@ class AppResident extends StatelessWidget {
     //   ..show(anchorType: AnchorType.top, anchorOffset: 0.0);
 
     //notificacoes();
+    // if (Usuario.logado() == null) {
+    //   Navigator.push(
+    //       context,
+    //       MaterialPageRoute(
+    //           builder: (context) => BaseWindow(conteudo: LoginPage(app: app))));
+    // } else if (Usuario.logado().idResidente == null ||
+    //     Usuario.logado().idResidente == "") {
+    //   Navigator.push(
+    //       context,
+    //       MaterialPageRoute(
+    //           builder: (context) =>
+    //               BaseWindow(conteudo: PerfilPage(app: app))));
+    // }
+
+    String rotaInicial = GruposPage.tag;
+    if (Usuario.logado() == null) {
+      rotaInicial = LoginPage.tag;
+    } else if (Usuario.logado().idResidente == null ||
+        Usuario.logado().idResidente == "") {
+      rotaInicial = PerfilPage.tag;
+    }
+
     return new MaterialApp(
       title: 'Resident',
       theme: new ThemeData(
         primarySwatch: Colors.blue,
       ),
+      initialRoute: rotaInicial,
       home: new BaseWindow(conteudo: GruposPage(app: app)),
       routes: <String, WidgetBuilder>{
         LoginPage.tag: (context) =>
@@ -147,7 +171,11 @@ class AppResident extends StatelessWidget {
         CriarUsuarioPage.tag: (context) =>
             new BaseWindow(conteudo: CriarUsuarioPage(app: app)),
         MedicamentosPage.tag: (context) =>
-            new BaseWindow(conteudo: MedicamentosPage(app: app))
+            new BaseWindow(conteudo: MedicamentosPage(app: app)),
+        PerfilPage.tag: (context) =>
+            new BaseWindow(conteudo: PerfilPage(app: app)),
+        VisionPage.tag: (context) =>
+            new BaseWindow(conteudo: VisionPage(app: app)),
       },
     );
   }

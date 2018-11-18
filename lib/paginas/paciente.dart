@@ -1,28 +1,5 @@
-import 'dart:async';
-
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:resident/componentes/bubble.dart';
-import 'package:resident/componentes/mensagem.dart';
-import 'package:resident/entidades/banco.dart';
-import 'dart:io';
-
-import 'package:resident/entidades/paciente_class.dart';
-import 'package:resident/paginas/alta_paciente.dart';
-import 'package:resident/paginas/hipotese_diagnostica.dart';
-import 'package:resident/paginas/historia_doenca_atual.dart';
-import 'package:resident/paginas/historia_pregressa.dart';
-import 'package:resident/paginas/medicamentos.dart';
-import 'package:resident/utilitarios/shared_prefs.dart';
-import 'exames.dart';
-import 'package:resident/entidades/usuarios.dart';
-import 'package:resident/paginas/base.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:http/http.dart' as http;
+import 'package:resident/imports.dart';
 
 class PacientePage extends StatefulWidget {
   static String tag = 'paciente-page';
@@ -75,7 +52,7 @@ class _PacientePageState extends State<PacientePage> {
           elevation: 1.0,
           backgroundColor: Colors.purpleAccent,
           title: Padding(
-            padding: EdgeInsets.only(top: 20.0),
+            padding: EdgeInsets.only(top: Tela.de(context).x(20.0)),
             child: Text(widget.paciente.nome),
           )),
       body: Column(
@@ -93,11 +70,15 @@ class _PacientePageState extends State<PacientePage> {
               },
               itemCount: _mensagens.length,
               reverse: true,
-              padding: EdgeInsets.all(10.0),
+              padding: EdgeInsets.fromLTRB(
+                  Tela.de(context).x(10.0),
+                  Tela.de(context).y(10.0),
+                  Tela.de(context).x(10.0),
+                  Tela.de(context).y(10.0)),
             ),
           ),
           Divider(
-            height: 1.0,
+            height: Tela.de(context).y(1.0),
           ),
           Container(
             child: _construirComposer(),
@@ -116,7 +97,9 @@ class _PacientePageState extends State<PacientePage> {
                 Navigator.push(context, MaterialPageRoute(builder: ((context) {
                   return BaseWindow(
                     conteudo: ExamesPage(
-                        app: widget.app, pacienteKey: widget.pacienteKey, grupoKey: widget.grupoKey),
+                        app: widget.app,
+                        pacienteKey: widget.pacienteKey,
+                        grupoKey: widget.grupoKey),
                   );
                 })));
               },
@@ -142,7 +125,9 @@ class _PacientePageState extends State<PacientePage> {
                 Navigator.push(context, MaterialPageRoute(builder: ((context) {
                   return BaseWindow(
                     conteudo: HistoriaDoencaAtualPage(
-                        app: widget.app, pacienteKey: widget.pacienteKey, grupoKey: widget.grupoKey),
+                        app: widget.app,
+                        pacienteKey: widget.pacienteKey,
+                        grupoKey: widget.grupoKey),
                   );
                 })));
               },
@@ -154,7 +139,9 @@ class _PacientePageState extends State<PacientePage> {
                 Navigator.push(context, MaterialPageRoute(builder: ((context) {
                   return BaseWindow(
                     conteudo: HistoriaPregressaPage(
-                        app: widget.app, pacienteKey: widget.pacienteKey, grupoKey: widget.grupoKey),
+                        app: widget.app,
+                        pacienteKey: widget.pacienteKey,
+                        grupoKey: widget.grupoKey),
                   );
                 })));
               },
@@ -166,7 +153,9 @@ class _PacientePageState extends State<PacientePage> {
                 Navigator.push(context, MaterialPageRoute(builder: ((context) {
                   return BaseWindow(
                     conteudo: HipoteseDiagnosticaPage(
-                        app: widget.app, pacienteKey: widget.pacienteKey, grupoKey: widget.grupoKey),
+                        app: widget.app,
+                        pacienteKey: widget.pacienteKey,
+                        grupoKey: widget.grupoKey),
                   );
                 })));
               },
@@ -178,7 +167,9 @@ class _PacientePageState extends State<PacientePage> {
                 Navigator.push(context, MaterialPageRoute(builder: ((context) {
                   return BaseWindow(
                     conteudo: AltaPacientePage(
-                        app: widget.app, pacienteKey: widget.pacienteKey, grupoKey: widget.grupoKey),
+                        app: widget.app,
+                        pacienteKey: widget.pacienteKey,
+                        grupoKey: widget.grupoKey),
                   );
                 })));
               },
@@ -209,9 +200,8 @@ class _PacientePageState extends State<PacientePage> {
           Usuarios.logado(), 'carregando arquivo...', DateTime.now());
       salvarMensagem(linkMsg);
 
-      DatabaseReference ref = Banco.ref()
-          .child('anexos')
-          .child(widget.pacienteKey);
+      DatabaseReference ref =
+          Banco.ref().child('anexos').child(widget.pacienteKey);
       String chave = ref.push().key;
 
       StorageReference sRef =
@@ -225,7 +215,7 @@ class _PacientePageState extends State<PacientePage> {
       arquivo.writeAsBytesSync(imagemBytes);
 
       StorageUploadTask task = sRef.putFile(arquivo);
-      final Uri downloadUrl = (await task.future).downloadUrl;
+      final Uri downloadUrl = (await task.onComplete).uploadSessionUri;
       final File downloadFile =
           new File('${Directory.systemTemp.path}/$chave.png');
       StorageFileDownloadTask dTask = sRef.writeToFile(downloadFile);
@@ -241,9 +231,8 @@ class _PacientePageState extends State<PacientePage> {
 
   Mensagem criarMensagem(String autor, String texto, DateTime hora) {
     Mensagem mensagem = new Mensagem(texto: texto, hora: hora, autor: autor);
-    DatabaseReference ref = Banco.ref()
-        .child('chats')
-        .child(widget.pacienteKey);
+    DatabaseReference ref =
+        Banco.ref().child('chats').child(widget.pacienteKey);
     mensagem.chave = ref.push().key;
     return mensagem;
   }
@@ -251,7 +240,7 @@ class _PacientePageState extends State<PacientePage> {
   void salvarMensagem(Mensagem mensagem) {
     DatabaseReference db = Banco.ref();
     db = db.child('chats').child(widget.pacienteKey).child(mensagem.chave);
-    
+
     db.child('texto').set(mensagem.texto);
     db.child('hora').set(mensagem.hora.millisecondsSinceEpoch);
     db.child('autor').set(mensagem.autor);
@@ -261,7 +250,7 @@ class _PacientePageState extends State<PacientePage> {
     return IconTheme(
       data: new IconThemeData(color: Colors.purpleAccent),
       child: new Container(
-        margin: const EdgeInsets.symmetric(horizontal: 29.0),
+        margin: EdgeInsets.symmetric(horizontal: Tela.de(context).x(29.0)),
         child: new Row(
           children: <Widget>[
             new Flexible(
@@ -272,7 +261,7 @@ class _PacientePageState extends State<PacientePage> {
                       InputDecoration.collapsed(hintText: 'Digite aqui')),
             ),
             new Container(
-              margin: EdgeInsets.symmetric(horizontal: 3.0),
+              margin: EdgeInsets.symmetric(horizontal: Tela.de(context).x(3.0)),
               child: Row(
                 children: <Widget>[
                   _botaoAnexar(),
@@ -283,8 +272,7 @@ class _PacientePageState extends State<PacientePage> {
                     ),
                     onPressed: () {
                       if (_textController.text == '') return;
-                      DatabaseReference db =
-                          Banco.ref();
+                      DatabaseReference db = Banco.ref();
                       db = db.child('chats').child(widget.pacienteKey);
                       String key = db.push().key;
 

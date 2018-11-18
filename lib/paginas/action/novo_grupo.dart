@@ -1,12 +1,4 @@
-import 'dart:async';
-
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-import 'package:resident/componentes/card_contato.dart';
-import 'package:resident/entidades/contato.dart';
-import 'package:resident/entidades/dados_grupo.dart';
-import 'package:resident/entidades/usuarios.dart';
+import 'package:resident/imports.dart';
 
 //Classe que mostra as coisas
 class DadosGrupoPage extends StatefulWidget {
@@ -38,6 +30,7 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
   @override
   void initState() {
     super.initState();
+    contatos.add(Usuario.logado());
     if (widget.grupoChave == null || widget.grupoChave == '')
       _dadosGrupo = new DadosGrupo();
     else
@@ -48,6 +41,30 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
         _descricao.text = dados.descricao;
       });
     });
+    Banco.ref()
+        .child('grupos')
+        .child(widget.grupoChave)
+        .onValue
+        .listen((evento) {
+      if (evento.snapshot.value != null) {
+        Map grupo = evento.snapshot.value;
+        if (grupo.containsKey('contatos')) {
+          Map _contatos = grupo['contatos'];
+          setState(() {
+            contatos = [];
+            contatos.add(Usuario.logado());
+            _contatos.forEach((chave, valor) async {
+              Usuario user = await lerContato(valor['uid']);
+              contatos.add(user);
+            });
+          });
+        }
+      }
+    });
+  }
+
+  Future<Usuario> lerContato(String valor) async {
+    return await Usuario.ler(valor);
   }
 
   void setar(String nome, String descricao, List<Usuario> contatos) {
@@ -58,12 +75,15 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
   }
 
   Future<List<Usuario>> listaContatos() async {
+    double h, v;
+    h = Tela.de(context).x(25.0);
+    v = Tela.de(context).x(25.0);
     return showDialog<List<Usuario>>(
         context: context,
         builder: (context) {
           List<Usuario> lista = [];
           return Padding(
-            padding: EdgeInsets.all(25.0),
+            padding: EdgeInsets.fromLTRB(h, v, h, v),
             child: Center(
               child: Container(
                 color: Colors.amberAccent,
@@ -89,7 +109,9 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
         context: context,
         builder: (context) {
           return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 120.0),
+            padding: EdgeInsets.symmetric(
+                horizontal: Tela.de(context).x(50.0),
+                vertical: Tela.de(context).y(120.0)),
             child: Container(
               color: Colors.white,
               child: Column(children: [
@@ -100,7 +122,7 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
                   ),
                 )),
                 SizedBox(
-                  height: 50.0,
+                  height: Tela.de(context).y(50.0),
                   child: FloatingActionButton(
                     child: Icon(Icons.done),
                     onPressed: () {
@@ -118,7 +140,7 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
                 )
               ]),
             ),
-          ); 
+          );
         });
 
     setState(() {
@@ -153,7 +175,7 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          SizedBox(height: 10.0),
+          SizedBox(height: Tela.de(context).y(10.0)),
           FloatingActionButton(
             child: Icon(Icons.done_outline),
             onPressed: () {
@@ -168,21 +190,22 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
       ),
       body: ListView(
         children: <Widget>[
-          SizedBox(height: 20.0),
+          SizedBox(height: Tela.de(context).y(20.0)),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 50.0),
+            padding: EdgeInsets.symmetric(horizontal: Tela.de(context).x(50.0)),
             child: TextFormField(
               controller: _nomeDoGrupo,
               maxLength: 40,
               decoration: InputDecoration(
                   labelText: 'Nome do grupo',
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20.0)))),
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(Tela.de(context).abs(20.0))))),
             ),
           ),
-          SizedBox(height: 20.0),
+          SizedBox(height: Tela.de(context).y(20.0)),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 50.0),
+            padding: EdgeInsets.symmetric(horizontal: Tela.de(context).x(50.0)),
             child: TextFormField(
               maxLength: 240,
               maxLines: 10,
@@ -193,11 +216,11 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
                       borderRadius: BorderRadius.all(Radius.circular(20.0)))),
             ),
           ),
-          SizedBox(height: 20.0),
+          SizedBox(height: Tela.de(context).y(20.0)),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            padding: EdgeInsets.symmetric(horizontal: Tela.de(context).x(20.0)),
             child: SizedBox(
-              height: 300.0,
+              height: Tela.de(context).y(300.0),
               child: Container(
                 child: ListView(children: contatosSelecionadosCards()),
               ),

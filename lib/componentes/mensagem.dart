@@ -1,3 +1,5 @@
+import 'package:resident/imports.dart';
+
 class Mensagem {
   String chave;
   String autor;

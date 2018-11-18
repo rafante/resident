@@ -8,6 +8,9 @@ package io.flutter.plugins.firebase.database;
 
 public final class R {
     public static final class attr {
+        public static final int buttonSize = 0x7f020043;
+        public static final int circleCrop = 0x7f02004a;
+        public static final int colorScheme = 0x7f020059;
         public static final int coordinatorLayoutStyle = 0x7f020064;
         public static final int font = 0x7f020077;
         public static final int fontProviderAuthority = 0x7f020079;
@@ -18,6 +21,8 @@ public final class R {
         public static final int fontProviderQuery = 0x7f02007e;
         public static final int fontStyle = 0x7f02007f;
         public static final int fontWeight = 0x7f020080;
+        public static final int imageAspectRatio = 0x7f02008b;
+        public static final int imageAspectRatioAdjust = 0x7f02008c;
         public static final int keylines = 0x7f020092;
         public static final int layout_anchor = 0x7f020094;
         public static final int layout_anchorGravity = 0x7f020095;
@@ -25,12 +30,24 @@ public final class R {
         public static final int layout_dodgeInsetEdges = 0x7f020097;
         public static final int layout_insetEdge = 0x7f020098;
         public static final int layout_keyline = 0x7f020099;
+        public static final int scopeUris = 0x7f0200c2;
         public static final int statusBarBackground = 0x7f0200d4;
     }
     public static final class bool {
         public static final int abc_action_bar_embed_tabs = 0x7f030000;
     }
     public static final class color {
+        public static final int common_google_signin_btn_text_dark = 0x7f04002a;
+        public static final int common_google_signin_btn_text_dark_default = 0x7f04002b;
+        public static final int common_google_signin_btn_text_dark_disabled = 0x7f04002c;
+        public static final int common_google_signin_btn_text_dark_focused = 0x7f04002d;
+        public static final int common_google_signin_btn_text_dark_pressed = 0x7f04002e;
+        public static final int common_google_signin_btn_text_light = 0x7f04002f;
+        public static final int common_google_signin_btn_text_light_default = 0x7f040030;
+        public static final int common_google_signin_btn_text_light_disabled = 0x7f040031;
+        public static final int common_google_signin_btn_text_light_focused = 0x7f040032;
+        public static final int common_google_signin_btn_text_light_pressed = 0x7f040033;
+        public static final int common_google_signin_btn_tint = 0x7f040034;
         public static final int notification_action_color_filter = 0x7f04004a;
         public static final int notification_icon_bg_color = 0x7f04004b;
         public static final int notification_material_background_media_default_color = 0x7f04004c;
@@ -62,6 +79,27 @@ public final class R {
         public static final int notification_top_pad_large_text = 0x7f050069;
     }
     public static final class drawable {
+        public static final int common_full_open_on_phone = 0x7f060053;
+        public static final int common_google_signin_btn_icon_dark = 0x7f060054;
+        public static final int common_google_signin_btn_icon_dark_focused = 0x7f060055;
+        public static final int common_google_signin_btn_icon_dark_normal = 0x7f060056;
+        public static final int common_google_signin_btn_icon_dark_normal_background = 0x7f060057;
+        public static final int common_google_signin_btn_icon_disabled = 0x7f060058;
+        public static final int common_google_signin_btn_icon_light = 0x7f060059;
+        public static final int common_google_signin_btn_icon_light_focused = 0x7f06005a;
+        public static final int common_google_signin_btn_icon_light_normal = 0x7f06005b;
+        public static final int common_google_signin_btn_icon_light_normal_background = 0x7f06005c;
+        public static final int common_google_signin_btn_text_dark = 0x7f06005d;
+        public static final int common_google_signin_btn_text_dark_focused = 0x7f06005e;
+        public static final int common_google_signin_btn_text_dark_normal = 0x7f06005f;
+        public static final int common_google_signin_btn_text_dark_normal_background = 0x7f060060;
+        public static final int common_google_signin_btn_text_disabled = 0x7f060061;
+        public static final int common_google_signin_btn_text_light = 0x7f060062;
+        public static final int common_google_signin_btn_text_light_focused = 0x7f060063;
+        public static final int common_google_signin_btn_text_light_normal = 0x7f060064;
+        public static final int common_google_signin_btn_text_light_normal_background = 0x7f060065;
+        public static final int googleg_disabled_color_18 = 0x7f060066;
+        public static final int googleg_standard_color_18 = 0x7f060067;
         public static final int notification_action_background = 0x7f060069;
         public static final int notification_bg = 0x7f06006a;
         public static final int notification_bg_low = 0x7f06006b;
@@ -82,19 +120,25 @@ public final class R {
         public static final int action_image = 0x7f070011;
         public static final int action_text = 0x7f070017;
         public static final int actions = 0x7f070018;
+        public static final int adjust_height = 0x7f07001b;
+        public static final int adjust_width = 0x7f07001c;
         public static final int async = 0x7f070020;
+        public static final int auto = 0x7f070021;
         public static final int blocking = 0x7f070023;
         public static final int bottom = 0x7f070024;
         public static final int cancel_action = 0x7f07002b;
         public static final int chronometer = 0x7f070030;
+        public static final int dark = 0x7f070037;
         public static final int end = 0x7f07003c;
         public static final int end_padder = 0x7f07003d;
         public static final int forever = 0x7f070043;
         public static final int icon = 0x7f070046;
         public static final int icon_group = 0x7f070047;
+        public static final int icon_only = 0x7f070048;
         public static final int info = 0x7f07004b;
         public static final int italic = 0x7f07004c;
         public static final int left = 0x7f07004d;
+        public static final int light = 0x7f07004e;
         public static final int line1 = 0x7f07004f;
         public static final int line3 = 0x7f070050;
         public static final int media_actions = 0x7f070053;
@@ -106,6 +150,7 @@ public final class R {
         public static final int right = 0x7f070061;
         public static final int right_icon = 0x7f070062;
         public static final int right_side = 0x7f070063;
+        public static final int standard = 0x7f07007c;
         public static final int start = 0x7f07007d;
         public static final int status_bar_latest_event_content = 0x7f07007e;
         public static final int tag_transition_group = 0x7f070082;
@@ -114,6 +159,7 @@ public final class R {
         public static final int time = 0x7f070087;
         public static final int title = 0x7f070088;
         public static final int top = 0x7f07008b;
+        public static final int wide = 0x7f070090;
     }
     public static final class integer {
         public static final int cancel_button_image_alpha = 0x7f080002;
@@ -138,7 +184,24 @@ public final class R {
         public static final int notification_template_part_time = 0x7f09002b;
     }
     public static final class string {
+        public static final int common_google_play_services_enable_button = 0x7f0b001d;
+        public static final int common_google_play_services_enable_text = 0x7f0b001e;
+        public static final int common_google_play_services_enable_title = 0x7f0b001f;
+        public static final int common_google_play_services_install_button = 0x7f0b0020;
+        public static final int common_google_play_services_install_text = 0x7f0b0021;
+        public static final int common_google_play_services_install_title = 0x7f0b0022;
+        public static final int common_google_play_services_notification_channel_name = 0x7f0b0023;
+        public static final int common_google_play_services_notification_ticker = 0x7f0b0024;
         public static final int common_google_play_services_unknown_issue = 0x7f0b0025;
+        public static final int common_google_play_services_unsupported_text = 0x7f0b0026;
+        public static final int common_google_play_services_update_button = 0x7f0b0027;
+        public static final int common_google_play_services_update_text = 0x7f0b0028;
+        public static final int common_google_play_services_update_title = 0x7f0b0029;
+        public static final int common_google_play_services_updating_text = 0x7f0b002a;
+        public static final int common_google_play_services_wear_update_text = 0x7f0b002b;
+        public static final int common_open_on_phone = 0x7f0b002c;
+        public static final int common_signin_button_text = 0x7f0b002d;
+        public static final int common_signin_button_text_long = 0x7f0b002e;
         public static final int status_bar_notification_info_overflow = 0x7f0b0040;
     }
     public static final class style {
@@ -182,5 +245,13 @@ public final class R {
         public static final int FontFamilyFont_font = 3;
         public static final int FontFamilyFont_fontStyle = 4;
         public static final int FontFamilyFont_fontWeight = 5;
+        public static final int[] LoadingImageView = { 0x7f02004a, 0x7f02008b, 0x7f02008c };
+        public static final int LoadingImageView_circleCrop = 0;
+        public static final int LoadingImageView_imageAspectRatio = 1;
+        public static final int LoadingImageView_imageAspectRatioAdjust = 2;
+        public static final int[] SignInButton = { 0x7f020043, 0x7f020059, 0x7f0200c2 };
+        public static final int SignInButton_buttonSize = 0;
+        public static final int SignInButton_colorScheme = 1;
+        public static final int SignInButton_scopeUris = 2;
     }
 }

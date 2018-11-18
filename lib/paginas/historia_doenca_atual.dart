@@ -1,6 +1,4 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-import 'package:resident/entidades/paciente_class.dart';
+import 'package:resident/imports.dart';
 
 class HistoriaDoencaAtualPage extends StatefulWidget {
   final FirebaseApp app;
@@ -38,14 +36,22 @@ class _HistoriaDoencaAtualPageState extends State<HistoriaDoencaAtualPage> {
         body: ListView(
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.fromLTRB(25.0, 15.0, 15.0, 0.0),
+              padding: EdgeInsets.fromLTRB(
+                  Tela.de(context).x(25.0),
+                  Tela.de(context).x(15.0),
+                  Tela.de(context).x(15.0),
+                  Tela.de(context).x(0.0)),
               child: Text(
                 'Paciente: $nomePaciente',
-                style: TextStyle(fontSize: 17.0),
+                style: TextStyle(fontSize: Tela.de(context).abs(17.0)),
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(20.0),
+              padding: EdgeInsets.fromLTRB(
+                  Tela.de(context).x(20.0),
+                  Tela.de(context).y(20.0),
+                  Tela.de(context).x(20.0),
+                  Tela.de(context).y(20.0)),
               child: TextFormField(
                 controller: _historiaDoencaAtual,
                 maxLines: 18,
@@ -56,7 +62,12 @@ class _HistoriaDoencaAtualPageState extends State<HistoriaDoencaAtualPage> {
                   });
                 },
                 decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(15.0),
+                    contentPadding: EdgeInsets.fromLTRB(
+                      Tela.de(context).x(15.0),
+                      Tela.de(context).y(15.0),
+                      Tela.de(context).x(15.0),
+                      Tela.de(context).y(15.0),
+                    ),
                     hintText: 'História de doença atual...',
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15.0)))),

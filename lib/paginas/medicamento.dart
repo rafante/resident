@@ -1,7 +1,5 @@
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:resident/entidades/aplicacao_medicamento.dart';
+import 'package:resident/imports.dart';
 
 class MedicamentoDetalhe extends StatefulWidget {
   static String tag = 'medicamento-detalhe';
@@ -35,7 +33,12 @@ class _MedicamentoDetalheState extends State<MedicamentoDetalhe> {
     return Scaffold(
       appBar: AppBar(title: Text('Tipo')),
       body: Padding(
-        padding: EdgeInsets.all(20.0),
+        padding: EdgeInsets.fromLTRB(
+          Tela.de(context).x(20.0),
+          Tela.de(context).y(20.0),
+          Tela.de(context).x(20.0),
+          Tela.de(context).y(20.0),
+        ),
         child: ListView(
           children: <Widget>[
             TextFormField(
@@ -46,13 +49,18 @@ class _MedicamentoDetalheState extends State<MedicamentoDetalhe> {
                 });
               },
               decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(15.0),
+                  contentPadding: EdgeInsets.fromLTRB(
+                    Tela.de(context).x(15.0),
+                    Tela.de(context).y(15.0),
+                    Tela.de(context).x(15.0),
+                    Tela.de(context).y(15.0),
+                  ),
                   hintText: 'Tipo',
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(15.0)))),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 20.0),
+              padding: EdgeInsets.symmetric(vertical: Tela.de(context).y(20.0)),
               child: DateTimePickerFormField(
                 controller: _horario,
                 format: dateFormat,
@@ -64,7 +72,11 @@ class _MedicamentoDetalheState extends State<MedicamentoDetalhe> {
                   }
                 },
                 decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(15.0),
+                    contentPadding: EdgeInsets.fromLTRB(
+                        Tela.de(context).x(15.0),
+                        Tela.de(context).y(15.0),
+                        Tela.de(context).x(15.0),
+                        Tela.de(context).y(15.0)),
                     hintText: 'Horário',
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15.0)))),
@@ -80,7 +92,11 @@ class _MedicamentoDetalheState extends State<MedicamentoDetalhe> {
                 });
               },
               decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(15.0),
+                  contentPadding: EdgeInsets.fromLTRB(
+                      Tela.de(context).x(15.0),
+                      Tela.de(context).y(15.0),
+                      Tela.de(context).x(15.0),
+                      Tela.de(context).y(15.0)),
                   hintText: 'Descrição',
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(15.0)))),
@@ -93,7 +109,7 @@ class _MedicamentoDetalheState extends State<MedicamentoDetalhe> {
         onPressed: () {
           aplicacao.salvarTipo(_tipo.text);
           aplicacao.salvarDescricao(_descricao.text);
-          
+
           aplicacao.salvar();
           Navigator.pop(context);
         },

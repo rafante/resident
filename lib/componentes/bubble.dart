@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:resident/imports.dart';
 
 class Bubble extends StatelessWidget {
   Bubble({this.message, this.time, this.delivered, this.isMe});
@@ -26,8 +26,8 @@ class Bubble extends StatelessWidget {
       crossAxisAlignment: align,
       children: <Widget>[
         Container(
-          margin: const EdgeInsets.all(3.0),
-          padding: const EdgeInsets.all(8.0),
+          margin: EdgeInsets.all(Tela.de(context).abs(3.0)),
+          padding: EdgeInsets.all(Tela.de(context).abs(8.0)),
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
@@ -41,23 +41,23 @@ class Bubble extends StatelessWidget {
           child: Stack(
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(right: 48.0),
+                padding: EdgeInsets.only(right: Tela.de(context).x(48.0)),
                 child: Text(message),
               ),
               Positioned(
-                bottom: 0.0,
-                right: 0.0,
+                bottom: Tela.de(context).y(0.0),
+                right: Tela.de(context).x(0.0),
                 child: Row(
                   children: <Widget>[
                     Text(time,
                         style: TextStyle(
                           color: Colors.black38,
-                          fontSize: 10.0,
+                          fontSize: Tela.de(context).abs(10.0),
                         )),
-                    SizedBox(width: 3.0),
+                    SizedBox(width: Tela.de(context).x(3.0)),
                     Icon(
                       icon,
-                      size: 12.0,
+                      size: Tela.de(context).abs(12.0),
                       color: Colors.black38,
                     )
                   ],

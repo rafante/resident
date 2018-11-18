@@ -13,7 +13,9 @@ class Usuario {
   String idResidente = "";
   Int8List imagem;
   List<Usuario> contatos = [];
+  static Map<String, Usuario> usuariosCarregados;
   static Usuario _logado;
+  static Map eu;
 
   Usuario(
       {this.chave,
@@ -24,6 +26,16 @@ class Usuario {
       this.imagem,
       this.contatos,
       this.idResidente});
+
+  static void setLogado(FirebaseUser user) {
+    eu = Map();
+    eu['nome'] = user.displayName;
+    eu['email'] = user.email;
+    eu['emailVerificado'] = user.isEmailVerified;
+    eu['telefone'] = user.phoneNumber;
+    eu['urlFoto'] = user.photoUrl;
+    eu['uid'] = user.uid;
+  }
 
   void salvar() {
     Banco.ref().child('usuarios').child(chave).child('displayName').set(nome);
@@ -38,6 +50,39 @@ class Usuario {
 
   static Future<FirebaseUser> firebaseUser() async {
     return await FirebaseAuth.instance.currentUser();
+  }
+
+  static Future<Usuario> lerResidente(String idResidente) async {
+    String chave = '';
+    await Banco.ref()
+        .child('usuarios')
+        .child('ids')
+        .child(idResidente)
+        .once()
+        .then((snap) {
+      if (snap.value == null) return null;
+      ler(snap.value);
+      chave = snap.value;
+    });
+    return ler(chave);
+  }
+
+  static Future<Usuario> ler(String chave) async {
+    if (usuariosCarregados == null) usuariosCarregados = Map();
+    if (chave == null || chave == '') return null;
+    if (usuariosCarregados.containsKey(chave)) return usuariosCarregados[chave];
+    await Banco.ref().child('usuarios').child(chave).once().then((snap) {
+      if (snap.value != null) {
+        usuariosCarregados[chave] = Usuario(
+            chave: chave,
+            email: snap.value['email'],
+            idResidente: snap.value['idResidente'],
+            urlFoto: snap.value['photoURL'],
+            nome: snap.value['displayName'],
+            telefone: snap.value['phone']);
+      }
+    });
+    return usuariosCarregados[chave];
   }
 
   static Usuario logado() {
@@ -66,9 +111,9 @@ class Usuario {
     });
   }
 
-  static Future<Null> setLogado(FirebaseUser user) async {
-    return await carregar();
-  }
+  // static Future<Null> setLogado(FirebaseUser user) async {
+  //   return await carregar();
+  // }
 
   static Future<Null> carregar() async {
     await firebaseUser().then((user) {

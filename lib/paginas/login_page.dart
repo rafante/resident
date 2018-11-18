@@ -1,13 +1,4 @@
-import 'dart:async';
-import 'dart:io';
-
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:resident/entidades/usuarios.dart';
-import 'package:resident/paginas/grupos_page.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:resident/imports.dart';
 
 class LoginPage extends StatefulWidget {
   static String tag = 'login-page';
@@ -19,7 +10,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final logo = new Icon(Icons.account_circle, size: 120.0, color: Colors.black);
+  // final logo = new Icon(Icons.account_circle, size: 120.0, color: Colors.black);
   TextEditingController _email = TextEditingController(text: '');
   TextEditingController _senha = TextEditingController(text: '');
   final GoogleSignIn googleSignIn = new GoogleSignIn();
@@ -85,81 +76,65 @@ class _LoginPageState extends State<LoginPage> {
       body: Center(
         child: ListView(
           shrinkWrap: true,
-          padding: EdgeInsets.only(left: 24.0, right: 24.0),
+          padding: EdgeInsets.only(
+              left: Tela.de(context).x(24.0), right: Tela.de(context).y(24.0)),
           children: <Widget>[
-            logo,
-            SizedBox(height: 48.0),
-            new TextFormField(
-              keyboardType: TextInputType.emailAddress,
-              autofocus: false,
-              controller: _email,
-              decoration: InputDecoration(
-                  hintText: 'Email',
-                  contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(32.0))),
-            ),
-            SizedBox(height: 24.0),
-            TextFormField(
-              autofocus: false,
-              obscureText: true,
-              controller: _senha,
-              decoration: InputDecoration(
-                  hintText: 'Senha',
-                  contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(32.0))),
-            ),
-            SizedBox(height: 48.0),
+            Image.asset('images/icone.png',
+                width: Tela.de(context).x(180.0),
+                height: Tela.de(context).y(180.0)),
+            SizedBox(height: 140.0),
             Padding(
-                padding: EdgeInsets.symmetric(vertical: 16.0),
-                child: Text(
-                  _erroMsg != null ? _erroMsg : '',
-                  style: TextStyle(color: Colors.redAccent),
-                )),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+              padding: EdgeInsets.symmetric(
+                  vertical: Tela.de(context).x(16.0),
+                  horizontal: Tela.de(context).y(16.0)),
               child: Material(
                 borderRadius: BorderRadius.circular(30.0),
                 shadowColor: Colors.lightBlueAccent,
-                elevation: 5.0,
+                // elevation: 5.0,
                 child: MaterialButton(
-                  minWidth: 200.0,
-                  height: 52.0,
+                  minWidth: Tela.de(context).x(200.0),
+                  height: Tela.de(context).y(52.0),
+                  elevation: 4.0,
                   onPressed: () {
                     _signIn().then((user) {
-                      Usuario.setLogado(user).then((evento) {
-                        Fluttertoast.showToast(
-                                msg: "Usuario ${user.displayName} logado",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.CENTER,
-                                timeInSecForIos: 1,
-                                bgcolor: "#e74c3c",
-                                textcolor: '#ffffff')
-                            .then((evento) {
-                          Navigator.of(context).pushNamed(GruposPage.tag);
-                        });
-                      });
-                    }).catchError((erro) {
-                      print(erro.toString());
+                      Usuario.setLogado(user);
+                      Fluttertoast.showToast(
+                              msg: "Usuario ${user.displayName} logado",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIos: 1,
+                              bgcolor: "#e74c3c",
+                              textcolor: '#ffffff')
+                          .then((evento) {
+                            Navigator.of(context).pushNamed(GruposPage.tag);
+                          });
                     });
-                    // _loginEmail().then((FirebaseUser usuario) {
-                    //   Navigator.of(context).pushNamed(GruposPage.tag);
-                    // }).catchError((erro) {
-                    //   setState(() {
-                    //     _erroMsg = erro.message;
-                    //   });
-                    // });
                   },
-                  color: Colors.blueAccent,
-                  child: Text(
-                    'Login',
-                    style: TextStyle(color: Colors.white),
+                  color: Colors.redAccent,
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        child:
+                            Icon(FontAwesomeIcons.google, color: Colors.white),
+                        width: Tela.de(context).x(40.0),
+                        height: Tela.de(context).y(40.0),
+                        // color: Colors.tealAccent,
+                      ),
+                      SizedBox(width: Tela.de(context).x(20.0)),
+                      Center(
+                        child: Text(
+                          'Login com Google',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: Tela.de(context).abs(25.0)),
+                        ),
+                      )
+                    ],
                   ),
                 ),
               ),
             ),
-            esqueceuSenhaLbl
+            // esqueceuSenhaLbl
           ],
         ),
       ),

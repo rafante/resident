@@ -1,14 +1,4 @@
-import 'dart:async';
-
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
-import 'package:resident/entidades/banco.dart';
-import 'package:resident/entidades/paciente_class.dart';
-import 'package:resident/paginas/base.dart';
-import 'package:resident/paginas/paciente.dart';
-import 'package:resident/paginas/paciente_detalhe.dart';
-import 'package:resident/utilitarios/shared_prefs.dart';
+import 'package:resident/imports.dart';
 
 class PacientesPage extends StatefulWidget {
   static String tag = 'pacientes-page';
@@ -59,22 +49,23 @@ class _PacientesPageState extends State<PacientesPage> {
         context: context,
         builder: (context) {
           return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30.0),
+            padding: EdgeInsets.symmetric(horizontal: Tela.de(context).x(30.0)),
             child: SimpleDialog(
               title: Text('Paciente'),
-              contentPadding:
-                  EdgeInsets.symmetric(horizontal: 30.0, vertical: 30.0),
+              contentPadding: EdgeInsets.symmetric(
+                  horizontal: Tela.de(context).x(30.0),
+                  vertical: Tela.de(context).y(30.0)),
               children: <Widget>[
                 Container(
-                  width: 300.0,
-                  height: 300.0,
+                  width: Tela.de(context).x(300.0),
+                  height: Tela.de(context).y(300.0),
                   child: ListView(
                     children: <Widget>[
                       TextFormField(
                         controller: _pacienteNome,
                         decoration: InputDecoration(hintText: 'Nome'),
                       ),
-                      SizedBox(height: 30.0),
+                      SizedBox(height: Tela.de(context).y(30.0)),
                       TextFormField(
                         decoration: InputDecoration(hintText: 'Outro dado'),
                       )
@@ -82,7 +73,8 @@ class _PacientesPageState extends State<PacientesPage> {
                   ),
                 ),
                 RaisedButton(
-                  padding: EdgeInsets.symmetric(horizontal: 80.0),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: Tela.de(context).x(80.0)),
                   color: Colors.blueAccent,
                   child: Text('Criar', style: TextStyle(color: Colors.white)),
                   onPressed: () {
@@ -128,7 +120,12 @@ class _PacientesPageState extends State<PacientesPage> {
       lista.add(new Card(
         elevation: 2.0,
         child: ListTile(
-            contentPadding: EdgeInsets.all(20.0),
+            leading: Icon(Icons.airline_seat_flat_angled),
+            contentPadding: EdgeInsets.fromLTRB(
+                Tela.de(context).x(20.0),
+                Tela.de(context).y(20.0),
+                Tela.de(context).x(20.0),
+                Tela.de(context).y(20.0)),
             trailing: IconButton(
               icon: paciente.notificacoes == 0
                   ? new Icon(Icons.settings)
@@ -136,9 +133,9 @@ class _PacientesPageState extends State<PacientesPage> {
                       children: <Widget>[
                         new Icon(Icons.settings),
                         Positioned(
-                          width: 13.0,
-                          height: 15.0,
-                          left: 10.0,
+                          width: Tela.de(context).x(13.0),
+                          height: Tela.de(context).y(15.0),
+                          left: Tela.de(context).x(10.0),
                           child: ClipOval(
                             child: Container(
                               color: Colors.amberAccent,
@@ -189,14 +186,14 @@ class _PacientesPageState extends State<PacientesPage> {
         // leading: new Icon(Icons.airline_seat_flat),
         elevation: 1.0,
         title: Padding(
-          padding: EdgeInsets.only(top: 20.0),
+          padding: EdgeInsets.only(top: Tela.de(context).y(20.0)),
           child: Title(
               color: Colors.lightBlueAccent, child: new Text('Pacientes')),
         ),
       ),
       body: ListView(
         children: _pacientesCard(),
-        itemExtent: 80.0,
+        itemExtent: Tela.de(context).abs(80.0),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),

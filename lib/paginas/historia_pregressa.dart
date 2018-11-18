@@ -1,6 +1,4 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-import 'package:resident/entidades/paciente_class.dart';
+import 'package:resident/imports.dart';
 
 class HistoriaPregressaPage extends StatefulWidget {
   final FirebaseApp app;
@@ -31,7 +29,11 @@ class _HistoriaPregressaPageState extends State<HistoriaPregressaPage> {
         body: ListView(
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.all(20.0),
+              padding: EdgeInsets.fromLTRB(
+                  Tela.de(context).x(20.0),
+                  Tela.de(context).x(20.0),
+                  Tela.de(context).x(20.0),
+                  Tela.de(context).x(20.0)),
               child: TextFormField(
                 controller: _historiaPregressa,
                 maxLines: 18,
@@ -42,7 +44,11 @@ class _HistoriaPregressaPageState extends State<HistoriaPregressaPage> {
                   });
                 },
                 decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(15.0),
+                    contentPadding: EdgeInsets.fromLTRB(
+                        Tela.de(context).x(15.0),
+                        Tela.de(context).y(15.0),
+                        Tela.de(context).x(15.0),
+                        Tela.de(context).y(15.0)),
                     hintText: 'História pregressa do paciente...',
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15.0)))),

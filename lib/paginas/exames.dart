@@ -1,14 +1,4 @@
-import 'dart:async';
-import 'dart:io';
-
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
-import 'package:open_file/open_file.dart';
-import 'package:resident/entidades/anexo.dart';
-import 'package:resident/entidades/banco.dart';
-import 'package:resident/entidades/usuarios.dart';
+import 'package:resident/imports.dart';
 
 class ExamesPage extends StatefulWidget {
   static String tag = 'exames';
@@ -89,12 +79,12 @@ class _ExamesPageState extends State<ExamesPage> {
     return ListView(
       children: <Widget>[
         Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+            padding: EdgeInsets.symmetric(
+                horizontal: Tela.de(context).x(20.0),
+                vertical: Tela.de(context).y(5.0)),
             child: Text(
               'Paciente: teste',
-              style: TextStyle(
-                fontSize: 15.0
-              ),
+              style: TextStyle(fontSize: Tela.de(context).abs(15.0)),
             )),
         DataTable(
           columns: <DataColumn>[
@@ -121,7 +111,13 @@ class _ExamesPageState extends State<ExamesPage> {
         appBar: AppBar(
           title: Text('Exames'),
         ),
-        body: Padding(padding: EdgeInsets.all(10.0), child: body())
+        body: Padding(
+            padding: EdgeInsets.fromLTRB(
+                Tela.de(context).x(10.0),
+                Tela.de(context).y(10.0),
+                Tela.de(context).x(10.0),
+                Tela.de(context).y(10.0)),
+            child: body())
         // SingleChildScrollView(scrollDirection: Axis.vertical, child: body()),
 
         // bottomNavigationBar: BottomNavigationBar(

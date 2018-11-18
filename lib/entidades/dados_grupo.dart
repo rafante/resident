@@ -25,7 +25,7 @@ class DadosGrupo {
             .child('uid')
             .set(contato.chave);
       });
-    }
+    } 
   }
 
   void getRef() {
