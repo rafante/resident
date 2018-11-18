@@ -120,9 +120,13 @@ class AppResident extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if(Theme.of(context).platform == TargetPlatform.android){
     FirebaseAdMob.instance
         .initialize(appId: 'ca-app-pub-1343647000894788~8781257788');
-
+    }else if(Theme.of(context).platform == TargetPlatform.iOS){
+      FirebaseAdMob.instance
+        .initialize(appId: 'ca-app-pub-1343647000894788~3932657414');
+    }
     // baner()
     //   ..load()
     //   ..show(anchorType: AnchorType.top, anchorOffset: 0.0);

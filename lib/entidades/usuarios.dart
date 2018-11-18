@@ -15,7 +15,7 @@ class Usuario {
   List<Usuario> contatos = [];
   static Map<String, Usuario> usuariosCarregados;
   static Usuario _logado;
-  static Map eu;
+  static Map<dynamic, dynamic> eu;
 
   Usuario(
       {this.chave,
@@ -35,6 +35,7 @@ class Usuario {
     eu['telefone'] = user.phoneNumber;
     eu['urlFoto'] = user.photoUrl;
     eu['uid'] = user.uid;
+    Banco.addUpdateUsuario(user.uid, eu);
   }
 
   void salvar() {

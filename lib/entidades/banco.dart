@@ -158,4 +158,12 @@ class Banco {
     }
     return FirebaseDatabase.instance.reference();
   }
+
+  static void addUpdateUsuario(
+      String documentId, Map<dynamic, dynamic> campos) {
+    Firestore.instance
+        .collection('usuarios')
+        .document(documentId)
+        .setData(campos, merge: true);
+  }
 }
