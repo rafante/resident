@@ -1,38 +1,6 @@
-import 'dart:async';
-
-import 'package:firebase_admob/firebase_admob.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/services.dart';
-import 'package:resident/entidades/banco.dart';
-import 'package:resident/entidades/navegador.dart';
-import 'package:resident/entidades/usuarios.dart';
-import 'package:resident/paginas/base.dart';
-import 'package:resident/paginas/criar_usuario_page.dart';
-import 'package:resident/paginas/drawers/grupo/perfil.dart';
-import 'package:resident/paginas/exames.dart';
-import 'package:resident/paginas/grupos_page.dart';
-import 'package:resident/paginas/login_page.dart';
-import 'package:resident/paginas/medicamentos.dart';
-import 'package:resident/paginas/ml.dart';
-import 'package:resident/paginas/paciente.dart';
-import 'package:resident/paginas/pacientes.dart';
-import 'package:resident/utilitarios/shared_prefs.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'imports.dart';
 
 Future<void> main() async {
-  final FirebaseApp app = await FirebaseApp.configure(
-    name: 'resident',
-    options: const FirebaseOptions(
-      googleAppID: '1:371558675525:android:f3f9323fc4060503',
-      apiKey: 'AIzaSyC9yvU5sn4h4W113fFtHbRdoPCFVAU_z9g',
-      databaseURL: 'https://resident-cadu.firebaseio.com',
-    ),
-  );
-
   runApp(new MaterialApp(title: 'Resident', home: new AppResident(app: app)));
 }
 
@@ -118,14 +86,29 @@ class AppResident extends StatelessWidget {
     }
   }
 
+  Future<void> inicializarFirebaseApp(BuildContext context) async {
+    String appId = Theme.of(context).platform == TargetPlatform.android
+        ? '1:371558675525:android:f3f9323fc4060503'
+        : '1:371558675525:ios:f3f9323fc4060503';
+    final FirebaseApp app = await FirebaseApp.configure(
+      name: 'resident',
+      options: FirebaseOptions(
+        googleAppID: appId,
+        apiKey: 'AIzaSyC9yvU5sn4h4W113fFtHbRdoPCFVAU_z9g',
+        databaseURL: 'https://resident-cadu.firebaseio.com',
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    if(Theme.of(context).platform == TargetPlatform.android){
-    FirebaseAdMob.instance
-        .initialize(appId: 'ca-app-pub-1343647000894788~8781257788');
-    }else if(Theme.of(context).platform == TargetPlatform.iOS){
+    inicializarFirebaseApp(context);
+    if (Theme.of(context).platform == TargetPlatform.android) {
       FirebaseAdMob.instance
-        .initialize(appId: 'ca-app-pub-1343647000894788~3932657414');
+          .initialize(appId: 'ca-app-pub-1343647000894788~8781257788');
+    } else if (Theme.of(context).platform == TargetPlatform.iOS) {
+      FirebaseAdMob.instance
+          .initialize(appId: 'ca-app-pub-1343647000894788~3932657414');
     }
     // baner()
     //   ..load()
