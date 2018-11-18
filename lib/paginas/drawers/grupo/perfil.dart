@@ -17,12 +17,12 @@ class _PerfilPageState extends State<PerfilPage> {
 
   @override
   void initState() {
-    if (Usuario.logado() != null) {
+    if (Usuario.estaLogado()) {
       setState(() {
-        _nome.text = Usuario.logado().nome;
-        _email.text = Usuario.logado().email;
-        _telefone.text = Usuario.logado().telefone;
-        _idResidente.text = Usuario.logado().idResidente;
+        _nome.text = Usuario.eu['nome'];
+        _email.text = Usuario.eu['email'];
+        _telefone.text = Usuario.eu['telefone'];
+        _idResidente.text = Usuario.eu['idResidente'];
       });
     }
     super.initState();
@@ -38,14 +38,14 @@ class _PerfilPageState extends State<PerfilPage> {
 
   void salvar() {
     setState(() {
-      Usuario.logado().nome = _nome.text;
-      Usuario.logado().email = _email.text;
-      Usuario.logado().telefone = _telefone.text;
-      if (_idResidente.text != Usuario.logado().idResidente) {
+      Usuario.eu['nome'] = _nome.text;
+      Usuario.eu['email'] = _email.text;
+      Usuario.eu['telefone'] = _telefone.text;
+      if (_idResidente.text != Usuario.eu['idResidente']) {
         Usuario.buscarId(_idResidente.text).then((user) {
           if (user == null) {
-            Usuario.logado().idResidente = _idResidente.text;
-            Usuario.logado().salvar();
+            Usuario.eu['idResidente'] = _idResidente.text;
+            // Usuario.logado().salvar();
             Fluttertoast.showToast(
                 msg: "Usuario salvo",
                 toastLength: Toast.LENGTH_SHORT,
@@ -64,8 +64,8 @@ class _PerfilPageState extends State<PerfilPage> {
           }
         });
       } else {
-        Usuario.logado().idResidente = _idResidente.text;
-        Usuario.logado().salvar();
+        Usuario.eu['idResidente'] = _idResidente.text;
+        // Usuario.logado().salvar();
         Fluttertoast.showToast(
             msg: "Usuario salvo",
             toastLength: Toast.LENGTH_SHORT,
@@ -81,13 +81,13 @@ class _PerfilPageState extends State<PerfilPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if (Usuario.logado().idResidente != _idResidente.text) {
+        if (Usuario.eu['idResidente'] != _idResidente.text) {
           if (_nome.text != '') {
             salvar();
           }
         }
-        if (Usuario.logado().idResidente == null ||
-            Usuario.logado().idResidente == "") {
+        if (Usuario.eu['idResidente'] == null ||
+            Usuario.eu['idResidente'] == "") {
           Fluttertoast.showToast(
               msg: "Para prosseguir favor inserir um nome de usuário válido",
               toastLength: Toast.LENGTH_LONG,
@@ -97,8 +97,7 @@ class _PerfilPageState extends State<PerfilPage> {
               textcolor: '#ffffff');
           return false;
         }
-        if (Usuario.logado().telefone == null ||
-            Usuario.logado().telefone == "") {
+        if (Usuario.eu['telefone'] == null || Usuario.eu['telefone'] == "") {
           Fluttertoast.showToast(
               msg: "Obrigatório preenchimento do telefone",
               toastLength: Toast.LENGTH_LONG,
@@ -129,7 +128,7 @@ class _PerfilPageState extends State<PerfilPage> {
               child: SizedBox(
                 height: Tela.de(context).y(150.0),
                 child: CachedNetworkImage(
-                  imageUrl: Usuario.logado().urlFoto,
+                  imageUrl: Usuario.eu['urlFoto'],
                 ),
               ),
             ),

@@ -15,7 +15,7 @@ class Usuario {
   List<Usuario> contatos = [];
   static Map<String, Usuario> usuariosCarregados;
   static Usuario _logado;
-  static Map<dynamic, dynamic> eu;
+  static Map<String, dynamic> eu;
 
   Usuario(
       {this.chave,
@@ -28,7 +28,7 @@ class Usuario {
       this.idResidente});
 
   static void setLogado(FirebaseUser user) {
-    eu = Map();
+    eu = Map<String, dynamic>();
     eu['nome'] = user.displayName;
     eu['email'] = user.email;
     eu['emailVerificado'] = user.isEmailVerified;
@@ -39,14 +39,7 @@ class Usuario {
   }
 
   void salvar() {
-    Banco.ref().child('usuarios').child(chave).child('displayName').set(nome);
-    Banco.ref().child('usuarios').child(chave).child('phone').set(telefone);
-    Banco.ref().child('usuarios').child(chave).child('email').set(email);
-    Banco.ref()
-        .child('usuarios')
-        .child(chave)
-        .child('idResidente')
-        .set(idResidente);
+    Banco.addUpdateUsuario(eu['uid'], eu);
   }
 
   static Future<FirebaseUser> firebaseUser() async {
@@ -152,6 +145,10 @@ class Usuario {
       });
     });
     return null;
+  }
+
+  static bool estaLogado() {
+    return eu != null && eu['uid'] != null;
   }
 }
 

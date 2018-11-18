@@ -19,6 +19,7 @@ class _GruposPageState extends State<GruposPage> {
 
   List<Card> _gruposCards() {
     List<Card> lista = <Card>[];
+    print(_grupos);
     _grupos.forEach((chave, grupo) {
       // Prefs.checarNotificacoes(grupo: chave).then((numeroNotificacoes) {
       //   if (numeroNotificacoes != grupo['notificacoes']) {
@@ -38,7 +39,7 @@ class _GruposPageState extends State<GruposPage> {
                 Positioned(
                   left: Tela.de(context).x(10.0),
                   top: Tela.de(context).y(10.0),
-                  child: 1 > 0
+                  child: 1 <= 0
                       ? ClipOval(
                           child: Container(
                             color: Colors.amberAccent,
@@ -73,7 +74,7 @@ class _GruposPageState extends State<GruposPage> {
               Tela.de(context).y(20.0),
               Tela.de(context).x(20.0),
               Tela.de(context).y(20.0)),
-          title: new Text(grupo['nome']),
+          title: new Text(grupo['nome'] != null ? grupo['nome'] : ''),
           onTap: () {
             Navigator.push(
                 context,
@@ -232,6 +233,7 @@ class _GruposPageState extends State<GruposPage> {
     Banco.assinarGrupos((Map<String, dynamic> grps) {
       setState(() {
         if (grps != null) {
+          _grupos.clear();
           _grupos.addAll(grps);
         }
       });
@@ -243,23 +245,6 @@ class _GruposPageState extends State<GruposPage> {
         }
       });
     });
-    // _validarUsuario();
-    // db = Banco.ref();
-    // db.child('grupos').onValue.listen((Event evento) {
-    //   List<Grupo> gruposLista = <Grupo>[];
-    //   final Map<dynamic, dynamic> grupos = evento.snapshot.value;
-    //   if (grupos != null) {
-    //     grupos.forEach((chave, valor) {
-    //       final String grupoChave = chave;
-    //       print('a chave do grupo clicado foi a: $grupoChave');
-    //       gruposLista.add(new Grupo(nome: valor['nome'], key: grupoChave));
-    //     });
-    //   }
-    //   setState(() {
-    //     _grupos = gruposLista;
-    //   });
-    // });
-    // checarUsuario();
   }
 
   void checarUsuario() {

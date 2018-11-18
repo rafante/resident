@@ -1,12 +1,10 @@
 import 'imports.dart';
 
 Future<void> main() async {
-  runApp(new MaterialApp(title: 'Resident', home: new AppResident(app: app)));
+  runApp(new MaterialApp(title: 'Resident', home: new AppResident()));
 }
 
 class AppResident extends StatelessWidget {
-  AppResident({this.app});
-  final FirebaseApp app;
   bool firstTime = true;
   final FirebaseMessaging mensageiro = FirebaseMessaging();
 
@@ -86,7 +84,7 @@ class AppResident extends StatelessWidget {
     }
   }
 
-  Future<void> inicializarFirebaseApp(BuildContext context) async {
+  Future<FirebaseApp> inicializarFirebaseApp(BuildContext context) async {
     String appId = Theme.of(context).platform == TargetPlatform.android
         ? '1:371558675525:android:f3f9323fc4060503'
         : '1:371558675525:ios:f3f9323fc4060503';
@@ -98,11 +96,12 @@ class AppResident extends StatelessWidget {
         databaseURL: 'https://resident-cadu.firebaseio.com',
       ),
     );
+    return app;
   }
 
   @override
   Widget build(BuildContext context) {
-    inicializarFirebaseApp(context);
+    inicializarFirebaseApp(context).then((FirebaseApp app) {});
     if (Theme.of(context).platform == TargetPlatform.android) {
       FirebaseAdMob.instance
           .initialize(appId: 'ca-app-pub-1343647000894788~8781257788');
@@ -143,26 +142,26 @@ class AppResident extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       initialRoute: rotaInicial,
-      home: new BaseWindow(conteudo: GruposPage(app: app)),
+      home: new BaseWindow(conteudo: HomePage()),
       routes: <String, WidgetBuilder>{
         LoginPage.tag: (context) =>
-            new BaseWindow(conteudo: LoginPage(app: app)),
+            new BaseWindow(conteudo: LoginPage()),
         GruposPage.tag: (context) =>
-            new BaseWindow(conteudo: GruposPage(app: app)),
+            new BaseWindow(conteudo: GruposPage()),
         PacientesPage.tag: (context) =>
-            new BaseWindow(conteudo: PacientesPage(app: app)),
+            new BaseWindow(conteudo: PacientesPage()),
         ExamesPage.tag: (context) =>
-            new BaseWindow(conteudo: ExamesPage(app: app)),
+            new BaseWindow(conteudo: ExamesPage()),
         PacientePage.tag: (context) =>
-            new BaseWindow(conteudo: PacientePage(app: app)),
+            new BaseWindow(conteudo: PacientePage()),
         CriarUsuarioPage.tag: (context) =>
-            new BaseWindow(conteudo: CriarUsuarioPage(app: app)),
+            new BaseWindow(conteudo: CriarUsuarioPage()),
         MedicamentosPage.tag: (context) =>
-            new BaseWindow(conteudo: MedicamentosPage(app: app)),
+            new BaseWindow(conteudo: MedicamentosPage()),
         PerfilPage.tag: (context) =>
-            new BaseWindow(conteudo: PerfilPage(app: app)),
+            new BaseWindow(conteudo: PerfilPage()),
         VisionPage.tag: (context) =>
-            new BaseWindow(conteudo: VisionPage(app: app)),
+            new BaseWindow(conteudo: VisionPage()),
       },
     );
   }
