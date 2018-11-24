@@ -16,18 +16,88 @@ class Banco {
   static List<AssinaturaBanco> _observadoresNotificacoes;
 
   static void setup() async {
-    if (_firstTime) {
-      _firstTime = false;
-      _observadoresUsuarios = [];
-      _observadoresGrupos = [];
-      _observadoresPacientes = [];
-      _observadoresNotificacoes = [];
-      FirebaseDatabase.instance.setPersistenceEnabled(true);
-      await _manterContatos();
-      await _manterGrupos();
-      await _manterPacientes();
-      await _manterNotificacoes();
+    // if (!_firstTime) {
+    // _firstTime = false;
+    _observadoresUsuarios = [];
+    _observadoresGrupos = [];
+    _observadoresPacientes = [];
+    _observadoresNotificacoes = [];
+    FirebaseDatabase.instance.setPersistenceEnabled(true);
+    await _manterContatos();
+    await _manterGrupos();
+    await _manterPacientes();
+    await _manterNotificacoes();
+    // }
+  }
+
+  static CollectionReference colecao(String colecao) {
+    return Firestore.instance.collection(colecao);
+  }
+
+  static DocumentReference documento(String documentoId) {
+    return Firestore.instance.document(documentoId);
+  }
+
+  static void atualizarGrupo(String grupoId,
+      {String nome, String descricao, List contatos}) {
+    var dados = {'nome': nome, 'descricao': descricao, 'contatos': contatos};
+    if (grupoId != null) {
+      var ref = Firestore.instance.document('grupos/$grupoId');
+      Firestore.instance.runTransaction((Transaction t) async {
+        DocumentSnapshot snap = await t.get(ref);
+
+        if (snap.exists) {
+          t.update(ref, dados);
+        } else {
+          t.set(ref, dados);
+        }
+      });
+    } else {
+      Firestore.instance.collection('grupos').document().setData(dados);
     }
+  }
+
+  static void atualizarPaciente(String pacienteId,
+      {String nome, DateTime entrada, String telefone}) {
+    var ref = Firestore.instance.document('pacientes/$pacienteId');
+    Firestore.instance.runTransaction((Transaction t) async {
+      DocumentSnapshot snap = await t.get(ref);
+      var dados = {'nome': nome, 'entrada': entrada, 'telefone': telefone};
+      if (snap.exists) {
+        t.update(ref, dados);
+      } else {
+        t.set(ref, dados);
+      }
+    });
+  }
+
+  static Map<String, dynamic> findGrupo(String grupoId) {
+    setup();
+    if (_grupos.containsKey(grupoId)) return _grupos[grupoId];
+    return null;
+  }
+
+  static Map<String, dynamic> findPaciente(String pacienteId) {
+    setup();
+    if (_pacientes.containsKey(pacienteId)) return _pacientes[pacienteId];
+    return null;
+  }
+
+  static Map<String, dynamic> findUsuario(String usuarioId) {
+    setup();
+    if (_usuarios.containsKey(usuarioId)) return _usuarios[usuarioId];
+    return null;
+  }
+
+  static Map<String, dynamic> findUsuarioPorResidente(String idResidente) {
+    setup();
+    Map<String, dynamic> usuarioEncontrado;
+    _usuarios.forEach((String chave, dynamic usuario) {
+      if (usuario['idResidente'] == idResidente) {
+        usuarioEncontrado = usuario;
+      }
+    });
+    return usuarioEncontrado;
   }
 
   static Map<String, dynamic> usuarios() {
@@ -71,9 +141,11 @@ class Banco {
   }
 
   static Future<void> _manterGrupos() async {
+    if(Usuario.uid == null)
+      return;
     Firestore.instance
         .collection('grupos')
-        .where('contatos', arrayContains: Usuario.eu['uid'])
+        .where('contatos', arrayContains: Usuario.uid)
         .snapshots()
         .listen((snap) {
       _grupos = Map();
@@ -120,28 +192,30 @@ class Banco {
       snap.documents.forEach((documento) {
         _usuarios.putIfAbsent(documento.documentID, () {
           Map<String, dynamic> dados = Map();
-          dados['nome'] = documento.data['displayName'];
-          dados['desabilitado'] = documento.data['disabled'];
+          dados['nome'] = documento.data['nome'];
+          dados['desabilitado'] = documento.data['desabilitado'];
           dados['email'] = documento.data['email'];
-          dados['emailVerificado'] = documento.data['emailVerified'];
+          dados['emailVerificado'] = documento.data['emailVerificado'];
           dados['idResidente'] = documento.data['idResidente'];
-          dados['telefone'] = documento.data['phone'];
-          dados['urlFoto'] = documento.data['photoURL'];
+          dados['telefone'] = documento.data['telefone'];
+          dados['urlFoto'] = documento.data['urlFoto'];
           dados['uid'] = documento.data['uid'];
           return dados;
         });
       });
-      _observadoresGrupos.forEach((observador) {
+      _observadoresUsuarios.forEach((observador) {
         observador(_usuarios);
       });
     });
   }
 
   static Future<void> _manterNotificacoes() async {
+    if(Usuario.uid == null)
+      return;
     _notificacoes = Map();
     Firestore.instance
         .collection('notificacoes')
-        .document(Usuario.eu['uid'])
+        .document(Usuario.uid)
         .collection('grupos')
         .snapshots()
         .listen((snap) {
@@ -160,13 +234,27 @@ class Banco {
   }
 
   static void addUpdateUsuario(String documentId, Map<String, dynamic> campos) {
-    Firestore.instance.collection('usuarios').document(documentId).setData({
-      'nome': campos['nome'],
-      'email': campos['email'],
-      'emailVerificado': campos['emailVerificado'],
-      'telefone': campos['telefone'],
-      'urlFoto': campos['urlFoto'],
-      'uid': campos['uid'],
-    }, merge: true);
+    if (documentId == null) documentId = Usuario.eu['uid'];
+    DocumentReference ref = Firestore.instance.document('usuarios/$documentId');
+    Firestore.instance.runTransaction((Transaction t) async {
+      var snap = await t.get(ref);
+      if (snap.exists) {
+        await t.update(ref, campos);
+      } else {
+        await t.set(ref, campos);
+      }
+    });
+  }
+
+  static Future<Map<String,dynamic>> criarUsuario(String documentId, Map<String, dynamic> campos) {
+    if (documentId == null) documentId = Usuario.eu['uid'];
+    DocumentReference ref = Firestore.instance.document('usuarios/$documentId');
+    return Firestore.instance.runTransaction((Transaction t) async {
+      var snap = await t.get(ref);
+      if (!snap.exists) {
+        await t.set(ref, campos);
+      }
+      return campos;
+    });
   }
 }

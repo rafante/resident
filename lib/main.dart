@@ -38,7 +38,7 @@ class AppResident extends StatelessWidget {
       size: AdSize.banner,
       targetingInfo: targetingInfo,
       listener: (MobileAdEvent event) {
-        print("BannerAd event is $event");
+        // print("BannerAd event is $event");
       },
     );
   }
@@ -49,17 +49,17 @@ class AppResident extends StatelessWidget {
 
   void notificacoes() {
     mensageiro.configure(onMessage: (Map<String, dynamic> mensagem) {
-      print('caiu no mensageiro:\n $mensagem');
+      // print('caiu no mensageiro:\n $mensagem');
       if (mensagem.containsKey('grupo') && mensagem.containsKey('paciente')) {
         Prefs.salvarNotificacao(mensagem['grupo'], mensagem['paciente']);
       }
     }, onLaunch: (Map<String, dynamic> mensagem) {
-      print('caiu no mensageiro:\n $mensagem');
+      // print('caiu no mensageiro:\n $mensagem');
       if (mensagem.containsKey('grupo') && mensagem.containsKey('paciente')) {
         Prefs.salvarNotificacao(mensagem['grupo'], mensagem['paciente']);
       }
     }, onResume: (Map<String, dynamic> mensagem) {
-      print('caiu no mensageiro:\n $mensagem');
+      // print('caiu no mensageiro:\n $mensagem');
       if (mensagem.containsKey('grupo') && mensagem.containsKey('paciente')) {
         Prefs.salvarNotificacao(mensagem['grupo'], mensagem['paciente']);
       }
@@ -129,10 +129,10 @@ class AppResident extends StatelessWidget {
     // }
 
     String rotaInicial = GruposPage.tag;
-    if (Usuario.logado() == null) {
+    if (Usuario.eu == null) {
       rotaInicial = LoginPage.tag;
-    } else if (Usuario.logado().idResidente == null ||
-        Usuario.logado().idResidente == "") {
+    } else if (Usuario.eu['idResidente'] == null ||
+        Usuario.eu['idResidente'] == "") {
       rotaInicial = PerfilPage.tag;
     }
 
@@ -144,24 +144,18 @@ class AppResident extends StatelessWidget {
       initialRoute: rotaInicial,
       home: new BaseWindow(conteudo: HomePage()),
       routes: <String, WidgetBuilder>{
-        LoginPage.tag: (context) =>
-            new BaseWindow(conteudo: LoginPage()),
-        GruposPage.tag: (context) =>
-            new BaseWindow(conteudo: GruposPage()),
+        LoginPage.tag: (context) => new BaseWindow(conteudo: LoginPage()),
+        GruposPage.tag: (context) => new BaseWindow(conteudo: GruposPage()),
         PacientesPage.tag: (context) =>
             new BaseWindow(conteudo: PacientesPage()),
-        ExamesPage.tag: (context) =>
-            new BaseWindow(conteudo: ExamesPage()),
-        PacientePage.tag: (context) =>
-            new BaseWindow(conteudo: PacientePage()),
+        ExamesPage.tag: (context) => new BaseWindow(conteudo: ExamesPage()),
+        PacientePage.tag: (context) => new BaseWindow(conteudo: PacientePage()),
         CriarUsuarioPage.tag: (context) =>
             new BaseWindow(conteudo: CriarUsuarioPage()),
         MedicamentosPage.tag: (context) =>
             new BaseWindow(conteudo: MedicamentosPage()),
-        PerfilPage.tag: (context) =>
-            new BaseWindow(conteudo: PerfilPage()),
-        VisionPage.tag: (context) =>
-            new BaseWindow(conteudo: VisionPage()),
+        PerfilPage.tag: (context) => new BaseWindow(conteudo: PerfilPage()),
+        VisionPage.tag: (context) => new BaseWindow(conteudo: VisionPage()),
       },
     );
   }

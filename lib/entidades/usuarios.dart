@@ -1,8 +1,6 @@
-import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:resident/entidades/banco.dart';
+import 'package:resident/imports.dart';
 
 class Usuario {
   String chave;
@@ -16,6 +14,7 @@ class Usuario {
   static Map<String, Usuario> usuariosCarregados;
   static Usuario _logado;
   static Map<String, dynamic> eu;
+  static String uid;
 
   Usuario(
       {this.chave,
@@ -28,17 +27,36 @@ class Usuario {
       this.idResidente});
 
   static void setLogado(FirebaseUser user) {
-    eu = Map<String, dynamic>();
-    eu['nome'] = user.displayName;
-    eu['email'] = user.email;
-    eu['emailVerificado'] = user.isEmailVerified;
-    eu['telefone'] = user.phoneNumber;
-    eu['urlFoto'] = user.photoUrl;
-    eu['uid'] = user.uid;
-    Banco.addUpdateUsuario(user.uid, eu);
+    if (user == null) {
+      eu = null;
+      return;
+    }
+    uid = user.uid;
+    Banco.criarUsuario(user.uid, {
+      'nome': user.displayName,
+      'email': user.email,
+      'telefone': user.phoneNumber,
+      'urlFoto': user.photoUrl,
+      'idResidente': '',
+      'uid': user.uid,
+      'contatos': []
+    }).then((Map<String, dynamic> usuarioLogado) {
+      eu = usuarioLogado;
+      manterUsuarioLogado();
+    });
+    
   }
 
-  void salvar() {
+  static void manterUsuarioLogado() {
+    Banco.documento('usuarios/$uid').snapshots().listen((snap) {
+      eu = snap.data;
+      List contatos = eu['contatos'];
+      eu['contatos'] = [];
+      eu['contatos'].addAll(contatos);
+    });
+  }
+
+  static void salvar() {
     Banco.addUpdateUsuario(eu['uid'], eu);
   }
 
@@ -46,19 +64,8 @@ class Usuario {
     return await FirebaseAuth.instance.currentUser();
   }
 
-  static Future<Usuario> lerResidente(String idResidente) async {
-    String chave = '';
-    await Banco.ref()
-        .child('usuarios')
-        .child('ids')
-        .child(idResidente)
-        .once()
-        .then((snap) {
-      if (snap.value == null) return null;
-      ler(snap.value);
-      chave = snap.value;
-    });
-    return ler(chave);
+  static Future<Map<String, dynamic>> lerResidente(String idResidente) async {
+    return Banco.findUsuarioPorResidente(idResidente);
   }
 
   static Future<Usuario> ler(String chave) async {
@@ -83,25 +90,18 @@ class Usuario {
     return _logado;
   }
 
-  static Future<Null> adicionarContato(String chave) async {
-    Banco.ref()
-        .child('usuarios')
-        .child(_logado.chave)
-        .child('contatos')
-        .child(chave)
-        .child('uid')
-        .set(chave);
-    return null;
+  static void adicionarContato(String chave) {
+    if (eu['contatos'] == null) eu['contatos'] = List;
+    eu['contatos'].add(chave);
   }
 
   static Future<dynamic> buscarId(String idResidente) async {
-    return await Banco.ref()
-        .child('usuarios')
-        .child('ids')
-        .child(idResidente)
-        .once()
+    return await Banco.colecao('usuarios')
+        .where('idResidente', isEqualTo: idResidente)
+        .snapshots()
+        .first
         .then((snap) {
-      return snap.value;
+      return snap.documents.length > 0 ? snap.documents[0] : null;
     });
   }
 
@@ -169,6 +169,8 @@ class Usuarios {
   // }
 
   static Future<void> deslogar() async {
+    final GoogleSignIn googleSignIn = new GoogleSignIn();
+    GoogleSignInAccount googleSignInAccount = await googleSignIn.signOut();
     return await FirebaseAuth.instance.signOut().then((teste) {
       _usuarioLogado = null;
     });

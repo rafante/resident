@@ -45,7 +45,7 @@ class _PerfilPageState extends State<PerfilPage> {
         Usuario.buscarId(_idResidente.text).then((user) {
           if (user == null) {
             Usuario.eu['idResidente'] = _idResidente.text;
-            // Usuario.logado().salvar();
+            Usuario.salvar();
             Fluttertoast.showToast(
                 msg: "Usuario salvo",
                 toastLength: Toast.LENGTH_SHORT,
@@ -65,7 +65,7 @@ class _PerfilPageState extends State<PerfilPage> {
         });
       } else {
         Usuario.eu['idResidente'] = _idResidente.text;
-        // Usuario.logado().salvar();
+        Usuario.salvar();
         Fluttertoast.showToast(
             msg: "Usuario salvo",
             toastLength: Toast.LENGTH_SHORT,

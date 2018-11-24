@@ -17,6 +17,26 @@ class _GruposPageState extends State<GruposPage> {
   Map<String, dynamic> _notificacoes = Map();
   TextEditingController _grupoNome = TextEditingController(text: '');
 
+  @override
+  void initState() {
+    super.initState();
+    Banco.assinarGrupos((Map<String, dynamic> grps) {
+      setState(() {
+        if (grps != null) {
+          _grupos.clear();
+          _grupos.addAll(grps);
+        }
+      });
+    });
+    Banco.assinarNotificacoes((Map<String, dynamic> nots) {
+      setState(() {
+        if (nots != null) {
+          _notificacoes.addAll(nots);
+        }
+      });
+    });
+  }
+
   List<Card> _gruposCards() {
     List<Card> lista = <Card>[];
     print(_grupos);
@@ -62,7 +82,6 @@ class _GruposPageState extends State<GruposPage> {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return BaseWindow(
                     conteudo: DadosGrupoPage(
-                  app: widget.app,
                   grupoChave: grupo['key'],
                 ));
               }));
@@ -227,26 +246,6 @@ class _GruposPageState extends State<GruposPage> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    Banco.assinarGrupos((Map<String, dynamic> grps) {
-      setState(() {
-        if (grps != null) {
-          _grupos.clear();
-          _grupos.addAll(grps);
-        }
-      });
-    });
-    Banco.assinarNotificacoes((Map<String, dynamic> nots) {
-      setState(() {
-        if (nots != null) {
-          _notificacoes.addAll(nots);
-        }
-      });
-    });
-  }
-
   void checarUsuario() {
     Usuario eu = Usuario.logado();
     Usuario.carregar().catchError((erro) {
@@ -292,7 +291,7 @@ class _GruposPageState extends State<GruposPage> {
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return new BaseWindow(
-              conteudo: DadosGrupoPage(app: widget.app),
+              conteudo: DadosGrupoPage(),
             );
           }));
         },

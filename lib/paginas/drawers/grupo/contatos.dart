@@ -8,24 +8,25 @@ class ContatosPage extends StatefulWidget {
 }
 
 class _ContatosPageState extends State<ContatosPage> {
-  List<Usuario> _contatos = [];
+  List _contatos = [];
 
   @override
   void initState() {
-    _contatos = Usuario.logado().contatos;
+    _contatos = Usuario.eu['contatos'];
     super.initState();
   }
 
   List<Widget> _contatosWidgets() {
     List<Widget> widgets = [];
-    _contatos.forEach((Usuario usuario) {
+    _contatos.forEach((cont) {
+      var usuario = Banco.findUsuario(cont);
       widgets.add(Card(
         child: ListTile(
           leading: CircleAvatar(
-            backgroundImage: CachedNetworkImageProvider(usuario.urlFoto),
+            backgroundImage: CachedNetworkImageProvider(usuario['urlFoto']),
           ),
-          title: Text(usuario.nome),
-          subtitle: Text(usuario.email),
+          title: Text(usuario['nome']),
+          subtitle: Text(usuario['email']),
         ),
       ));
     });
@@ -44,7 +45,7 @@ class _ContatosPageState extends State<ContatosPage> {
           );
         });
     setState(() {
-      print('contatos');
+      // if (1 < 0) print('contatos');
     });
     return null;
   }
@@ -55,9 +56,7 @@ class _ContatosPageState extends State<ContatosPage> {
       appBar: AppBar(
         title: Text('Contatos'),
       ),
-      body: ListView(
-        children: _contatosWidgets(),
-      ),
+      body: ListView(children: _contatosWidgets()),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
@@ -73,7 +72,7 @@ class PopupContatos extends StatefulWidget {
 }
 
 class _PopupContatosState extends State<PopupContatos> {
-  Usuario _usuario;
+  Map<String, dynamic> _usuario;
 
   @override
   Widget build(BuildContext context) {
@@ -91,10 +90,9 @@ class _PopupContatosState extends State<PopupContatos> {
                 child: TextField(
                   onChanged: (valor) {
                     if (valor.length >= 3) {
-                      Usuario.lerResidente(valor).then((Usuario usuario) {
+                      Usuario.lerResidente(valor).then((usuario) {
                         setState(() {
                           if (usuario != null) {
-                            print(usuario.nome);
                             _usuario = usuario;
                           } else
                             _usuario = null;
@@ -121,7 +119,7 @@ class _PopupContatosState extends State<PopupContatos> {
               child: _usuario != null
                   ? ListTile(
                       leading: Icon(Icons.person),
-                      title: Text(_usuario.nome),
+                      title: Text(_usuario['nome']),
                     )
                   : Container(),
             )
@@ -130,10 +128,10 @@ class _PopupContatosState extends State<PopupContatos> {
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.done),
           onPressed: () {
-            Usuario.adicionarContato(_usuario.chave).then((evento) {
-              setState(() {
-                Navigator.pop(context);
-              });
+            Usuario.adicionarContato(_usuario['uid']);
+            Usuario.salvar();
+            setState(() {
+              Navigator.pop(context);
             });
           },
         ),

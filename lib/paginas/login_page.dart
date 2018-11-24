@@ -17,15 +17,20 @@ class _LoginPageState extends State<LoginPage> {
   String _erroMsg;
 
   Future<FirebaseUser> _signIn() async {
-    GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
-    GoogleSignInAuthentication authentication =
-        await googleSignInAccount.authentication;
+    bool erro = false;
+    FirebaseUser user;
+    GoogleSignInAccount googleSignInAccount =
+        await googleSignIn.signIn().then((signin) async {
+      if (signin != null) {
+        GoogleSignInAuthentication authentication = await signin.authentication;
+        user = await FirebaseAuth.instance.signInWithGoogle(
+            idToken: authentication.idToken,
+            accessToken: authentication.accessToken);
+      }
+    }).catchError((erro) {
+      erro = true;
+    });
 
-    FirebaseUser user = await FirebaseAuth.instance.signInWithGoogle(
-        idToken: authentication.idToken,
-        accessToken: authentication.accessToken);
-
-    print("Username: ${user.displayName}");
     return user;
   }
 
@@ -74,70 +79,77 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: ListView(
-          shrinkWrap: true,
-          padding: EdgeInsets.only(
-              left: Tela.de(context).x(24.0), right: Tela.de(context).y(24.0)),
-          children: <Widget>[
-            Image.asset('images/icone.png',
-                width: Tela.de(context).x(180.0),
-                height: Tela.de(context).y(180.0)),
-            SizedBox(height: 140.0),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                  vertical: Tela.de(context).x(16.0),
-                  horizontal: Tela.de(context).y(16.0)),
-              child: Material(
-                borderRadius: BorderRadius.circular(30.0),
-                shadowColor: Colors.lightBlueAccent,
-                // elevation: 5.0,
-                child: MaterialButton(
-                  minWidth: Tela.de(context).x(200.0),
-                  height: Tela.de(context).y(52.0),
-                  elevation: 4.0,
-                  onPressed: () {
-                    _signIn().then((user) {
-                      Usuario.setLogado(user);
-                      Fluttertoast.showToast(
-                              msg: "Usuario ${user.displayName} logado",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.CENTER,
-                              timeInSecForIos: 1,
-                              bgcolor: "#e74c3c",
-                              textcolor: '#ffffff')
-                          .then((evento) {
-                            Navigator.of(context).pushNamed(GruposPage.tag);
-                          });
-                    });
-                  },
-                  color: Colors.redAccent,
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        child:
-                            Icon(FontAwesomeIcons.google, color: Colors.white),
-                        width: Tela.de(context).x(40.0),
-                        height: Tela.de(context).y(40.0),
-                        // color: Colors.tealAccent,
-                      ),
-                      SizedBox(width: Tela.de(context).x(20.0)),
-                      Center(
-                        child: Text(
-                          'Login com Google',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: Tela.de(context).abs(25.0)),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            // esqueceuSenhaLbl
-          ],
+        child: Form(
+          child: _lista(),
         ),
       ),
+    );
+  }
+
+  Widget _lista() {
+    return ListView(
+      shrinkWrap: true,
+      padding: EdgeInsets.only(
+          left: Tela.de(context).x(24.0), right: Tela.de(context).y(24.0)),
+      children: <Widget>[
+        Image.asset('images/icone.png',
+            width: Tela.de(context).x(180.0),
+            height: Tela.de(context).y(180.0)),
+        SizedBox(height: 140.0),
+        Padding(
+          padding: EdgeInsets.symmetric(
+              vertical: Tela.de(context).x(16.0),
+              horizontal: Tela.de(context).y(16.0)),
+          child: Material(
+            borderRadius: BorderRadius.circular(30.0),
+            shadowColor: Colors.lightBlueAccent,
+            // elevation: 5.0,
+            child: MaterialButton(
+              minWidth: Tela.de(context).x(200.0),
+              height: Tela.de(context).y(52.0),
+              elevation: 4.0,
+              onPressed: () {
+                _signIn().then((user) {
+                  if (user != null) {
+                    Usuario.setLogado(user);
+                    Fluttertoast.showToast(
+                            msg: "Usuario ${user.displayName} logado",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER,
+                            timeInSecForIos: 1,
+                            bgcolor: "#e74c3c",
+                            textcolor: '#ffffff')
+                        .then((evento) {
+                      Navigator.of(context).pushNamed(GruposPage.tag);
+                    });
+                  }
+                });
+              },
+              color: Colors.redAccent,
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    child: Icon(FontAwesomeIcons.google, color: Colors.white),
+                    width: Tela.de(context).x(40.0),
+                    height: Tela.de(context).y(40.0),
+                    // color: Colors.tealAccent,
+                  ),
+                  SizedBox(width: Tela.de(context).x(20.0)),
+                  Center(
+                    child: Text(
+                      'Login com Google',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: Tela.de(context).abs(25.0)),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+        // esqueceuSenhaLbl
+      ],
     );
   }
 }
