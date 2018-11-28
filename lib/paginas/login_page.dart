@@ -87,10 +87,17 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _lista() {
-    return ListView(
-      shrinkWrap: true,
+    return Padding(
       padding: EdgeInsets.only(
-          left: Tela.de(context).x(24.0), right: Tela.de(context).y(24.0)),
+          left: Tela.de(context).x(24.0), right: Tela.de(context).y(24.0), top: Tela.de(context).y(120.0)),
+      child: _componentesLogin(),
+    );
+  }
+
+  Widget _componentesLogin() {
+    return Column(
+      // shrinkWrap: true,
+
       children: <Widget>[
         Image.asset('images/icone.png',
             width: Tela.de(context).x(180.0),

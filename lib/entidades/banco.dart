@@ -16,18 +16,21 @@ class Banco {
   static List<AssinaturaBanco> _observadoresNotificacoes;
 
   static void setup() async {
-    // if (!_firstTime) {
-    // _firstTime = false;
-    _observadoresUsuarios = [];
-    _observadoresGrupos = [];
-    _observadoresPacientes = [];
-    _observadoresNotificacoes = [];
-    FirebaseDatabase.instance.setPersistenceEnabled(true);
-    await _manterContatos();
-    await _manterGrupos();
-    await _manterPacientes();
-    await _manterNotificacoes();
-    // }
+    if (_observadoresGrupos == null ||
+        _observadoresNotificacoes == null ||
+        _observadoresPacientes == null ||
+        _observadoresUsuarios == null) {
+      _firstTime = false;
+      _observadoresUsuarios = [];
+      _observadoresGrupos = [];
+      _observadoresPacientes = [];
+      _observadoresNotificacoes = [];
+      FirebaseDatabase.instance.setPersistenceEnabled(true);
+      await _manterContatos();
+      await _manterGrupos();
+      await _manterPacientes();
+      await _manterNotificacoes();
+    }
   }
 
   static CollectionReference colecao(String colecao) {
@@ -38,11 +41,12 @@ class Banco {
     return Firestore.instance.document(documentoId);
   }
 
-  static void atualizarGrupo(String grupoId,
+  static String atualizarGrupo(String grupoId,
       {String nome, String descricao, List contatos}) {
     var dados = {'nome': nome, 'descricao': descricao, 'contatos': contatos};
+    DocumentReference ref;
     if (grupoId != null) {
-      var ref = Firestore.instance.document('grupos/$grupoId');
+      ref = Firestore.instance.document('grupos/$grupoId');
       Firestore.instance.runTransaction((Transaction t) async {
         DocumentSnapshot snap = await t.get(ref);
 
@@ -53,13 +57,20 @@ class Banco {
         }
       });
     } else {
-      Firestore.instance.collection('grupos').document().setData(dados);
+      ref = Firestore.instance.collection('grupos').document();
+      ref.setData(dados);
     }
+    if (ref == null) return null;
+    return ref.documentID;
   }
 
-  static void atualizarPaciente(String pacienteId,
+  static DocumentReference atualizarPaciente(String pacienteId,
       {String nome, DateTime entrada, String telefone}) {
-    var ref = Firestore.instance.document('pacientes/$pacienteId');
+    DocumentReference ref;
+    if (pacienteId != null || pacienteId == "")
+      ref = Firestore.instance.document('pacientes/$pacienteId');
+    else
+      ref = Firestore.instance.collection('pacientes').document();
     Firestore.instance.runTransaction((Transaction t) async {
       DocumentSnapshot snap = await t.get(ref);
       var dados = {'nome': nome, 'entrada': entrada, 'telefone': telefone};
@@ -69,9 +80,10 @@ class Banco {
         t.set(ref, dados);
       }
     });
+    return ref;
   }
 
-  static Map<String, dynamic> findGrupo(String grupoId) {
+  static Map<dynamic, dynamic> findGrupo(String grupoId) {
     setup();
     if (_grupos.containsKey(grupoId)) return _grupos[grupoId];
     return null;
@@ -141,8 +153,7 @@ class Banco {
   }
 
   static Future<void> _manterGrupos() async {
-    if(Usuario.uid == null)
-      return;
+    if (Usuario.uid == null) return;
     Firestore.instance
         .collection('grupos')
         .where('contatos', arrayContains: Usuario.uid)
@@ -154,6 +165,8 @@ class Banco {
           Map grupo = Map();
           grupo['nome'] = documento.data['nome'];
           grupo['descricao'] = documento.data['descricao'];
+          grupo['contatos'] = documento.data['contatos'];
+          grupo['key'] = documento.documentID;
           return grupo;
         });
       });
@@ -210,8 +223,7 @@ class Banco {
   }
 
   static Future<void> _manterNotificacoes() async {
-    if(Usuario.uid == null)
-      return;
+    if (Usuario.uid == null) return;
     _notificacoes = Map();
     Firestore.instance
         .collection('notificacoes')
@@ -233,9 +245,11 @@ class Banco {
     return FirebaseDatabase.instance.reference();
   }
 
-  static void addUpdateUsuario(String documentId, Map<String, dynamic> campos) {
+  static DocumentReference addUpdateUsuario(
+      String documentId, Map<String, dynamic> campos) {
+    DocumentReference ref;
     if (documentId == null) documentId = Usuario.eu['uid'];
-    DocumentReference ref = Firestore.instance.document('usuarios/$documentId');
+    ref = Firestore.instance.document('usuarios/$documentId');
     Firestore.instance.runTransaction((Transaction t) async {
       var snap = await t.get(ref);
       if (snap.exists) {
@@ -244,9 +258,11 @@ class Banco {
         await t.set(ref, campos);
       }
     });
+    return ref;
   }
 
-  static Future<Map<String,dynamic>> criarUsuario(String documentId, Map<String, dynamic> campos) {
+  static Future<Map<String, dynamic>> criarUsuario(
+      String documentId, Map<String, dynamic> campos) {
     if (documentId == null) documentId = Usuario.eu['uid'];
     DocumentReference ref = Firestore.instance.document('usuarios/$documentId');
     return Firestore.instance.runTransaction((Transaction t) async {

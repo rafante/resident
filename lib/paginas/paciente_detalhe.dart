@@ -32,7 +32,7 @@ class _PacienteDetalheState extends State<PacienteDetalhe> {
         _telefone.text = paciente.telefone;
       });
     });
-    print(paciente.grupoKey);
+    // print(paciente.grupoKey);
   }
 
   @override
@@ -53,7 +53,7 @@ class _PacienteDetalheState extends State<PacienteDetalhe> {
             controller: _nome,
             onEditingComplete: () {
               setState(() {
-                print(_nome.text);
+                // print(_nome.text);
                 paciente.salvaNome(_nome.text);
               });
             },
@@ -106,7 +106,7 @@ class _PacienteDetalheState extends State<PacienteDetalhe> {
             controller: _telefone,
             onEditingComplete: () {
               setState(() {
-                print(_telefone.text);
+                // print(_telefone.text);
                 paciente.salvaTelefone(_telefone.text);
               });
             },
@@ -131,7 +131,7 @@ class _PacienteDetalheState extends State<PacienteDetalhe> {
             paciente.salvaEntrada(dataEntrada);
             paciente.salvaTelefone(_telefone.text);
             paciente.salvar();
-            print('salvou o cliente');
+            // print('salvou o cliente');
           });
           Navigator.pop(context);
         },

@@ -42,7 +42,7 @@ class _HipoteseDiagnosticaPageState extends State<HipoteseDiagnosticaPage> {
                 maxLengthEnforced: true,
                 onEditingComplete: () {
                   setState(() {
-                    print(_hipoteseDiagnostica.text);
+                    print('.');
                   });
                 },
                 decoration: InputDecoration(

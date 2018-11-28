@@ -49,11 +49,11 @@ class _ExamesPageState extends State<ExamesPage> {
             onPressed: () async {
               String path = '${Directory.systemTemp.path}/${anexo.nome}.png';
               File arquivo = new File(path);
-              print('o path do arquivo é $path');
+              // print('o path do arquivo é $path');
               bool existe = arquivo.existsSync();
-              print('o arquivo ${existe ? "existe" : "não existe"}');
+              // print('o arquivo ${existe ? "existe" : "não existe"}');
               int tamanho = existe ? arquivo.readAsBytesSync().length : 0;
-              print('o tamanho do arquivo é $tamanho');
+              // print('o tamanho do arquivo é $tamanho');
               if (existe && (tamanho == 0 || tamanho != tamanho)) {
                 arquivo.deleteSync();
               }
@@ -65,7 +65,7 @@ class _ExamesPageState extends State<ExamesPage> {
                     .child('anexos')
                     .child('${anexo.nome}.png');
 
-                print('iniciando o download');
+                // print('iniciando o download');
                 StorageFileDownloadTask dTask = ref.writeToFile(arquivo);
                 dTask.future.then((snapshot) {
                   abrirArquivo(path);

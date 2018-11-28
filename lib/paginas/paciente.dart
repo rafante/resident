@@ -220,7 +220,7 @@ class _PacientePageState extends State<PacientePage> {
           new File('${Directory.systemTemp.path}/$chave.png');
       StorageFileDownloadTask dTask = sRef.writeToFile(downloadFile);
       int byteCount = (await dTask.future).totalByteCount;
-      print('Deu $byteCount bytes no arquivo ${downloadFile.path.toString()}');
+      // print('Deu $byteCount bytes no arquivo ${downloadFile.path.toString()}');
       ref.child('tamanho').set(byteCount);
       ref.child('link').set(downloadUrl.toString());
       ref.child('nome').set(chave);

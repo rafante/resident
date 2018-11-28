@@ -58,7 +58,7 @@ class _HistoriaDoencaAtualPageState extends State<HistoriaDoencaAtualPage> {
                 maxLengthEnforced: true,
                 onEditingComplete: () {
                   setState(() {
-                    print(_historiaDoencaAtual.text);
+                    print('.');
                   });
                 },
                 decoration: InputDecoration(

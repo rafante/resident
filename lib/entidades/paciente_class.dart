@@ -16,50 +16,54 @@ class Paciente {
   DatabaseReference ref;
 
   void salvar() {
-    ref
-        .child('grupos')
-        .child(grupoKey)
-        .child('pacientes')
-        .child(key)
-        .child('nome')
-        .set(this.nome);
-    ref
-        .child('grupos')
-        .child(grupoKey)
-        .child('pacientes')
-        .child(key)
-        .child('telefone')
-        .set(this.telefone);
-    if (entrada != null)
-      ref
-          .child('grupos')
-          .child(grupoKey)
-          .child('pacientes')
-          .child(key)
-          .child('entrada')
-          .set(this.entrada.millisecondsSinceEpoch);
-    if (historiaPregressa != null && historiaPregressa != "") {
-      ref
-          .child('pacientes')
-          .child(key)
-          .child('historiaPregressa')
-          .set(historiaPregressa);
-    }
-    if (historiaDoencaAtual != null && historiaDoencaAtual != "") {
-      ref
-          .child('pacientes')
-          .child(key)
-          .child('historiaDoencaAtual')
-          .set(historiaDoencaAtual);
-    }
-    if (hipoteseDiagnostica != null && hipoteseDiagnostica != "") {
-      ref
-          .child('pacientes')
-          .child(key)
-          .child('hipoteseDiagnostica')
-          .set(hipoteseDiagnostica);
-    }
+    Banco.atualizarPaciente(key,
+        nome: nome, telefone: telefone, entrada: entrada);
   }
+  // void salvar() {
+  //   ref
+  //       .child('grupos')
+  //       .child(grupoKey)
+  //       .child('pacientes')
+  //       .child(key)
+  //       .child('nome')
+  //       .set(this.nome);
+  //   ref
+  //       .child('grupos')
+  //       .child(grupoKey)
+  //       .child('pacientes')
+  //       .child(key)
+  //       .child('telefone')
+  //       .set(this.telefone);
+  //   if (entrada != null)
+  //     ref
+  //         .child('grupos')
+  //         .child(grupoKey)
+  //         .child('pacientes')
+  //         .child(key)
+  //         .child('entrada')
+  //         .set(this.entrada.millisecondsSinceEpoch);
+  //   if (historiaPregressa != null && historiaPregressa != "") {
+  //     ref
+  //         .child('pacientes')
+  //         .child(key)
+  //         .child('historiaPregressa')
+  //         .set(historiaPregressa);
+  //   }
+  //   if (historiaDoencaAtual != null && historiaDoencaAtual != "") {
+  //     ref
+  //         .child('pacientes')
+  //         .child(key)
+  //         .child('historiaDoencaAtual')
+  //         .set(historiaDoencaAtual);
+  //   }
+  //   if (hipoteseDiagnostica != null && hipoteseDiagnostica != "") {
+  //     ref
+  //         .child('pacientes')
+  //         .child(key)
+  //         .child('hipoteseDiagnostica')
+  //         .set(hipoteseDiagnostica);
+  //   }
+  // }
 
   void salvaNome(String nome) {
     this.nome = nome;
@@ -79,28 +83,42 @@ class Paciente {
 
   Future<Null> carregaDadosDoServidor(
       {bool carregarDadosExtras = false}) async {
-    await ref
-        .child('grupos')
-        .child(grupoKey)
-        .child('pacientes')
-        .child(key)
-        .once()
-        .then((snapshot) {
-      Map paciente = snapshot.value;
-      if (paciente != null) nome = paciente['nome'];
-      if (paciente['entrada'] != null)
-        entrada = DateTime.fromMillisecondsSinceEpoch(paciente['entrada']);
+    var paciente = Banco.findPaciente(key);
+    if (paciente != null) {
+      nome = paciente['nome'];
+      entrada = paciente['entrada'];
       telefone = paciente['telefone'];
-    });
-    if (carregarDadosExtras) {
-      await ref.child('pacientes').child(key).once().then((snapshot) {
-        Map paciente = snapshot.value;
-        historiaPregressa = paciente['historiaPregressa'];
-        historiaDoencaAtual = paciente['historiaDoencaAtual'];
-        hipoteseDiagnostica = paciente['hipoteseDiagnostica'];
-      });
+    } else {
+      nome = "";
+      entrada = DateTime.now();
+      telefone = "";
     }
   }
+
+  // Future<Null> carregaDadosDoServidor(
+  //     {bool carregarDadosExtras = false}) async {
+  //   await ref
+  //       .child('grupos')
+  //       .child(grupoKey)
+  //       .child('pacientes')
+  //       .child(key)
+  //       .once()
+  //       .then((snapshot) {
+  //     Map paciente = snapshot.value;
+  //     if (paciente != null) nome = paciente['nome'];
+  //     if (paciente['entrada'] != null)
+  //       entrada = DateTime.fromMillisecondsSinceEpoch(paciente['entrada']);
+  //     telefone = paciente['telefone'];
+  //   });
+  //   if (carregarDadosExtras) {
+  //     await ref.child('pacientes').child(key).once().then((snapshot) {
+  //       Map paciente = snapshot.value;
+  //       historiaPregressa = paciente['historiaPregressa'];
+  //       historiaDoencaAtual = paciente['historiaDoencaAtual'];
+  //       hipoteseDiagnostica = paciente['hipoteseDiagnostica'];
+  //     });
+  //   }
+  // }
 
   Paciente(
       {this.key,

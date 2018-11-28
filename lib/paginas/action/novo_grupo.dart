@@ -16,19 +16,55 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
   String titulo = 'Novo grupo';
   TextEditingController _nomeDoGrupo = TextEditingController(text: '');
   TextEditingController _descricao = TextEditingController(text: '');
-  Map<String, dynamic> grupo;
+  FocusNode _focusNome;
+  FocusNode _focusDescricao;
+  Map<dynamic, dynamic> grupo;
   List _contatos;
 
   @override
   void initState() {
     super.initState();
     grupo = Map();
-    _contatos = [];
+    carregaFocos();
+
     if (widget.grupoChave == null || widget.grupoChave == '')
-      grupo = {'nome': '', 'descricao': '', 'contatos': []};
+      grupo = {
+        'nome': '',
+        'descricao': '',
+        'contatos': [Usuario.eu['uid']]
+      };
     else {
       grupo = Banco.findGrupo(widget.grupoChave);
+      titulo = grupo['nome'];
     }
+    _nomeDoGrupo.text = grupo['nome'];
+    _descricao.text = grupo['descricao'];
+    _contatos = grupo['contatos'];
+  }
+
+  void carregaFocos() {
+    _focusNome = FocusNode();
+    _focusNome.addListener(() {
+      salvaTela();
+    });
+    _focusDescricao = FocusNode();
+    _focusDescricao.addListener(() {
+      salvaTela();
+    });
+  }
+
+  void salvaTela() {
+    setState(() {
+      grupo['nome'] = _nomeDoGrupo.text;
+      grupo['descricao'] = _descricao.text;
+      grupo['contatos'] = _contatos;
+    });
+  }
+
+  @override
+  void dispose() {
+    _focusNome.dispose();
+    super.dispose();
   }
 
   @override
@@ -45,10 +81,12 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
             child: Icon(Icons.done_outline),
             onPressed: () {
               setState(() {
-                grupo['nome'] = _nomeDoGrupo.text;
-                grupo['descricao'] = _descricao.text;
-                grupo['contatos'] = _contatos;
+                salvaTela();
                 titulo = grupo['nome'];
+                Banco.atualizarGrupo(grupo['key'],
+                    nome: grupo['nome'],
+                    descricao: grupo['descricao'],
+                    contatos: grupo['contatos']);
                 Navigator.pop(context);
               });
             },
@@ -62,6 +100,7 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
             padding: EdgeInsets.symmetric(horizontal: Tela.de(context).x(50.0)),
             child: TextFormField(
               controller: _nomeDoGrupo,
+              focusNode: _focusNome,
               maxLength: 40,
               decoration: InputDecoration(
                   labelText: 'Nome do grupo',
@@ -108,9 +147,7 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
           style: TextStyle(fontSize: Tela.de(context).abs(25.0)),
         ),
         onPressed: () {
-          setState(() {
-            grupo['contatos'] = [];
-          });
+          salvaTela();
           abrirSelecaoContatos();
         },
       ),
@@ -120,10 +157,9 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
       contatosWidgets.add(Card(
         child: ListTile(
           title: Text(contatoBanco['nome']),
-          trailing: Checkbox(
-            value: !false,
-            onChanged: (marcado) {},
-          ),
+          contentPadding: EdgeInsets.all(Tela.de(context).abs(10.0)),
+          trailing:
+              contato == Usuario.eu['uid'] ? null : _botaoRemover(contatoBanco),
           leading: CircleAvatar(
             child: Image.network(contatoBanco['urlFoto']),
           ),
@@ -131,6 +167,50 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
       ));
     });
     return contatosWidgets;
+  }
+
+  Widget _botaoRemover(Map contatoBanco) {
+    return IconButton(
+      iconSize: Tela.de(context).abs(40.0),
+      icon: Icon(
+        Icons.remove_circle,
+        color: Colors.redAccent,
+      ),
+      onPressed: () async {
+        setState(() {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text("Deseja remover ${contatoBanco['nome']}?"),
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text('Sim'),
+                      onPressed: () {
+                        Navigator.pop(context, 'sim');
+                      },
+                    ),
+                    FlatButton(
+                      child: Text('Não'),
+                      onPressed: () {
+                        Navigator.pop(context, 'nao');
+                      },
+                    )
+                  ],
+                );
+              }).then((opcao) {
+            if (opcao != null && opcao == 'sim') {
+              setState(() {
+                _contatos = [];
+                _contatos.addAll(grupo['contatos']);
+                _contatos.remove(contatoBanco['uid']);
+                grupo['contato'] = _contatos;
+              });
+            }
+          });
+        });
+      },
+    );
   }
 
   Future<List<Usuario>> listaContatos() async {
@@ -157,19 +237,34 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
 
   Future<Null> abrirSelecaoContatos() async {
     List lista = grupo['contatos'];
-    var _contatos = await showDialog(
+    print(grupo);
+    var _selecionados = await showDialog(
         context: context,
         builder: (context) {
           return ContatosGrupo(lista: lista);
         });
 
     setState(() {
-      if (_contatos != null)
-        grupo['contatos'] = ['cJH7EH0ze9hta0mlrcE3wUk78Uz2'];
-      Banco.atualizarGrupo(null,
+      salvaTela();
+      if (_selecionados != null) {
+        _contatos = [];
+        if (grupo['contatos'] == null)
+          grupo['contatos'] = _contatos;
+        else {
+          grupo['contatos'].forEach((cont) {
+            if (cont != null) _contatos.add(cont);
+          });
+        }
+        _selecionados.forEach((String contato) {
+          if (!_contatos.contains(contato)) _contatos.add(contato);
+        });
+        grupo['contatos'] = _contatos;
+      }
+      var grupoId = Banco.atualizarGrupo(grupo['key'],
           nome: grupo['nome'],
           descricao: grupo['descricao'],
           contatos: grupo['contatos']);
+      grupo['key'] = grupoId;
     });
   }
 }

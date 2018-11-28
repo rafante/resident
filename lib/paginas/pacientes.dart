@@ -15,16 +15,9 @@ class _PacientesPageState extends State<PacientesPage> {
 
   @override
   void initState() {
-    DatabaseReference db = Banco.ref();
-    db
-        .child('grupos')
-        .child(widget.grupoKey)
-        .child('pacientes')
-        .onValue
-        .listen((Event evento) {
-      Map pacientes = evento.snapshot.value;
-      List<Paciente> lista = <Paciente>[];
+    Banco.assinarPacientes((pacientes) {
       if (pacientes != null && pacientes.length > 0) {
+        List<Paciente> lista = <Paciente>[];
         pacientes.forEach((chave, valor) {
           lista.add(new Paciente(
               key: chave,
@@ -33,12 +26,35 @@ class _PacientesPageState extends State<PacientesPage> {
               nome: valor['nome'],
               telefone: valor['telefone']));
         });
+        setState(() {
+          _pacientes = lista;
+        });
       }
-
-      setState(() {
-        _pacientes = lista;
-      });
     });
+    // DatabaseReference db = Banco.ref();
+    // db
+    //     .child('grupos')
+    //     .child(widget.grupoKey)
+    //     .child('pacientes')
+    //     .onValue
+    //     .listen((Event evento) {
+    //   Map pacientes = evento.snapshot.value;
+    //   List<Paciente> lista = <Paciente>[];
+    //   if (pacientes != null && pacientes.length > 0) {
+    //     pacientes.forEach((chave, valor) {
+    //       lista.add(new Paciente(
+    //           key: chave,
+    //           grupoKey: widget.grupoKey,
+    //           entrada: DateTime.fromMillisecondsSinceEpoch(valor['entrada']),
+    //           nome: valor['nome'],
+    //           telefone: valor['telefone']));
+    //     });
+    //   }
+
+    //   setState(() {
+    //     _pacientes = lista;
+    //   });
+    // });
     super.initState();
   }
 

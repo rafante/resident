@@ -44,15 +44,16 @@ class Usuario {
       eu = usuarioLogado;
       manterUsuarioLogado();
     });
-    
   }
 
   static void manterUsuarioLogado() {
     Banco.documento('usuarios/$uid').snapshots().listen((snap) {
       eu = snap.data;
-      List contatos = eu['contatos'];
-      eu['contatos'] = [];
-      eu['contatos'].addAll(contatos);
+      if (eu != null) {
+        List contatos = eu['contatos'];
+        eu['contatos'] = [];
+        eu['contatos'].addAll(contatos);
+      }
     });
   }
 

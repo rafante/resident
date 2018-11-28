@@ -40,7 +40,7 @@ class _HistoriaPregressaPageState extends State<HistoriaPregressaPage> {
                 maxLengthEnforced: true,
                 onEditingComplete: () {
                   setState(() {
-                    print(_historiaPregressa.text);
+                    print('.');
                   });
                 },
                 decoration: InputDecoration(

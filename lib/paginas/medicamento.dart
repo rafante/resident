@@ -45,7 +45,7 @@ class _MedicamentoDetalheState extends State<MedicamentoDetalhe> {
               controller: _tipo,
               onEditingComplete: () {
                 setState(() {
-                  print(_tipo.text);
+                  print('.');
                 });
               },
               decoration: InputDecoration(
@@ -88,7 +88,7 @@ class _MedicamentoDetalheState extends State<MedicamentoDetalhe> {
               maxLengthEnforced: true,
               onEditingComplete: () {
                 setState(() {
-                  print(_descricao.text);
+                  print('.');
                 });
               },
               decoration: InputDecoration(

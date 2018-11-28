@@ -20,6 +20,11 @@ class _GruposPageState extends State<GruposPage> {
   @override
   void initState() {
     super.initState();
+    Banco.assinarUsuarios((Map<String, dynamic> users) {
+      setState(() {
+        print('.');
+      });
+    });
     Banco.assinarGrupos((Map<String, dynamic> grps) {
       setState(() {
         if (grps != null) {
@@ -39,7 +44,7 @@ class _GruposPageState extends State<GruposPage> {
 
   List<Card> _gruposCards() {
     List<Card> lista = <Card>[];
-    print(_grupos);
+    // print(_grupos);
     _grupos.forEach((chave, grupo) {
       // Prefs.checarNotificacoes(grupo: chave).then((numeroNotificacoes) {
       //   if (numeroNotificacoes != grupo['notificacoes']) {
