@@ -28,54 +28,37 @@ class _ExamesPageState extends State<ExamesPage> {
         snap.documents.forEach((documento) {
           exames.add(Exame(
               nome: documento.data['nome'],
+              tamanho: documento.data['tamanho'],
+              anexo: documento.data['anexo'],
+              pacienteKey: documento.data['pacienteKey'],
+              key: documento.data['key'],
               descricao: documento.data['descricao'],
               downloadLink: documento.data['downloadLink']));
         });
-        setState(() {
-          _exames = exames;
-        });
+        if (mounted) {
+          setState(() {
+            _exames = exames;
+          });
+        }
       }
     });
   }
 
   Widget body() {
     List<DataRow> rows = [];
-    for (Exame exame in _exames) {
-      rows.add(new DataRow(cells: [
-        DataCell(Text(exame.nome)),
-        DataCell(Text(exame.tamanho.toString())),
-        // DataCell(Text('cba')),
-        DataCell(IconButton(
-            icon: Icon(Icons.pageview),
-            onPressed: () async {
-              String path = '${Directory.systemTemp.path}/${exame.key}.png';
-              File arquivo = new File(path);
-              // print('o path do arquivo é $path');
-              bool existe = arquivo.existsSync();
-              // print('o arquivo ${existe ? "existe" : "não existe"}');
-              int tamanho = existe ? arquivo.readAsBytesSync().length : 0;
-              // print('o tamanho do arquivo é $tamanho');
-              if (existe && (tamanho == 0 || tamanho != tamanho)) {
-                arquivo.deleteSync();
-              }
-              if (tamanho == 0 || tamanho != exame.tamanho) {
-                await arquivo.create();
-                assert(await arquivo.readAsString() == "");
-                StorageReference ref = FirebaseStorage.instance
-                    .ref()
-                    .child('anexos')
-                    .child('${exame.nome}.png');
-
-                // print('iniciando o download');
-                StorageFileDownloadTask dTask = ref.writeToFile(arquivo);
-                dTask.future.then((snapshot) {
-                  abrirArquivo(path);
-                });
-              } else if (existe && tamanho == exame.tamanho) {
-                abrirArquivo(path);
-              }
-            }))
-      ]));
+    if (_exames != null) {
+      for (Exame exame in _exames) {
+        rows.add(new DataRow(cells: [
+          DataCell(Text(exame.nome)),
+          DataCell(Text(exame.tamanho.toString())),
+          // DataCell(Text('cba')),
+          DataCell(IconButton(
+              icon: Icon(Icons.pageview),
+              onPressed: () async {
+                Exame.abrirAnexoExame(exame: exame);
+              }))
+        ]));
+      }
     }
     return ListView(
       children: <Widget>[
@@ -111,6 +94,12 @@ class _ExamesPageState extends State<ExamesPage> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Exames'),
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            Exame.criarAnexo(context, TipoExame.ANEXO, widget.pacienteKey);
+          },
         ),
         body: Padding(
             padding: EdgeInsets.fromLTRB(

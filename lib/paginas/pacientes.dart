@@ -145,7 +145,16 @@ class _PacientesPageState extends State<PacientesPage> {
                   )
                 ],
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
+                  return BaseWindow(
+                      conteudo: PacienteDetalhe(
+                          app: widget.app,
+                          pacienteKey: paciente.key,
+                          grupoKey: paciente.grupoKey));
+                }));
+              },
             ),
             dense: true,
             title: new Text(paciente.nome),

@@ -1,10 +1,20 @@
 import 'package:resident/imports.dart';
 
 class Bubble extends StatelessWidget {
-  Bubble({this.message, this.time, this.delivered, this.isMe});
+  Bubble(
+      {this.message,
+      this.time,
+      this.delivered,
+      this.isMe,
+      this.autor,
+      this.onTap,
+      this.link});
 
   final String message, time;
+  final String autor;
+  final Function onTap;
   final delivered, isMe;
+  final bool link;
 
   @override
   Widget build(BuildContext context) {
@@ -38,32 +48,53 @@ class Bubble extends StatelessWidget {
             color: bg,
             borderRadius: radius,
           ),
-          child: Stack(
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(right: Tela.de(context).x(48.0)),
-                child: Text(message),
-              ),
-              Positioned(
-                bottom: Tela.de(context).y(0.0),
-                right: Tela.de(context).x(0.0),
-                child: Row(
-                  children: <Widget>[
-                    Text(time,
-                        style: TextStyle(
-                          color: Colors.black38,
-                          fontSize: Tela.de(context).abs(10.0),
-                        )),
-                    SizedBox(width: Tela.de(context).x(3.0)),
-                    Icon(
-                      icon,
-                      size: Tela.de(context).abs(12.0),
-                      color: Colors.black38,
-                    )
-                  ],
+          child: InkWell(
+            onTap: onTap,
+            child: Stack(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(
+                      right: Tela.de(context).x(48.0),
+                      top: Tela.de(context).y(15.0)),
+                  child: Text(
+                    message,
+                    style: TextStyle(
+                        color: link ? Colors.blueAccent : Colors.black,
+                        decoration: link
+                            ? TextDecoration.underline
+                            : TextDecoration.none),
+                  ),
                 ),
-              )
-            ],
+                Positioned(
+                  bottom: Tela.de(context).y(0.0),
+                  right: Tela.de(context).x(0.0),
+                  child: Row(
+                    children: <Widget>[
+                      Text(time,
+                          style: TextStyle(
+                            color: Colors.black38,
+                            fontSize: Tela.de(context).abs(10.0),
+                          )),
+                      SizedBox(width: Tela.de(context).x(3.0)),
+                      Icon(
+                        icon,
+                        size: Tela.de(context).abs(12.0),
+                        color: Colors.black38,
+                      )
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      right: Tela.de(context).x(48.0),
+                      top: Tela.de(context).y(0.0)),
+                  child: Text(
+                    autor,
+                    style: TextStyle(color: Colors.blueGrey),
+                  ),
+                )
+              ],
+            ),
           ),
         )
       ],

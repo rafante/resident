@@ -33,7 +33,7 @@ class Paciente {
       'telefone': '',
       'notificacoes': 0
     });
-    return Paciente(key: ref.documentID);
+    return Paciente(key: ref.documentID, grupoKey: grupo);
   }
 
   static Future<Paciente> buscar(String documentId) async {

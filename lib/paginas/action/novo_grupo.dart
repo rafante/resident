@@ -156,20 +156,17 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
 
   Future<Null> salvarGrupo() async {
     DocumentReference ref;
+    print(grupo['key']);
     if (grupo['key'] == null) {
       ref = Firestore.instance.collection('grupos').document();
     } else {
       ref = Firestore.instance.document('grupos/${grupo["key"]}');
     }
-    await Firestore.instance.runTransaction((Transaction t) async {
-      var snap = await t.get(ref);
-      if (snap.exists) {
-        await t.update(ref, grupo);
-      } else {
-        await t.set(ref, grupo);
-      }
-    }).catchError((erro) {
-      print('deu ruim: $erro');
+    await ref.setData({
+      'key': ref.documentID,
+      'nome': grupo['nome'],
+      'descricao': grupo['descricao'],
+      'contatos': grupo['contatos']
     });
     return null;
   }

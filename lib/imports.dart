@@ -18,6 +18,7 @@ export 'package:open_file/open_file.dart';
 export 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 export 'package:image_picker/image_picker.dart';
 export 'package:resident/paginas/medicamentos.dart';
+export 'package:path_provider/path_provider.dart';
 export 'dart:async';
 export 'dart:io';
 export './componentes/bubble.dart';

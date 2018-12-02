@@ -20,11 +20,11 @@ class Prefs {
 
   static Future<Null> lerNotificacao(
       String grupoKey, String pacienteKey) async {
-    final prefs = await SharedPreferences.getInstance();
-    String grupo = grupoKey;
-    String paciente = grupoKey + '|' + pacienteKey;
-    prefs.setInt(paciente, 0);
-    prefs.setInt(grupo, 0);
+    // final prefs = await SharedPreferences.getInstance();
+    // String grupo = grupoKey;
+    // String paciente = grupoKey + '|' + pacienteKey;
+    // prefs.setInt(paciente, 0);
+    // prefs.setInt(grupo, 0);
   }
 
   static Future<int> checarNotificacoes({String grupo, String paciente = ''}) async {

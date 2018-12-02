@@ -22,6 +22,36 @@ class _PacientePageState extends State<PacientePage> {
   @override
   void initState() {
     super.initState();
+    Firestore.instance
+        .collection('mensagens')
+        .where('pacienteKey', isEqualTo: widget.pacienteKey)
+        .snapshots()
+        .listen((snap) {
+      if (snap.documents != null) {
+        List<Mensagem> mensagens = [];
+        snap.documents.forEach((documento) {
+          DateTime data = documento.data['hora'] != null
+              ? DateTime.fromMillisecondsSinceEpoch(documento.data['hora'])
+              : DateTime.now();
+          Mensagem mensagem = Mensagem(
+            chave: documento.documentID,
+            pacienteKey: documento.data['pacienteKey'],
+            autor: documento.data['autor'],
+            autorNome: documento.data['autorNome'],
+            hora: data,
+            link: documento.data['link'],
+            texto: documento.data['texto'],
+          );
+          mensagens.add(mensagem);
+        });
+        mensagens = mensagens.reversed.toList();
+        if (mounted) {
+          setState(() {
+            _mensagens = mensagens;
+          });
+        }
+      }
+    });
   }
 
   @override
@@ -44,8 +74,15 @@ class _PacientePageState extends State<PacientePage> {
                 String horaFormatada = DateFormat('HH:mm').format(msg.hora);
                 return Bubble(
                     message: msg.texto,
-                    time: msg.hora != null ? horaFormatada : '',
-                    isMe: msg.autor == Usuarios.logado(),
+                    time: horaFormatada,
+                    autor: msg.autorNome,
+                    link: msg.link != null,
+                    onTap: () {
+                      if (msg.link != null) {
+                        Exame.abrirAnexoExame(ExameId: msg.link);
+                      }
+                    },
+                    isMe: msg.autor == Usuario.eu['uid'],
                     delivered: true);
               },
               itemCount: _mensagens.length,
@@ -172,8 +209,15 @@ class _PacientePageState extends State<PacientePage> {
     );
   }
 
-  Mensagem criarMensagem(String autor, String texto, DateTime hora) {
-    Mensagem mensagem = new Mensagem(texto: texto, hora: hora, autor: autor);
+  Future<Mensagem> criarMensagem(
+      String autor, String texto, DateTime hora) async {
+    Mensagem mensagem = await Mensagem.criar(
+      widget.pacienteKey,
+      texto: texto,
+      hora: hora,
+      autor: autor,
+    );
+    mensagem.salvar();
     // DatabaseReference ref =
     //     Banco.ref().child('chats').child(widget.pacienteKey);
     // mensagem.chave = ref.push().key;
@@ -215,22 +259,8 @@ class _PacientePageState extends State<PacientePage> {
                     ),
                     onPressed: () {
                       if (_textController.text == '') return;
-                      // DatabaseReference db = Banco.ref();
-                      // db = db.child('chats').child(widget.pacienteKey);
-                      // String key = db.push().key;
-
-                      Mensagem mensagem = new Mensagem(
-                        texto: _textController.text,
-                        hora: DateTime.now(),
-                        autor: Usuarios.logado(),
-                        // chave: key,
-                      );
-                      // db
-                      //     .child(key)
-                      //     .child('hora')
-                      //     .set(mensagem.hora.millisecondsSinceEpoch);
-                      // db.child(key).child('texto').set(mensagem.texto);
-                      // db.child(key).child('autor').set(mensagem.autor);
+                      criarMensagem(
+                          Usuario.uid, _textController.text, DateTime.now());
 
                       setState(() {
                         // _mensagens.add(mensagem);
