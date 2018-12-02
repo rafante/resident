@@ -73,15 +73,15 @@ class AppResident extends StatelessWidget {
   }
 
   Future<Null> salvarToken(String token) async {
-    var tokenNode = Banco.ref().child('tokens');
+    // var tokenNode = Banco.ref().child('tokens');
     bool contem = false;
-    await tokenNode.once().then((snapshot) {
-      Map tokens = snapshot.value;
-      contem = tokens.containsValue(token);
-    });
-    if (!contem) {
-      tokenNode.push().set(token);
-    }
+    // await tokenNode.once().then((snapshot) {
+    //   Map tokens = snapshot.value;
+    //   contem = tokens.containsValue(token);
+    // });
+    // if (!contem) {
+    //   tokenNode.push().set(token);
+    // }
   }
 
   Future<FirebaseApp> inicializarFirebaseApp(BuildContext context) async {

@@ -17,10 +17,10 @@ class _HipoteseDiagnosticaPageState extends State<HipoteseDiagnosticaPage> {
 
   @override
   void initState() {
-    paciente = new Paciente(key: widget.pacienteKey, grupoKey: widget.grupoKey);
-    paciente.carregaDadosDoServidor(carregarDadosExtras: true).then((event) {
-      _hipoteseDiagnostica.text = paciente.hipoteseDiagnostica;
-    });
+    carregarPaciente();
+    // paciente.carregaDadosDoServidor(carregarDadosExtras: true).then((event) {
+    //   _hipoteseDiagnostica.text = paciente.hipoteseDiagnostica;
+    // });
     super.initState();
   }
 
@@ -61,10 +61,14 @@ class _HipoteseDiagnosticaPageState extends State<HipoteseDiagnosticaPage> {
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.done_outline),
           onPressed: () {
-            paciente.salvarHipoteseDiagnostica(_hipoteseDiagnostica.text);
+            paciente.setar(hipoteseDiagnostica: _hipoteseDiagnostica.text);
             paciente.salvar();
             Navigator.pop(context);
           },
         ));
+  }
+
+  Future<Null> carregarPaciente() async {
+    await Paciente.buscar(widget.pacienteKey);
   }
 }

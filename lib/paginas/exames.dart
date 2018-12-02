@@ -13,41 +13,42 @@ class ExamesPage extends StatefulWidget {
 }
 
 class _ExamesPageState extends State<ExamesPage> {
-  List<Anexo> _anexos;
+  List<Exame> _exames;
 
   @override
   void initState() {
     super.initState();
-    if (_anexos == null) _anexos = [];
-    DatabaseReference ref = Banco.ref();
-    ref
-        .child('anexos')
-        .child(widget.pacienteKey)
-        .onValue
-        .listen((Event evento) async {
-      Map registro = evento.snapshot.value;
-      List<Anexo> anexos = [];
-      anexos.add(new Anexo(
-          nome: registro['nome'],
-          downloadLink: registro['link'],
-          tamanho: registro['tamanho']));
-      setState(() {
-        _anexos = anexos;
-      });
+    Firestore.instance
+        .collection('exames')
+        .where('pacienteKey', isEqualTo: widget.pacienteKey)
+        .snapshots()
+        .listen((snap) {
+      if (snap.documents != null) {
+        List<Exame> exames = [];
+        snap.documents.forEach((documento) {
+          exames.add(Exame(
+              nome: documento.data['nome'],
+              descricao: documento.data['descricao'],
+              downloadLink: documento.data['downloadLink']));
+        });
+        setState(() {
+          _exames = exames;
+        });
+      }
     });
   }
 
   Widget body() {
     List<DataRow> rows = [];
-    for (Anexo anexo in _anexos) {
+    for (Exame exame in _exames) {
       rows.add(new DataRow(cells: [
-        DataCell(Text(anexo.nome)),
-        DataCell(Text(anexo.tamanho.toString())),
+        DataCell(Text(exame.nome)),
+        DataCell(Text(exame.tamanho.toString())),
         // DataCell(Text('cba')),
         DataCell(IconButton(
             icon: Icon(Icons.pageview),
             onPressed: () async {
-              String path = '${Directory.systemTemp.path}/${anexo.nome}.png';
+              String path = '${Directory.systemTemp.path}/${exame.key}.png';
               File arquivo = new File(path);
               // print('o path do arquivo é $path');
               bool existe = arquivo.existsSync();
@@ -57,20 +58,20 @@ class _ExamesPageState extends State<ExamesPage> {
               if (existe && (tamanho == 0 || tamanho != tamanho)) {
                 arquivo.deleteSync();
               }
-              if (tamanho == 0 || tamanho != anexo.tamanho) {
+              if (tamanho == 0 || tamanho != exame.tamanho) {
                 await arquivo.create();
                 assert(await arquivo.readAsString() == "");
                 StorageReference ref = FirebaseStorage.instance
                     .ref()
                     .child('anexos')
-                    .child('${anexo.nome}.png');
+                    .child('${exame.nome}.png');
 
                 // print('iniciando o download');
                 StorageFileDownloadTask dTask = ref.writeToFile(arquivo);
                 dTask.future.then((snapshot) {
                   abrirArquivo(path);
                 });
-              } else if (existe && tamanho == anexo.tamanho) {
+              } else if (existe && tamanho == exame.tamanho) {
                 abrirArquivo(path);
               }
             }))
@@ -117,15 +118,6 @@ class _ExamesPageState extends State<ExamesPage> {
                 Tela.de(context).y(10.0),
                 Tela.de(context).x(10.0),
                 Tela.de(context).y(10.0)),
-            child: body())
-        // SingleChildScrollView(scrollDirection: Axis.vertical, child: body()),
-
-        // bottomNavigationBar: BottomNavigationBar(
-        //   items: <BottomNavigationBarItem>[
-        //     BottomNavigationBarItem(icon: Icon(Icons.add), title: Text('')),
-        //     BottomNavigationBarItem(icon: Icon(Icons.flag), title: Text('')),
-        //   ],
-        // ),
-        );
+            child: body()));
   }
 }

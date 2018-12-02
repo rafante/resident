@@ -11,7 +11,7 @@ class GruposPage extends StatefulWidget {
 }
 
 class _GruposPageState extends State<GruposPage> {
-  DatabaseReference db;
+  // DatabaseReference db;
 
   Map<String, dynamic> _grupos = Map();
   Map<String, dynamic> _notificacoes = Map();
@@ -20,24 +20,22 @@ class _GruposPageState extends State<GruposPage> {
   @override
   void initState() {
     super.initState();
-    Banco.assinarUsuarios((Map<String, dynamic> users) {
-      setState(() {
-        print('.');
+    Firestore.instance
+        .collection('grupos')
+        .where('contatos', arrayContains: Usuario.eu['uid'])
+        .snapshots()
+        .listen((snap) {
+      Map<String, dynamic> grps = Map();
+      grps.clear();
+      snap.documents.forEach((documento) {
+        grps.putIfAbsent(documento.documentID, () {
+          Map doc = documento.data;
+          doc['key'] = documento.documentID;
+          return doc;
+        });
       });
-    });
-    Banco.assinarGrupos((Map<String, dynamic> grps) {
       setState(() {
-        if (grps != null) {
-          _grupos.clear();
-          _grupos.addAll(grps);
-        }
-      });
-    });
-    Banco.assinarNotificacoes((Map<String, dynamic> nots) {
-      setState(() {
-        if (nots != null) {
-          _notificacoes.addAll(nots);
-        }
+        _grupos = grps;
       });
     });
   }
@@ -46,17 +44,14 @@ class _GruposPageState extends State<GruposPage> {
     List<Card> lista = <Card>[];
     // print(_grupos);
     _grupos.forEach((chave, grupo) {
-      // Prefs.checarNotificacoes(grupo: chave).then((numeroNotificacoes) {
-      //   if (numeroNotificacoes != grupo['notificacoes']) {
-      //     setState(() {
-      //       grupo['notificacoes'] = numeroNotificacoes;
-      //     });
-      //   }
-      // });
-
       lista.add(new Card(
         child: new ListTile(
           leading: Icon(Icons.group),
+          contentPadding: EdgeInsets.fromLTRB(
+              Tela.de(context).x(20.0),
+              Tela.de(context).y(20.0),
+              Tela.de(context).x(20.0),
+              Tela.de(context).y(20.0)),
           trailing: IconButton(
             icon: Stack(
               children: <Widget>[
@@ -93,12 +88,9 @@ class _GruposPageState extends State<GruposPage> {
             },
           ),
           dense: true,
-          contentPadding: EdgeInsets.fromLTRB(
-              Tela.de(context).x(20.0),
-              Tela.de(context).y(20.0),
-              Tela.de(context).x(20.0),
-              Tela.de(context).y(20.0)),
           title: new Text(grupo['nome'] != null ? grupo['nome'] : ''),
+          subtitle:
+              new Text(grupo['descricao'] != null ? grupo['descricao'] : ''),
           onTap: () {
             Navigator.push(
                 context,

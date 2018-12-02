@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:resident/imports.dart';
 
 class PacientesPage extends StatefulWidget {
@@ -12,49 +13,36 @@ class PacientesPage extends StatefulWidget {
 
 class _PacientesPageState extends State<PacientesPage> {
   TextEditingController _pacienteNome = TextEditingController(text: '');
+  DateFormat dateFormat = DateFormat("dd/MM/yyyy hh:mm:ss");
 
   @override
   void initState() {
-    Banco.assinarPacientes((pacientes) {
-      if (pacientes != null && pacientes.length > 0) {
-        List<Paciente> lista = <Paciente>[];
-        pacientes.forEach((chave, valor) {
-          lista.add(new Paciente(
-              key: chave,
-              grupoKey: widget.grupoKey,
-              entrada: DateTime.fromMillisecondsSinceEpoch(valor['entrada']),
-              nome: valor['nome'],
-              telefone: valor['telefone']));
+    Firestore.instance
+        .collection('pacientes')
+        .where('grupoKey', isEqualTo: widget.grupoKey)
+        .snapshots()
+        .listen((snap) {
+      List<Paciente> lista = <Paciente>[];
+
+      if (snap.documents != null) {
+        snap.documents.forEach((documento) {
+          lista.add(Paciente(
+            key: documento.documentID,
+            entrada: documento.data['entrada'],
+            nome: documento.data['nome'],
+            telefone: documento.data['telefone'],
+            hipoteseDiagnostica: documento.data['hipoteseDiagnostica'],
+            historiaDoencaAtual: documento.data['historiaDoencaAtual'],
+            historiaPregressa: documento.data['historiaPregressa'],
+          ));
         });
+      }
+      if (this.mounted) {
         setState(() {
           _pacientes = lista;
         });
       }
     });
-    // DatabaseReference db = Banco.ref();
-    // db
-    //     .child('grupos')
-    //     .child(widget.grupoKey)
-    //     .child('pacientes')
-    //     .onValue
-    //     .listen((Event evento) {
-    //   Map pacientes = evento.snapshot.value;
-    //   List<Paciente> lista = <Paciente>[];
-    //   if (pacientes != null && pacientes.length > 0) {
-    //     pacientes.forEach((chave, valor) {
-    //       lista.add(new Paciente(
-    //           key: chave,
-    //           grupoKey: widget.grupoKey,
-    //           entrada: DateTime.fromMillisecondsSinceEpoch(valor['entrada']),
-    //           nome: valor['nome'],
-    //           telefone: valor['telefone']));
-    //     });
-    //   }
-
-    //   setState(() {
-    //     _pacientes = lista;
-    //   });
-    // });
     super.initState();
   }
 
@@ -110,23 +98,12 @@ class _PacientesPageState extends State<PacientesPage> {
         conteudo: PacienteDetalhe(grupoKey: widget.grupoKey, pacienteKey: null),
       );
     }));
-    // await _popupCriaPaciente().then((Paciente paciente) {
-    //   DatabaseReference db = Banco.ref();
-    //   db = db.child('grupos').child(widget.grupoKey).child('pacientes');
-    //   String chave = db.push().key;
-    //   db.child(chave).child('nome').set(paciente.nome);
-    //   paciente.key = chave;
-    //   setState(() {
-    //     _pacientes.add(paciente);
-    //   });
-    // });
   }
 
   List<Card> _pacientesCard() {
     List<Card> lista = <Card>[];
     _pacientes.forEach((Paciente paciente) {
-      Prefs.checarNotificacoes(grupo: paciente.grupoKey, paciente: paciente.key)
-          .then((int nots) {
+      Prefs.checarNotificacoes(paciente: paciente.key).then((int nots) {
         if (nots != paciente.notificacoes) {
           setState(() {
             paciente.notificacoes = nots;
@@ -134,7 +111,6 @@ class _PacientesPageState extends State<PacientesPage> {
         }
       });
       lista.add(new Card(
-        elevation: 2.0,
         child: ListTile(
             leading: Icon(Icons.airline_seat_flat_angled),
             contentPadding: EdgeInsets.fromLTRB(
@@ -143,39 +119,40 @@ class _PacientesPageState extends State<PacientesPage> {
                 Tela.de(context).x(20.0),
                 Tela.de(context).y(20.0)),
             trailing: IconButton(
-              icon: paciente.notificacoes == 0
-                  ? new Icon(Icons.settings)
-                  : Stack(
-                      children: <Widget>[
-                        new Icon(Icons.settings),
-                        Positioned(
-                          width: Tela.de(context).x(13.0),
-                          height: Tela.de(context).y(15.0),
-                          left: Tela.de(context).x(10.0),
-                          child: ClipOval(
+              icon: Stack(
+                children: <Widget>[
+                  Icon(Icons.settings),
+                  Positioned(
+                    left: Tela.de(context).x(10.0),
+                    top: Tela.de(context).y(10.0),
+                    child: 1 <= 0
+                        ? ClipOval(
                             child: Container(
                               color: Colors.amberAccent,
+                              height: Tela.de(context).y(15.0),
+                              width: Tela.de(context).x(13.0),
                               child: Center(
-                                child: Text(paciente.notificacoes.toString(),
-                                    style: TextStyle(
-                                        color: Colors.blueAccent,
-                                        fontWeight: FontWeight.bold)),
+                                child: Text(
+                                  paciente.notificacoes.toString(),
+                                  style: TextStyle(
+                                      color: Colors.blueAccent,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
                             ),
-                          ),
-                        )
-                      ],
-                    ),
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return BaseWindow(
-                    conteudo: PacienteDetalhe(
-                        grupoKey: widget.grupoKey, pacienteKey: paciente.key),
-                  );
-                }));
-              },
+                          )
+                        : new Container(),
+                  )
+                ],
+              ),
+              onPressed: () {},
             ),
+            dense: true,
             title: new Text(paciente.nome),
+            subtitle: paciente.entrada != null
+                ? Text(dateFormat.format(
+                    DateTime.fromMillisecondsSinceEpoch(paciente.entrada)))
+                : Text(''),
             onTap: () {
               setState(() {
                 Navigator.push(

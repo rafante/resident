@@ -15,10 +15,9 @@ class _HistoriaPregressaPageState extends State<HistoriaPregressaPage> {
 
   @override
   void initState() {
-    paciente = new Paciente(key: widget.pacienteKey, grupoKey: widget.grupoKey);
-    paciente.carregaDadosDoServidor(carregarDadosExtras: true).then((event) {
-      _historiaPregressa.text = paciente.historiaPregressa;
-    });
+    // paciente.carregaDadosDoServidor(carregarDadosExtras: true).then((event) {
+    //   _historiaPregressa.text = paciente.historiaPregressa;
+    // });
     super.initState();
   }
 
@@ -59,10 +58,14 @@ class _HistoriaPregressaPageState extends State<HistoriaPregressaPage> {
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.done_outline),
           onPressed: () {
-            paciente.salvarHistoriaPregressa(_historiaPregressa.text);
+            paciente.setar(historiaPregressa: _historiaPregressa.text);
             paciente.salvar();
             Navigator.pop(context);
           },
         ));
+  }
+
+  Future<Null> carregarPaciente() async {
+    paciente = await Paciente.buscar(widget.pacienteKey);
   }
 }

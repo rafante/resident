@@ -34,8 +34,14 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
         'contatos': [Usuario.eu['uid']]
       };
     else {
-      grupo = Banco.findGrupo(widget.grupoChave);
-      titulo = grupo['nome'];
+      carregarGrupo().then((event) {
+        setState(() {
+          titulo = grupo['nome'];
+          _nomeDoGrupo.text = grupo['nome'];
+          _descricao.text = grupo['descricao'];
+          _contatos = grupo['contatos'];
+        });
+      });
     }
     _nomeDoGrupo.text = grupo['nome'];
     _descricao.text = grupo['descricao'];
@@ -72,6 +78,7 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(titulo),
+        actions: _getAcoes(),
       ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -83,11 +90,9 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
               setState(() {
                 salvaTela();
                 titulo = grupo['nome'];
-                Banco.atualizarGrupo(grupo['key'],
-                    nome: grupo['nome'],
-                    descricao: grupo['descricao'],
-                    contatos: grupo['contatos']);
-                Navigator.pop(context);
+                salvarGrupo().then((snap) {
+                  Navigator.pop(context);
+                });
               });
             },
           )
@@ -137,36 +142,145 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
     );
   }
 
+  Future<Null> carregarGrupo() async {
+    await Firestore.instance
+        .document('grupos/${widget.grupoChave}')
+        .snapshots()
+        .first
+        .then((snap) {
+      grupo = snap.data;
+      if (grupo['contatos'] == null) grupo['contatos'] = [];
+      grupo['key'] = snap.documentID;
+    });
+  }
+
+  Future<Null> salvarGrupo() async {
+    DocumentReference ref;
+    if (grupo['key'] == null) {
+      ref = Firestore.instance.collection('grupos').document();
+    } else {
+      ref = Firestore.instance.document('grupos/${grupo["key"]}');
+    }
+    await Firestore.instance.runTransaction((Transaction t) async {
+      var snap = await t.get(ref);
+      if (snap.exists) {
+        await t.update(ref, grupo);
+      } else {
+        await t.set(ref, grupo);
+      }
+    }).catchError((erro) {
+      print('deu ruim: $erro');
+    });
+    return null;
+  }
+
   List<Widget> _contatosWidgets() {
     List<Widget> contatosWidgets = [];
-    contatosWidgets.add(SizedBox(
-      height: Tela.de(context).y(50.0),
-      child: MaterialButton(
-        child: Text(
-          '+ Add contato',
-          style: TextStyle(fontSize: Tela.de(context).abs(25.0)),
-        ),
-        onPressed: () {
-          salvaTela();
-          abrirSelecaoContatos();
-        },
-      ),
-    ));
-    grupo['contatos'].forEach((contato) {
-      Map<String, dynamic> contatoBanco = Banco.findUsuario(contato);
-      contatosWidgets.add(Card(
-        child: ListTile(
-          title: Text(contatoBanco['nome']),
-          contentPadding: EdgeInsets.all(Tela.de(context).abs(10.0)),
-          trailing:
-              contato == Usuario.eu['uid'] ? null : _botaoRemover(contatoBanco),
-          leading: CircleAvatar(
-            child: Image.network(contatoBanco['urlFoto']),
+    if (grupo != null && grupo['contatos'] != null) {
+      contatosWidgets.add(SizedBox(
+        height: Tela.de(context).y(50.0),
+        child: MaterialButton(
+          child: Text(
+            '+ Add contato',
+            style: TextStyle(fontSize: Tela.de(context).abs(25.0)),
           ),
+          onPressed: () {
+            salvaTela();
+            abrirSelecaoContatos();
+          },
         ),
       ));
-    });
+      grupo['contatos'].forEach((contato) {
+        Map<String, dynamic> contatoBanco = Banco.findUsuario(contato);
+        if (contatoBanco != null) {
+          contatosWidgets.add(Card(
+            child: ListTile(
+              title: Text(contatoBanco['nome']),
+              contentPadding: EdgeInsets.all(Tela.de(context).abs(10.0)),
+              trailing: contato == Usuario.eu['uid']
+                  ? null
+                  : _botaoRemover(contatoBanco),
+              leading: CircleAvatar(
+                child: Image.network(contatoBanco['urlFoto']),
+              ),
+            ),
+          ));
+        }
+      });
+    }
+
     return contatosWidgets;
+  }
+
+  List<Widget> _getAcoes() {
+    List<Widget> lista = [];
+    if (grupo['key'] != null) {
+      lista.add(RaisedButton(
+        child: Icon(
+          FontAwesomeIcons.ban,
+          color: Colors.white,
+        ),
+        color: Colors.red,
+        elevation: 5.0,
+        onPressed: () async {
+          var resposta = await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return SimpleDialog(
+                title: Title(
+                  color: Colors.black,
+                  child: Text('Deseja sair do grupo ${grupo["nome"]}?'),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  // horizontal: Tela.de(context).x(3.0),
+                  vertical: Tela.de(context).y(10.0),
+                ),
+                children: <Widget>[
+                  SimpleDialogOption(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: Tela.de(context).x(10.0),
+                          vertical: Tela.de(context).y(10.0)),
+                      child: Text('Não'),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context, 'nao');
+                    },
+                  ),
+                  SimpleDialogOption(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: Tela.de(context).x(10.0),
+                          vertical: Tela.de(context).y(10.0)),
+                      child: Container(
+                        color: Colors.redAccent,
+                        child: Text('Sim'),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context, 'sim');
+                    },
+                  )
+                ],
+              );
+            },
+          );
+          if (resposta == 'sim') {
+            setState(() {
+              _contatos = [];
+              grupo['contatos'].forEach((cont) {
+                if (cont != Usuario.eu['uid']) _contatos.add(cont);
+              });
+              salvaTela();
+              salvarGrupo().then((snap) {
+                Navigator.pop(context);
+              });
+            });
+          }
+        },
+      ));
+    }
+    return lista;
   }
 
   Widget _botaoRemover(Map contatoBanco) {

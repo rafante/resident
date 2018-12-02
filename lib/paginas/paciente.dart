@@ -22,26 +22,6 @@ class _PacientePageState extends State<PacientePage> {
   @override
   void initState() {
     super.initState();
-    DatabaseReference db = Banco.ref();
-    db.child('chats').child(widget.pacienteKey).onValue.listen((Event evento) {
-      Map eventoMsgs = evento.snapshot.value;
-      List<Mensagem> mensagens = <Mensagem>[];
-      if (eventoMsgs != null) {
-        eventoMsgs.forEach((chave, valor) {
-          mensagens.add(new Mensagem(
-              chave: chave,
-              autor: valor['autor'],
-              hora: new DateTime.fromMillisecondsSinceEpoch(valor['hora']),
-              texto: valor['texto']));
-        });
-        mensagens.sort((msg1, msg2) {
-          return msg2.hora.compareTo(msg1.hora);
-        });
-        setState(() {
-          _mensagens = mensagens;
-        });
-      }
-    });
   }
 
   @override
@@ -187,63 +167,26 @@ class _PacientePageState extends State<PacientePage> {
         color: Colors.white,
       ),
       onPressed: () {
-        criarAnexo();
+        Exame.criarAnexo(context, TipoExame.ANEXO, widget.pacienteKey);
       },
     );
   }
 
-  void criarAnexo() {
-    ImagePicker.pickImage(source: ImageSource.camera).then((File imagem) async {
-      if (imagem == null) return;
-
-      Mensagem linkMsg = criarMensagem(
-          Usuarios.logado(), 'carregando arquivo...', DateTime.now());
-      salvarMensagem(linkMsg);
-
-      DatabaseReference ref =
-          Banco.ref().child('anexos').child(widget.pacienteKey);
-      String chave = ref.push().key;
-
-      StorageReference sRef =
-          FirebaseStorage.instance.ref().child('anexos').child('$chave.png');
-
-      final File arquivo =
-          await new File('${Directory.systemTemp.path}/$chave.png').create();
-
-      List<int> imagemBytes = imagem.readAsBytesSync();
-
-      arquivo.writeAsBytesSync(imagemBytes);
-
-      StorageUploadTask task = sRef.putFile(arquivo);
-      final Uri downloadUrl = (await task.onComplete).uploadSessionUri;
-      final File downloadFile =
-          new File('${Directory.systemTemp.path}/$chave.png');
-      StorageFileDownloadTask dTask = sRef.writeToFile(downloadFile);
-      int byteCount = (await dTask.future).totalByteCount;
-      // print('Deu $byteCount bytes no arquivo ${downloadFile.path.toString()}');
-      ref.child('tamanho').set(byteCount);
-      ref.child('link').set(downloadUrl.toString());
-      ref.child('nome').set(chave);
-    }).catchError((erro) {
-      print(erro.toString());
-    });
-  }
-
   Mensagem criarMensagem(String autor, String texto, DateTime hora) {
     Mensagem mensagem = new Mensagem(texto: texto, hora: hora, autor: autor);
-    DatabaseReference ref =
-        Banco.ref().child('chats').child(widget.pacienteKey);
-    mensagem.chave = ref.push().key;
+    // DatabaseReference ref =
+    //     Banco.ref().child('chats').child(widget.pacienteKey);
+    // mensagem.chave = ref.push().key;
     return mensagem;
   }
 
   void salvarMensagem(Mensagem mensagem) {
-    DatabaseReference db = Banco.ref();
-    db = db.child('chats').child(widget.pacienteKey).child(mensagem.chave);
+    // DatabaseReference db = Banco.ref();
+    // db = db.child('chats').child(widget.pacienteKey).child(mensagem.chave);
 
-    db.child('texto').set(mensagem.texto);
-    db.child('hora').set(mensagem.hora.millisecondsSinceEpoch);
-    db.child('autor').set(mensagem.autor);
+    // db.child('texto').set(mensagem.texto);
+    // db.child('hora').set(mensagem.hora.millisecondsSinceEpoch);
+    // db.child('autor').set(mensagem.autor);
   }
 
   Widget _construirComposer() {
@@ -272,22 +215,22 @@ class _PacientePageState extends State<PacientePage> {
                     ),
                     onPressed: () {
                       if (_textController.text == '') return;
-                      DatabaseReference db = Banco.ref();
-                      db = db.child('chats').child(widget.pacienteKey);
-                      String key = db.push().key;
+                      // DatabaseReference db = Banco.ref();
+                      // db = db.child('chats').child(widget.pacienteKey);
+                      // String key = db.push().key;
 
                       Mensagem mensagem = new Mensagem(
                         texto: _textController.text,
                         hora: DateTime.now(),
                         autor: Usuarios.logado(),
-                        chave: key,
+                        // chave: key,
                       );
-                      db
-                          .child(key)
-                          .child('hora')
-                          .set(mensagem.hora.millisecondsSinceEpoch);
-                      db.child(key).child('texto').set(mensagem.texto);
-                      db.child(key).child('autor').set(mensagem.autor);
+                      // db
+                      //     .child(key)
+                      //     .child('hora')
+                      //     .set(mensagem.hora.millisecondsSinceEpoch);
+                      // db.child(key).child('texto').set(mensagem.texto);
+                      // db.child(key).child('autor').set(mensagem.autor);
 
                       setState(() {
                         // _mensagens.add(mensagem);

@@ -28,14 +28,14 @@ class Prefs {
   }
 
   static Future<int> checarNotificacoes({String grupo, String paciente = ''}) async {
-    final prefs = await SharedPreferences.getInstance();
-    var chave = grupo;
-    if(paciente != ""){
-      chave += "|" + paciente;
-    }
-    var nots = await prefs.getInt(chave);
-    if(nots == null)
-      nots = 0;
-    return nots;
+    // final prefs = await SharedPreferences.getInstance();
+    // var chave = grupo;
+    // if(paciente != ""){
+    //   chave += "|" + paciente;
+    // }
+    // var nots = await prefs.getInt(chave);
+    // if(nots == null)
+    //   nots = 0;
+    return 0;
   }
 }

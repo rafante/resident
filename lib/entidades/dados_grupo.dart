@@ -28,22 +28,18 @@ class DadosGrupo {
     } 
   }
 
-  void getRef() {
-    if (_ref == null) _ref = Banco.ref();
-  }
-
   Future<DadosGrupo> getDados() async {
-    await _ref
-        .child('grupos')
-        .child(chave)
-        .once()
-        .then((DataSnapshot snapshot) {
-      Map dados = snapshot.value;
-      if (dados != null) {
-        nome = dados['nome'];
-        descricao = dados['descricao'];
-      }
-    });
+    // await _ref
+    //     .child('grupos')
+    //     .child(chave)
+    //     .once()
+    //     .then((DataSnapshot snapshot) {
+    //   Map dados = snapshot.value;
+    //   if (dados != null) {
+    //     nome = dados['nome'];
+    //     descricao = dados['descricao'];
+    //   }
+    // });
     return this;
   }
 
@@ -57,9 +53,9 @@ class DadosGrupo {
       nome = '';
       descricao = '';
       contatos = [];
-      getRef();
+      // getRef();
     } else {
-      getRef();
+      // getRef();
     }
   }
 }

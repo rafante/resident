@@ -24,15 +24,13 @@ class _PacienteDetalheState extends State<PacienteDetalhe> {
   @override
   void initState() {
     super.initState();
-    paciente = Paciente(key: widget.pacienteKey, grupoKey: widget.grupoKey);
-    paciente.carregaDadosDoServidor().then((evento) {
+    paciente = Paciente();
+    carregarPaciente().then((Paciente pac) {
       setState(() {
-        _nome.text = paciente.nome;
-        _data.text = dateFormat.format(paciente.entrada);
-        _telefone.text = paciente.telefone;
+        paciente = pac;
+        carregaDadosTela();
       });
     });
-    // print(paciente.grupoKey);
   }
 
   @override
@@ -54,7 +52,7 @@ class _PacienteDetalheState extends State<PacienteDetalhe> {
             onEditingComplete: () {
               setState(() {
                 // print(_nome.text);
-                paciente.salvaNome(_nome.text);
+                paciente.setar(nome: _nome.text);
               });
             },
             decoration: InputDecoration(
@@ -107,7 +105,7 @@ class _PacienteDetalheState extends State<PacienteDetalhe> {
             onEditingComplete: () {
               setState(() {
                 // print(_telefone.text);
-                paciente.salvaTelefone(_telefone.text);
+                paciente.setar(telefone: _telefone.text);
               });
             },
             decoration: InputDecoration(
@@ -127,9 +125,12 @@ class _PacienteDetalheState extends State<PacienteDetalhe> {
         child: Icon(Icons.done_outline),
         onPressed: () {
           setState(() {
-            paciente.salvaNome(_nome.text);
-            paciente.salvaEntrada(dataEntrada);
-            paciente.salvaTelefone(_telefone.text);
+            paciente.setar(
+                nome: _nome.text,
+                entrada: dataEntrada != null
+                    ? dataEntrada.millisecondsSinceEpoch
+                    : DateTime.now().millisecondsSinceEpoch,
+                telefone: _telefone.text);
             paciente.salvar();
             // print('salvou o cliente');
           });
@@ -137,5 +138,21 @@ class _PacienteDetalheState extends State<PacienteDetalhe> {
         },
       ),
     );
+  }
+
+  void carregaDadosTela() {
+    _nome.text = paciente.nome;
+    if (paciente.entrada != null) {
+      dataEntrada = DateTime.fromMillisecondsSinceEpoch(paciente.entrada);
+      _data.text = dateFormat.format(dataEntrada);
+    }
+    _telefone.text = paciente.telefone;
+  }
+
+  Future<Paciente> carregarPaciente() async {
+    if (widget.pacienteKey != null)
+      return await Paciente.buscar(widget.pacienteKey);
+    else
+      return await Paciente.criar(widget.grupoKey);
   }
 }

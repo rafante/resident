@@ -25,7 +25,8 @@ class Banco {
       _observadoresGrupos = [];
       _observadoresPacientes = [];
       _observadoresNotificacoes = [];
-      FirebaseDatabase.instance.setPersistenceEnabled(true);
+      Firestore.instance.settings(persistenceEnabled: true);
+      // FirebaseDatabase.instance.setPersistenceEnabled(true);
       await _manterContatos();
       await _manterGrupos();
       await _manterPacientes();
@@ -152,6 +153,18 @@ class Banco {
     _observadoresNotificacoes.add(observador);
   }
 
+  // static Map<String, dynamic> criarPaciente(String grupoId) async {
+  //   DocumentReference ref;
+  //   if(grupoId == null)
+  //     ref = Firestore.instance.collection('pacientes').document();
+  //   else
+  //     ref = Firestore.instance.document('pacientes/$grupoId');
+  //   Map paciente;
+  //   final DocumentSnapshot snap = await ref.snapshots().first;
+
+  //   return paciente;
+  // }
+
   static Future<void> _manterGrupos() async {
     if (Usuario.uid == null) return;
     Firestore.instance
@@ -180,19 +193,21 @@ class Banco {
     _pacientes = Map();
     Firestore.instance.collection('pacientes').snapshots().listen((snap) {
       _pacientes = Map();
-      snap.documents.forEach((documento) {
-        _pacientes.putIfAbsent(documento.documentID, () {
-          Map paciente = Map();
-          paciente['nome'] = documento.data['nome'];
-          paciente['entrada'] = documento.data['nome'];
-          paciente['telefone'] = documento.data['telefone'];
-          paciente['grupo'] = documento.data['grupo'];
-          documento.data['usuarios'].forEach((usuario) {
-            paciente['usuarios'].add(usuario);
+      if (snap.documents != null) {
+        snap.documents.forEach((documento) {
+          _pacientes.putIfAbsent(documento.documentID, () {
+            Map paciente = Map();
+            paciente['nome'] = documento.data['nome'];
+            paciente['entrada'] = documento.data['nome'];
+            paciente['telefone'] = documento.data['telefone'];
+            paciente['grupo'] = documento.data['grupo'];
+            // documento.data['usuarios'].forEach((usuario) {
+            //   paciente['usuarios'].add(usuario);
+            // });
+            return paciente;
           });
-          return paciente;
         });
-      });
+      }
       _observadoresPacientes.forEach((observador) {
         observador(_pacientes);
       });
@@ -237,13 +252,13 @@ class Banco {
     });
   }
 
-  static DatabaseReference ref() {
-    if (_firstTime) {
-      setup();
-      _firstTime = false;
-    }
-    return FirebaseDatabase.instance.reference();
-  }
+  // static DatabaseReference ref() {
+  //   if (_firstTime) {
+  //     setup();
+  //     _firstTime = false;
+  //   }
+  //   return FirebaseDatabase.instance.reference();
+  // }
 
   static DocumentReference addUpdateUsuario(
       String documentId, Map<String, dynamic> campos) {

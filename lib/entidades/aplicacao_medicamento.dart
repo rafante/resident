@@ -6,33 +6,33 @@ class AplicacaoMedicamento {
   String descricao;
   String tipo;
   DateTime horario;
-  DatabaseReference ref;
+  // DatabaseReference ref;
 
   Future<Null> carregarDadosDoServidor() async {
-    await ref
-        .child('pacientes')
-        .child(pacienteKey)
-        .child('medicamentos')
-        .child(key)
-        .once()
-        .then((snapshot) {
-      Map medicamento = snapshot.value;
-      descricao = medicamento['descricao'];
-      tipo = medicamento['tipo'];
-      horario = DateTime.fromMillisecondsSinceEpoch(medicamento['horario']);
-    });
+    // await ref
+    //     .child('pacientes')
+    //     .child(pacienteKey)
+    //     .child('medicamentos')
+    //     .child(key)
+    //     .once()
+    //     .then((snapshot) {
+    //   Map medicamento = snapshot.value;
+    //   descricao = medicamento['descricao'];
+    //   tipo = medicamento['tipo'];
+    //   horario = DateTime.fromMillisecondsSinceEpoch(medicamento['horario']);
+    // });
   }
 
   void salvar() {
-    var medicamento = ref
-        .child('pacientes')
-        .child(pacienteKey)
-        .child('medicamentos')
-        .child(key);
-    medicamento.child('descricao').set(descricao);
-    medicamento.child('tipo').set(tipo);
-    if (horario != null)
-      medicamento.child('horario').set(horario.millisecondsSinceEpoch);
+    // var medicamento = ref
+    //     .child('pacientes')
+    //     .child(pacienteKey)
+    //     .child('medicamentos')
+    //     .child(key);
+    // medicamento.child('descricao').set(descricao);
+    // medicamento.child('tipo').set(tipo);
+    // if (horario != null)
+    //   medicamento.child('horario').set(horario.millisecondsSinceEpoch);
   }
 
   AplicacaoMedicamento(
@@ -42,14 +42,14 @@ class AplicacaoMedicamento {
       this.descricao,
       this.tipo,
       this.horario}) {
-    if (ref == null) ref = Banco.ref();
+    // if (ref == null) ref = Banco.ref();
     if (key == null || key == '') {
-      key = ref
-          .child('pacientes')
-          .child(pacienteKey)
-          .child('medicamentos')
-          .push()
-          .key;
+      // key = ref
+      //     .child('pacientes')
+      //     .child(pacienteKey)
+      //     .child('medicamentos')
+      //     .push()
+      //     .key;
     } else {
       if (forcarOnline) carregarDadosDoServidor();
     }

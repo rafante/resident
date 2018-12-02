@@ -19,13 +19,7 @@ class _HistoriaDoencaAtualPageState extends State<HistoriaDoencaAtualPage> {
   @override
   void initState() {
     nomePaciente = 'Aguarde, carregando...';
-    paciente = new Paciente(key: widget.pacienteKey, grupoKey: widget.grupoKey);
-    paciente.carregaDadosDoServidor(carregarDadosExtras: true).then((event) {
-      setState(() {
-        _historiaDoencaAtual.text = paciente.historiaDoencaAtual;
-        nomePaciente = paciente.nome;
-      });
-    });
+    carregarPaciente();
     super.initState();
   }
 
@@ -78,10 +72,14 @@ class _HistoriaDoencaAtualPageState extends State<HistoriaDoencaAtualPage> {
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.done_outline),
           onPressed: () {
-            paciente.salvarHistoriaDoencaAtual(_historiaDoencaAtual.text);
+            paciente.setar(historiaDoencaAtual: _historiaDoencaAtual.text);
             paciente.salvar();
             Navigator.pop(context);
           },
         ));
+  }
+
+  Future<Null> carregarPaciente() async {
+    await Paciente.buscar(widget.pacienteKey);
   }
 }

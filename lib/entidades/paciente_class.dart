@@ -1,145 +1,87 @@
-import 'dart:async';
-
-import 'package:firebase_database/firebase_database.dart';
-import 'package:resident/entidades/banco.dart';
+import 'package:resident/imports.dart';
 
 class Paciente {
+  String key;
+  String grupoKey;
   String nome;
   String telefone;
-  DateTime entrada;
   String historiaPregressa;
   String historiaDoencaAtual;
   String hipoteseDiagnostica;
-  String grupoKey;
-  String key;
+  int entrada;
   int notificacoes = 0;
-  DatabaseReference ref;
-
-  void salvar() {
-    Banco.atualizarPaciente(key,
-        nome: nome, telefone: telefone, entrada: entrada);
-  }
-  // void salvar() {
-  //   ref
-  //       .child('grupos')
-  //       .child(grupoKey)
-  //       .child('pacientes')
-  //       .child(key)
-  //       .child('nome')
-  //       .set(this.nome);
-  //   ref
-  //       .child('grupos')
-  //       .child(grupoKey)
-  //       .child('pacientes')
-  //       .child(key)
-  //       .child('telefone')
-  //       .set(this.telefone);
-  //   if (entrada != null)
-  //     ref
-  //         .child('grupos')
-  //         .child(grupoKey)
-  //         .child('pacientes')
-  //         .child(key)
-  //         .child('entrada')
-  //         .set(this.entrada.millisecondsSinceEpoch);
-  //   if (historiaPregressa != null && historiaPregressa != "") {
-  //     ref
-  //         .child('pacientes')
-  //         .child(key)
-  //         .child('historiaPregressa')
-  //         .set(historiaPregressa);
-  //   }
-  //   if (historiaDoencaAtual != null && historiaDoencaAtual != "") {
-  //     ref
-  //         .child('pacientes')
-  //         .child(key)
-  //         .child('historiaDoencaAtual')
-  //         .set(historiaDoencaAtual);
-  //   }
-  //   if (hipoteseDiagnostica != null && hipoteseDiagnostica != "") {
-  //     ref
-  //         .child('pacientes')
-  //         .child(key)
-  //         .child('hipoteseDiagnostica')
-  //         .set(hipoteseDiagnostica);
-  //   }
-  // }
-
-  void salvaNome(String nome) {
-    this.nome = nome;
-  }
-
-  void salvarHistoriaPregressa(String historia) {
-    this.historiaPregressa = historia;
-  }
-
-  void salvaEntrada(DateTime entrada) {
-    this.entrada = entrada;
-  }
-
-  void salvaTelefone(String telefone) {
-    this.telefone = telefone;
-  }
-
-  Future<Null> carregaDadosDoServidor(
-      {bool carregarDadosExtras = false}) async {
-    var paciente = Banco.findPaciente(key);
-    if (paciente != null) {
-      nome = paciente['nome'];
-      entrada = paciente['entrada'];
-      telefone = paciente['telefone'];
-    } else {
-      nome = "";
-      entrada = DateTime.now();
-      telefone = "";
-    }
-  }
-
-  // Future<Null> carregaDadosDoServidor(
-  //     {bool carregarDadosExtras = false}) async {
-  //   await ref
-  //       .child('grupos')
-  //       .child(grupoKey)
-  //       .child('pacientes')
-  //       .child(key)
-  //       .once()
-  //       .then((snapshot) {
-  //     Map paciente = snapshot.value;
-  //     if (paciente != null) nome = paciente['nome'];
-  //     if (paciente['entrada'] != null)
-  //       entrada = DateTime.fromMillisecondsSinceEpoch(paciente['entrada']);
-  //     telefone = paciente['telefone'];
-  //   });
-  //   if (carregarDadosExtras) {
-  //     await ref.child('pacientes').child(key).once().then((snapshot) {
-  //       Map paciente = snapshot.value;
-  //       historiaPregressa = paciente['historiaPregressa'];
-  //       historiaDoencaAtual = paciente['historiaDoencaAtual'];
-  //       hipoteseDiagnostica = paciente['hipoteseDiagnostica'];
-  //     });
-  //   }
-  // }
 
   Paciente(
       {this.key,
       this.grupoKey,
       this.nome,
-      this.entrada,
       this.telefone,
-      bool forcarOnline = false}) {
-    if (ref == null) ref = Banco.ref();
-    if (key == null || key == "") {
-      key = ref.child('grupos').child(grupoKey).child('pacientes').push().key;
-    } else {
-      if (forcarOnline) carregaDadosDoServidor();
-    }
+      this.entrada,
+      this.notificacoes,
+      this.historiaPregressa,
+      this.hipoteseDiagnostica,
+      this.historiaDoencaAtual});
+
+  static Future<Paciente> criar(String grupo) async {
+    DocumentReference ref =
+        Firestore.instance.collection('pacientes').document();
+    await ref.setData({
+      'key': ref.documentID,
+      'grupoKey': grupo,
+      'nome': '',
+      'entrada': DateTime.now().millisecondsSinceEpoch,
+      'telefone': '',
+      'notificacoes': 0
+    });
+    return Paciente(key: ref.documentID);
   }
 
-  void salvarHistoriaDoencaAtual(String historiaDoencaAtual) {
-    this.historiaDoencaAtual = historiaDoencaAtual;
+  static Future<Paciente> buscar(String documentId) async {
+    DocumentReference ref =
+        Firestore.instance.document('pacientes/$documentId');
+    Paciente paciente;
+    await ref.get().then((snap) {
+      paciente = Paciente(
+          key: snap.documentID,
+          grupoKey: snap.data['grupoKey'],
+          nome: snap.data['nome'],
+          entrada: snap.data['entrada'],
+          telefone: snap.data['telefone'],
+          notificacoes: snap.data['notificacoes'],
+          historiaPregressa: snap.data['historiaPregressa'],
+          hipoteseDiagnostica: snap.data['hipoteseDiagnostica'],
+          historiaDoencaAtual: snap.data['historiaDoencaAtual']);
+    });
+    return paciente;
   }
 
-  void salvarHipoteseDiagnostica(String hipoteseDiagnostica) {
-    this.hipoteseDiagnostica = hipoteseDiagnostica;
+  void setar({
+    String nome,
+    int entrada,
+    String telefone,
+    String historiaPregressa,
+    String historiaDoencaAtual,
+    String hipoteseDiagnostica,
+  }) {
+    if (nome != null) this.nome = nome;
+    if (entrada != null) this.entrada = entrada;
+    if (telefone != null) this.telefone = telefone;
+    if (historiaPregressa != null) this.historiaPregressa = historiaPregressa;
+    if (historiaDoencaAtual != null)
+      this.historiaDoencaAtual = historiaDoencaAtual;
+    if (hipoteseDiagnostica != null)
+      this.hipoteseDiagnostica = hipoteseDiagnostica;
+  }
+
+  void salvar() async {
+    await Firestore.instance.document('pacientes/$key').setData({
+      'grupoKey': grupoKey,
+      'nome': nome,
+      'entrada': entrada,
+      'telefone': telefone,
+      'historiaPregressa': historiaPregressa,
+      'historiaDoencaAtual': historiaDoencaAtual,
+      'hipoteseDiagnostica': hipoteseDiagnostica
+    });
   }
 }

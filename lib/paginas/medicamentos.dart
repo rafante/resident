@@ -43,41 +43,41 @@ class _MedicamentosPageState extends State<MedicamentosPage> {
   @override
   void initState() {
     nomePaciente = 'Aguarde, carregando...';
-    _paciente = new Paciente(
-        key: widget.pacienteKey,
-        grupoKey: widget.grupoKey,
-        forcarOnline: false);
-    _paciente.carregaDadosDoServidor().then((teste) {
-      setState(() {
-        nomePaciente = _paciente.nome;
-      });
-    });
-    var ref = Banco.ref();
-    ref
-        .child('pacientes')
-        .child(widget.pacienteKey)
-        .child('medicamentos')
-        .onValue
-        .listen((evento) {
-      Map meds = evento.snapshot.value;
-      List<AplicacaoMedicamento> lista = [];
-      if (meds != null) {
-        meds.forEach((chave, valor) {
-          var medicamento = new AplicacaoMedicamento(
-              key: chave,
-              tipo: valor['tipo'],
-              descricao: valor['descricao'],
-              horario: DateTime.fromMillisecondsSinceEpoch(valor['horario']));
-          lista.add(medicamento);
-        });
-        lista.sort((AplicacaoMedicamento ap1, AplicacaoMedicamento ap2) {
-          return ap2.horario.compareTo(ap1.horario);
-        });
-        setState(() {
-          medicamentos = lista;
-        });
-      }
-    });
+    // _paciente = new Paciente(
+    //     key: widget.pacienteKey,
+    //     grupoKey: widget.grupoKey,
+    //     forcarOnline: false);
+    // _paciente.carregaDadosDoServidor().then((teste) {
+    //   setState(() {
+    //     nomePaciente = _paciente.nome;
+    //   });
+    // });
+    // var ref = Banco.ref();
+    // ref
+    //     .child('pacientes')
+    //     .child(widget.pacienteKey)
+    //     .child('medicamentos')
+    //     .onValue
+    //     .listen((evento) {
+    //   Map meds = evento.snapshot.value;
+    //   List<AplicacaoMedicamento> lista = [];
+    //   if (meds != null) {
+    //     meds.forEach((chave, valor) {
+    //       var medicamento = new AplicacaoMedicamento(
+    //           key: chave,
+    //           tipo: valor['tipo'],
+    //           descricao: valor['descricao'],
+    //           horario: DateTime.fromMillisecondsSinceEpoch(valor['horario']));
+    //       lista.add(medicamento);
+    //     });
+    //     lista.sort((AplicacaoMedicamento ap1, AplicacaoMedicamento ap2) {
+    //       return ap2.horario.compareTo(ap1.horario);
+    //     });
+    //     setState(() {
+    //       medicamentos = lista;
+    //     });
+    //   }
+    // });
 
     super.initState();
   }

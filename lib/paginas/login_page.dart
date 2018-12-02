@@ -89,7 +89,9 @@ class _LoginPageState extends State<LoginPage> {
   Widget _lista() {
     return Padding(
       padding: EdgeInsets.only(
-          left: Tela.de(context).x(24.0), right: Tela.de(context).y(24.0), top: Tela.de(context).y(120.0)),
+          left: Tela.de(context).x(24.0),
+          right: Tela.de(context).y(24.0),
+          top: Tela.de(context).y(120.0)),
       child: _componentesLogin(),
     );
   }
@@ -99,9 +101,11 @@ class _LoginPageState extends State<LoginPage> {
       // shrinkWrap: true,
 
       children: <Widget>[
-        Image.asset('images/icone.png',
-            width: Tela.de(context).x(180.0),
-            height: Tela.de(context).y(180.0)),
+        Image.asset(
+          'images/icone.png',
+          width: Tela.de(context).x(180.0),
+          height: Tela.de(context).y(180.0),
+        ),
         SizedBox(height: 140.0),
         Padding(
           padding: EdgeInsets.symmetric(
@@ -118,16 +122,17 @@ class _LoginPageState extends State<LoginPage> {
               onPressed: () {
                 _signIn().then((user) {
                   if (user != null) {
-                    Usuario.setLogado(user);
-                    Fluttertoast.showToast(
-                            msg: "Usuario ${user.displayName} logado",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            timeInSecForIos: 1,
-                            bgcolor: "#e74c3c",
-                            textcolor: '#ffffff')
-                        .then((evento) {
-                      Navigator.of(context).pushNamed(GruposPage.tag);
+                    Usuario.setLogado(user).then((evento) {
+                      Fluttertoast.showToast(
+                              msg: "Usuario ${user.displayName} logado",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIos: 1,
+                              bgcolor: "#e74c3c",
+                              textcolor: '#ffffff')
+                          .then((evento) {
+                        Navigator.of(context).pushNamed(GruposPage.tag);
+                      });
                     });
                   }
                 });
