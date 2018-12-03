@@ -1,4 +1,5 @@
 import 'package:resident/imports.dart';
+import 'package:http/http.dart' as http;
 
 class Exame {
   String key;
@@ -6,6 +7,7 @@ class Exame {
   String descricao;
   String nome;
   String anexo;
+  String extensao;
   String downloadLink;
   int tamanho;
 
@@ -16,6 +18,7 @@ class Exame {
       this.tamanho,
       this.key,
       this.pacienteKey,
+      this.extensao,
       this.anexo});
 
   static Future<TipoAnexo> popupTipoAnexo(BuildContext context) {
@@ -85,6 +88,32 @@ class Exame {
         });
   }
 
+  static Future<Null> _downloadFile(
+      String anexoName, String anexoExtensao) async {
+    StorageReference ref = FirebaseStorage.instance
+        .ref()
+        .child('anexos')
+        .child('$anexoName.$anexoExtensao');
+    print('o Arquivo -> $anexoName.$anexoExtensao');
+    final http.Response downloadData =
+        await http.get(await ref.getDownloadURL()).catchError((erro) {
+      print(erro);
+      return null;
+    });
+
+    final File tempFile =
+        File('${Directory.systemTemp.path}/$anexoName.$anexoExtensao');
+    if (tempFile.existsSync()) {
+      await tempFile.delete();
+    }
+    await tempFile.create();
+    assert(await tempFile.readAsString() == "");
+    final StorageFileDownloadTask task = ref.writeToFile(tempFile);
+    final int byteCount = (await task.future).totalByteCount;
+    final List<int> tempFileContents = await tempFile.readAsBytesSync();
+    print('baixado ${downloadData.body}');
+  }
+
   static Future<Null> abrirAnexoExame({Exame exame, String ExameId}) async {
     if (exame == null) {
       print('exame veio nulo, carregando do banco');
@@ -97,39 +126,21 @@ class Exame {
             nome: documento.data['nome'],
             tamanho: documento.data['tamanho'],
             anexo: documento.data['anexo'],
+            extensao: documento.data['extensao'],
             pacienteKey: documento.data['pacienteKey'],
             key: documento.data['key'],
             descricao: documento.data['descricao'],
             downloadLink: documento.data['downloadLink']);
       });
     }
-    print('exame ${exame.anexo} carregado');
-    String path = '${Directory.systemTemp.path}/${exame.anexo}.png';
-    File arquivo = new File(path);
-    // print('o path do arquivo é $path');
-    bool existe = arquivo.existsSync();
-    // print('o arquivo ${existe ? "existe" : "não existe"}');
-    int tamanho = existe ? arquivo.readAsBytesSync().length : 0;
-    // print('o tamanho do arquivo é $tamanho');
-    if (existe && (tamanho == 0 || tamanho != tamanho)) {
-      arquivo.deleteSync();
-    }
-    if (tamanho == 0 || tamanho != exame.tamanho) {
-      await arquivo.create();
-      assert(await arquivo.readAsString() == "");
-      StorageReference ref = FirebaseStorage.instance
-          .ref()
-          .child('anexos')
-          .child('${exame.anexo}.png');
 
-      // print('iniciando o download');
-      StorageFileDownloadTask dTask = ref.writeToFile(arquivo);
-      await dTask.future;
-      int fileSize = await arquivo.length();
-      print('abrindo arquivo em $path');
-      OpenFile.open(arquivo.path);
-    } else if (existe && tamanho == exame.tamanho) {
-      print('abrindo arquivo em $path');
+    String path =
+        '${Directory.systemTemp.path}/${exame.anexo}.${exame.extensao}';
+    File file = new File(path);
+    if (file.existsSync() && file.lengthSync() == exame.tamanho) {
+      OpenFile.open(path);
+    } else {
+      await _downloadFile(exame.anexo, exame.extensao);
       OpenFile.open(path);
     }
   }
@@ -193,17 +204,10 @@ class Exame {
           if (fonteImagem != null) file = await colheVideo(fonteImagem);
           break;
         case TipoAnexo.DOCUMENTO:
+          await popupInsereDocumentoExame(context);
           break;
       }
       if (file == null) return;
-      // DocumentReference anexoRef = await Firestore.instance
-      //     .collection('anexos')
-      //     .add({'pacienteKey': pacienteKey});
-
-      //Cria a mensagem
-
-      DocumentReference mensagemRef =
-          Firestore.instance.collection('mensagens').document();
 
       final Mensagem mensagem =
           await Mensagem.criar(pacienteKey, texto: 'Inserindo anexo... (0%)');
@@ -220,16 +224,67 @@ class Exame {
     }
   }
 
+  static Future<Null> popupInsereDocumentoExame(BuildContext context) async {
+    TextEditingController nome = TextEditingController(text: '');
+    TextEditingController descricao = TextEditingController(text: '');
+
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return SimpleDialog(
+          title: Text('Exame 2'),
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: Tela.de(context).x(20.0),
+                  vertical: Tela.de(context).y(10.0)),
+              child: TextFormField(
+                controller: nome,
+                decoration: InputDecoration(
+                  hintText: 'Nome',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: Tela.de(context).x(20.0),
+                  vertical: Tela.de(context).y(10.0)),
+              child: TextFormField(
+                controller: descricao,
+                maxLines: 10,
+                maxLengthEnforced: true,
+                decoration: InputDecoration(
+                  hintText: 'Descrição',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+            FloatingActionButton(
+              child: Icon(Icons.done),
+              onPressed: () {},
+            )
+          ],
+        );
+      },
+    );
+  }
+
   static Future<String> upload(
       File file, String pacienteKey, Mensagem mensagem) async {
+    if (file == null) return null;
+    String extensao = file.path.split('.').last;
     DocumentReference exameRef =
         Firestore.instance.collection('exames').document();
 
     String chave = exameRef.documentID;
-    StorageReference sRef =
-        FirebaseStorage.instance.ref().child('anexos').child('$chave.png');
+    StorageReference sRef = FirebaseStorage.instance
+        .ref()
+        .child('anexos')
+        .child('$chave.$extensao');
     final File arquivo =
-        await new File('${Directory.systemTemp.path}/$chave.png').create();
+        await new File('${Directory.systemTemp.path}/$chave.$extensao')
+            .create();
 
     List<int> imagemBytes = file.readAsBytesSync();
     arquivo.writeAsBytesSync(imagemBytes);
@@ -241,7 +296,7 @@ class Exame {
         case StorageTaskEventType.progress:
           int bytes = evento.snapshot.bytesTransferred;
           double porcentagem = (bytes * 100) / imagemBytes.length;
-          texto = 'Inserindo anexo... ($porcentagem%)';
+          texto = 'Inserindo anexo... (${porcentagem.toInt()}%)';
           break;
         case StorageTaskEventType.failure:
           texto = 'upload falhou';
@@ -262,7 +317,7 @@ class Exame {
 
     final Uri downloadUrl = (await task.onComplete).uploadSessionUri;
     final File downloadFile =
-        new File('${Directory.systemTemp.path}/$chave.png');
+        new File('${Directory.systemTemp.path}/$chave.$extensao');
 
     StorageFileDownloadTask dTask = sRef.writeToFile(downloadFile);
     FileDownloadTaskSnapshot downloadSnap = await dTask.future;
@@ -271,6 +326,7 @@ class Exame {
       'nome': 'Anexo',
       'pacienteKey': pacienteKey,
       'anexo': chave,
+      'extensao': extensao,
       'descricao': 'Anexo',
       'tamanho': imagemBytes.length,
       'downloadLink': downloadUrl.toString(),

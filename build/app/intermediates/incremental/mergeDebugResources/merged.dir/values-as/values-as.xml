@@ -19,4 +19,11 @@
     <string msgid="3441753203274453993" name="common_signin_button_text">"ছাইন ইন কৰক"</string>
     <string msgid="669893613918351210" name="common_signin_button_text_long">"Googleৰ জৰিয়তে ছাইন ইন কৰক"</string>
     <string msgid="4133737464567140336" name="fcm_fallback_notification_channel_label">"বিবিধ"</string>
+    <string msgid="368094699078615544" name="s1">"ছবি ছেভ কৰক"</string>
+    <string msgid="4550830452390689489" name="s2">"বিজ্ঞাপনক চিত্ৰৰ গেলাৰীত ছবি সঞ্চয় কৰিবলৈ অনুমতি দিবনে?"</string>
+    <string msgid="2435407834265420668" name="s3">"স্বীকাৰ কৰক"</string>
+    <string msgid="9167523597401839819" name="s4">"প্ৰত্যাখ্যান কৰক"</string>
+    <string msgid="1566682516266724847" name="s5">"কেলেণ্ডাৰৰ কাৰ্যক্ৰম সৃষ্টি কৰক"</string>
+    <string msgid="5996672174517137271" name="s6">"বিজ্ঞাপনক কোনো কেলেণ্ডাৰৰ কাৰ্যক্ৰম সৃষ্টি কৰিবলৈ অনুমতি দিবনে?"</string>
+    <string msgid="7163549807207034258" name="s7">"পৰীক্ষণ বিজ্ঞাপন"</string>
 </resources>

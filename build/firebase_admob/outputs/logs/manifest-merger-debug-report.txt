@@ -1,23 +1,29 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.5.7\android\src\main\AndroidManifest.xml:1:1-5:12
-INJECTED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.5.7\android\src\main\AndroidManifest.xml:1:1-5:12
-INJECTED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.5.7\android\src\main\AndroidManifest.xml:1:1-5:12
+ADDED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.7.0\android\src\main\AndroidManifest.xml:1:1-9:12
+INJECTED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.7.0\android\src\main\AndroidManifest.xml:1:1-9:12
+INJECTED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.7.0\android\src\main\AndroidManifest.xml:1:1-9:12
 	package
-		ADDED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.5.7\android\src\main\AndroidManifest.xml:2:3-45
-		INJECTED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.5.7\android\src\main\AndroidManifest.xml
-		INJECTED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.5.7\android\src\main\AndroidManifest.xml
+		ADDED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.7.0\android\src\main\AndroidManifest.xml:2:3-45
+		INJECTED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.7.0\android\src\main\AndroidManifest.xml
+		INJECTED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.7.0\android\src\main\AndroidManifest.xml
 	xmlns:android
-		ADDED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.5.7\android\src\main\AndroidManifest.xml:1:11-69
-uses-permission#android.permission.INTERNET
-ADDED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.5.7\android\src\main\AndroidManifest.xml:4:3-65
+		ADDED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.7.0\android\src\main\AndroidManifest.xml:1:11-69
+meta-data#com.google.android.gms.ads.APPLICATION_ID
+ADDED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.7.0\android\src\main\AndroidManifest.xml:5:3-7:39
+	android:value
+		ADDED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.7.0\android\src\main\AndroidManifest.xml:7:7-37
 	android:name
-		ADDED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.5.7\android\src\main\AndroidManifest.xml:4:20-62
+		ADDED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.7.0\android\src\main\AndroidManifest.xml:6:7-63
+uses-permission#android.permission.INTERNET
+ADDED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.7.0\android\src\main\AndroidManifest.xml:8:3-65
+	android:name
+		ADDED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.7.0\android\src\main\AndroidManifest.xml:8:20-62
 uses-sdk
-INJECTED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.5.7\android\src\main\AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.5.7\android\src\main\AndroidManifest.xml
-INJECTED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.5.7\android\src\main\AndroidManifest.xml
+INJECTED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.7.0\android\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.7.0\android\src\main\AndroidManifest.xml
+INJECTED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.7.0\android\src\main\AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.5.7\android\src\main\AndroidManifest.xml
-		ADDED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.5.7\android\src\main\AndroidManifest.xml
-		INJECTED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.5.7\android\src\main\AndroidManifest.xml
+		INJECTED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.7.0\android\src\main\AndroidManifest.xml
+		ADDED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.7.0\android\src\main\AndroidManifest.xml
+		INJECTED from C:\flutter\.pub-cache\hosted\pub.dartlang.org\firebase_admob-0.7.0\android\src\main\AndroidManifest.xml

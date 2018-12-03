@@ -1,4 +1,4 @@
-#Sun Dec 02 20:04:45 BRST 2018
+#Mon Dec 03 01:31:34 BRST 2018
 base.0=C\:\\dev\\Pessoal\\resident\\build\\app\\intermediates\\transforms\\dexMerger\\debug\\0
 path.1=classes2.dex
 renamed.1=classes2.dex

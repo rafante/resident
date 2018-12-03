@@ -128,11 +128,13 @@ class _PopupContatosState extends State<PopupContatos> {
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.done),
           onPressed: () {
-            Usuario.adicionarContato(_usuario['uid']);
-            Usuario.salvar();
-            setState(() {
-              Navigator.pop(context);
-            });
+            if (_usuario != null) {
+              Usuario.adicionarContato(_usuario['uid']);
+              Usuario.salvar();
+              setState(() {
+                Navigator.pop(context);
+              });
+            }
           },
         ),
       ),

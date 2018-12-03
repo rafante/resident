@@ -30,6 +30,7 @@ class _ExamesPageState extends State<ExamesPage> {
               nome: documento.data['nome'],
               tamanho: documento.data['tamanho'],
               anexo: documento.data['anexo'],
+              extensao: documento.data['extensao'],
               pacienteKey: documento.data['pacienteKey'],
               key: documento.data['key'],
               descricao: documento.data['descricao'],
@@ -48,9 +49,23 @@ class _ExamesPageState extends State<ExamesPage> {
     List<DataRow> rows = [];
     if (_exames != null) {
       for (Exame exame in _exames) {
+        String unit = 'Kb';
+
+        double size = exame.tamanho / 1024;
+        if (size > 1000) {
+          unit = 'Mb';
+          size /= 1024;
+        }
+
+        if (size > 1000) {
+          unit = 'Gb';
+          size /= 1024;
+        }
+
+        String tamanhoStr = '${size.toStringAsFixed(1)} $unit';
         rows.add(new DataRow(cells: [
           DataCell(Text(exame.nome)),
-          DataCell(Text(exame.tamanho.toString())),
+          DataCell(Text(tamanhoStr)),
           // DataCell(Text('cba')),
           DataCell(IconButton(
               icon: Icon(Icons.pageview),
