@@ -17,7 +17,11 @@ class _HipoteseDiagnosticaPageState extends State<HipoteseDiagnosticaPage> {
 
   @override
   void initState() {
-    carregarPaciente();
+    carregarPaciente().then((Paciente pac) {
+      setState(() {
+        paciente = pac;
+      });
+    });
     // paciente.carregaDadosDoServidor(carregarDadosExtras: true).then((event) {
     //   _hipoteseDiagnostica.text = paciente.hipoteseDiagnostica;
     // });
@@ -68,7 +72,7 @@ class _HipoteseDiagnosticaPageState extends State<HipoteseDiagnosticaPage> {
         ));
   }
 
-  Future<Null> carregarPaciente() async {
-    await Paciente.buscar(widget.pacienteKey);
+  Future<Paciente> carregarPaciente() async {
+    return Paciente.buscar(widget.pacienteKey);
   }
 }

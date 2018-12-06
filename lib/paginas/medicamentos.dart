@@ -11,7 +11,7 @@ class MedicamentosPage extends StatefulWidget {
 }
 
 class _MedicamentosPageState extends State<MedicamentosPage> {
-  Paciente _paciente;
+  Paciente paciente;
   String nomePaciente;
   List<AplicacaoMedicamento> medicamentos = [];
 
@@ -43,42 +43,40 @@ class _MedicamentosPageState extends State<MedicamentosPage> {
   @override
   void initState() {
     nomePaciente = 'Aguarde, carregando...';
-    // _paciente = new Paciente(
-    //     key: widget.pacienteKey,
-    //     grupoKey: widget.grupoKey,
-    //     forcarOnline: false);
-    // _paciente.carregaDadosDoServidor().then((teste) {
-    //   setState(() {
-    //     nomePaciente = _paciente.nome;
-    //   });
-    // });
-    // var ref = Banco.ref();
-    // ref
-    //     .child('pacientes')
-    //     .child(widget.pacienteKey)
-    //     .child('medicamentos')
-    //     .onValue
-    //     .listen((evento) {
-    //   Map meds = evento.snapshot.value;
-    //   List<AplicacaoMedicamento> lista = [];
-    //   if (meds != null) {
-    //     meds.forEach((chave, valor) {
-    //       var medicamento = new AplicacaoMedicamento(
-    //           key: chave,
-    //           tipo: valor['tipo'],
-    //           descricao: valor['descricao'],
-    //           horario: DateTime.fromMillisecondsSinceEpoch(valor['horario']));
-    //       lista.add(medicamento);
-    //     });
-    //     lista.sort((AplicacaoMedicamento ap1, AplicacaoMedicamento ap2) {
-    //       return ap2.horario.compareTo(ap1.horario);
-    //     });
-    //     setState(() {
-    //       medicamentos = lista;
-    //     });
-    //   }
-    // });
+    carregarPaciente().then((Paciente pac) {
+      paciente = pac;
+    });
+    Firestore.instance
+        .collection('medicamentos')
+        .where('pacienteKey', isEqualTo: widget.pacienteKey)
+        .snapshots()
+        .listen((snap) {
+      if (snap.documents != null) {
+        List<AplicacaoMedicamento> lista = [];
 
+        snap.documents.forEach((documento) {
+          DateTime horario = DateTime.now();
+          if (documento.data['horario'] != null)
+            horario =
+                DateTime.fromMillisecondsSinceEpoch(documento.data['horario']);
+          AplicacaoMedicamento aplicacao = AplicacaoMedicamento(
+            descricao: documento.data['descricao'],
+            horario: horario,
+            pacienteKey: documento.data['pacienteKey'],
+            tipo: documento.data['tipo'],
+            key: documento.documentID,
+          );
+          lista.add(aplicacao);
+        });
+
+        if (mounted) {
+          setState(() {
+            medicamentos = lista;
+          });
+        }
+      }
+    });
+    
     super.initState();
   }
 
@@ -92,11 +90,10 @@ class _MedicamentosPageState extends State<MedicamentosPage> {
         children: <Widget>[
           Padding(
             padding: EdgeInsets.fromLTRB(
-              Tela.de(context).x(20.0),
-              Tela.de(context).y(20.0),
-              Tela.de(context).x(20.0),
-              Tela.de(context).y(20.0)
-            ),
+                Tela.de(context).x(20.0),
+                Tela.de(context).y(20.0),
+                Tela.de(context).x(20.0),
+                Tela.de(context).y(20.0)),
             child: Text('Paciente: $nomePaciente'),
           ),
           tabela()
@@ -113,5 +110,9 @@ class _MedicamentosPageState extends State<MedicamentosPage> {
         },
       ),
     );
+  }
+
+  Future<Paciente> carregarPaciente() async {
+    return await Paciente.buscar(widget.pacienteKey);
   }
 }

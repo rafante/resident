@@ -125,13 +125,26 @@ class _PacienteDetalheState extends State<PacienteDetalhe> {
         child: Icon(Icons.done_outline),
         onPressed: () {
           setState(() {
-            paciente.setar(
-                nome: _nome.text,
-                entrada: dataEntrada != null
-                    ? dataEntrada.millisecondsSinceEpoch
-                    : DateTime.now().millisecondsSinceEpoch,
-                telefone: _telefone.text);
-            paciente.salvar();
+            if (paciente == null) {
+              criaPaciente().then((Paciente criado) {
+                paciente = criado;
+                paciente.setar(
+                    nome: _nome.text,
+                    entrada: dataEntrada != null
+                        ? dataEntrada.millisecondsSinceEpoch
+                        : DateTime.now().millisecondsSinceEpoch,
+                    telefone: _telefone.text);
+                paciente.salvar();
+              });
+            } else {
+              paciente.setar(
+                  nome: _nome.text,
+                  entrada: dataEntrada != null
+                      ? dataEntrada.millisecondsSinceEpoch
+                      : DateTime.now().millisecondsSinceEpoch,
+                  telefone: _telefone.text);
+              paciente.salvar();
+            }
             // print('salvou o cliente');
           });
           Navigator.pop(context);
@@ -149,10 +162,14 @@ class _PacienteDetalheState extends State<PacienteDetalhe> {
     _telefone.text = paciente.telefone;
   }
 
+  Future<Paciente> criaPaciente() async {
+    return await Paciente.criar(widget.grupoKey);
+  }
+
   Future<Paciente> carregarPaciente() async {
-    if (widget.pacienteKey != null)
-      return await Paciente.buscar(widget.pacienteKey);
-    else
-      return await Paciente.criar(widget.grupoKey);
+    // if (widget.pacienteKey != null)
+    return await Paciente.buscar(widget.pacienteKey);
+    // else
+    //   return await Paciente.criar(widget.grupoKey);
   }
 }

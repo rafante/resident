@@ -21,6 +21,7 @@ class _MedicamentoDetalheState extends State<MedicamentoDetalhe> {
 
   @override
   void initState() {
+    carregarMedicamento().then((AplicacaoMedicamento aplicacao) {});
     aplicacao = new AplicacaoMedicamento(
         pacienteKey: widget.pacienteKey, key: widget.medicamentoKey);
     if (widget.medicamentoKey != null && widget.medicamentoKey != "")
@@ -115,5 +116,9 @@ class _MedicamentoDetalheState extends State<MedicamentoDetalhe> {
         },
       ),
     );
+  }
+
+  Future<AplicacaoMedicamento> carregarMedicamento() {
+    return null;
   }
 }

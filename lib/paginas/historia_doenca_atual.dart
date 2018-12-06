@@ -19,7 +19,9 @@ class _HistoriaDoencaAtualPageState extends State<HistoriaDoencaAtualPage> {
   @override
   void initState() {
     nomePaciente = 'Aguarde, carregando...';
-    carregarPaciente();
+    carregarPaciente().then((Paciente pac) {
+      paciente = pac;
+    });
     super.initState();
   }
 
@@ -79,7 +81,7 @@ class _HistoriaDoencaAtualPageState extends State<HistoriaDoencaAtualPage> {
         ));
   }
 
-  Future<Null> carregarPaciente() async {
-    await Paciente.buscar(widget.pacienteKey);
+  Future<Paciente> carregarPaciente() async {
+    return Paciente.buscar(widget.pacienteKey);
   }
 }

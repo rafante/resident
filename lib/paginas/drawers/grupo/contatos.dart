@@ -20,15 +20,17 @@ class _ContatosPageState extends State<ContatosPage> {
     List<Widget> widgets = [];
     _contatos.forEach((cont) {
       var usuario = Banco.findUsuario(cont);
-      widgets.add(Card(
-        child: ListTile(
-          leading: CircleAvatar(
-            backgroundImage: CachedNetworkImageProvider(usuario['urlFoto']),
+      if (usuario != null) {
+        widgets.add(Card(
+          child: ListTile(
+            leading: CircleAvatar(
+              backgroundImage: CachedNetworkImageProvider(usuario['urlFoto']),
+            ),
+            title: Text(usuario['nome']),
+            subtitle: Text(usuario['email']),
           ),
-          title: Text(usuario['nome']),
-          subtitle: Text(usuario['email']),
-        ),
-      ));
+        ));
+      }
     });
     return widgets;
   }

@@ -102,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
 
       children: <Widget>[
         Image.asset(
-          'images/icone.png',
+          'images/ic_launcher.jpg',
           width: Tela.de(context).x(180.0),
           height: Tela.de(context).y(180.0),
         ),

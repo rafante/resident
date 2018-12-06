@@ -15,9 +15,9 @@ class _HistoriaPregressaPageState extends State<HistoriaPregressaPage> {
 
   @override
   void initState() {
-    // paciente.carregaDadosDoServidor(carregarDadosExtras: true).then((event) {
-    //   _historiaPregressa.text = paciente.historiaPregressa;
-    // });
+    carregarPaciente().then((Paciente pac) {
+      paciente = pac;
+    });
     super.initState();
   }
 
@@ -65,7 +65,7 @@ class _HistoriaPregressaPageState extends State<HistoriaPregressaPage> {
         ));
   }
 
-  Future<Null> carregarPaciente() async {
-    paciente = await Paciente.buscar(widget.pacienteKey);
+  Future<Paciente> carregarPaciente() async {
+    return Paciente.buscar(widget.pacienteKey);
   }
 }
