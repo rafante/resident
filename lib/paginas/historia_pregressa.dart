@@ -12,11 +12,18 @@ class HistoriaPregressaPage extends StatefulWidget {
 class _HistoriaPregressaPageState extends State<HistoriaPregressaPage> {
   TextEditingController _historiaPregressa = TextEditingController(text: '');
   Paciente paciente;
+  String nomePaciente = 'carregando...';
 
   @override
   void initState() {
     carregarPaciente().then((Paciente pac) {
-      paciente = pac;
+      if (mounted) {
+        setState(() {
+          paciente = pac;
+          nomePaciente = paciente.nome;
+          _historiaPregressa.text = paciente.historiaPregressa;
+        });
+      }
     });
     super.initState();
   }
@@ -27,6 +34,17 @@ class _HistoriaPregressaPageState extends State<HistoriaPregressaPage> {
         appBar: AppBar(title: Text('História Pregressa')),
         body: ListView(
           children: <Widget>[
+            Padding(
+              padding: EdgeInsets.fromLTRB(
+                  Tela.de(context).x(25.0),
+                  Tela.de(context).x(15.0),
+                  Tela.de(context).x(15.0),
+                  Tela.de(context).x(0.0)),
+              child: Text(
+                'Paciente: $nomePaciente',
+                style: TextStyle(fontSize: Tela.de(context).abs(17.0)),
+              ),
+            ),
             Padding(
               padding: EdgeInsets.fromLTRB(
                   Tela.de(context).x(20.0),

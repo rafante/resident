@@ -1,7 +1,7 @@
 import 'package:resident/imports.dart';
 
 class LoginPage extends StatefulWidget {
-  static String tag = 'login-page';
+  static const String tag = 'login-page';
   final FirebaseApp app;
   LoginPage({this.app});
 
@@ -102,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
 
       children: <Widget>[
         Image.asset(
-          'images/ic_launcher.jpg',
+          'images/icone_r.png',
           width: Tela.de(context).x(180.0),
           height: Tela.de(context).y(180.0),
         ),
@@ -126,12 +126,12 @@ class _LoginPageState extends State<LoginPage> {
                       Fluttertoast.showToast(
                               msg: "Usuario ${user.displayName} logado",
                               toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.CENTER,
+                              gravity: ToastGravity.BOTTOM,
                               timeInSecForIos: 1,
                               bgcolor: "#e74c3c",
                               textcolor: '#ffffff')
                           .then((evento) {
-                        Navigator.of(context).pushNamed(GruposPage.tag);
+                        Navegador.de(context).navegar(Tag.GRUPOS, null);
                       });
                     });
                   }

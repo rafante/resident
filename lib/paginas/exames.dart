@@ -1,12 +1,14 @@
+import 'package:flutter/rendering.dart';
 import 'package:resident/imports.dart';
 
 class ExamesPage extends StatefulWidget {
   static String tag = 'exames';
+  final String pacienteNome;
   final FirebaseApp app;
   final String pacienteKey;
   final String grupoKey;
 
-  ExamesPage({this.app, this.pacienteKey, this.grupoKey});
+  ExamesPage({this.app, this.pacienteKey, this.grupoKey, this.pacienteNome});
 
   @override
   _ExamesPageState createState() => _ExamesPageState();
@@ -14,10 +16,12 @@ class ExamesPage extends StatefulWidget {
 
 class _ExamesPageState extends State<ExamesPage> {
   List<Exame> _exames;
+  String nomePaciente = 'carregando';
 
   @override
   void initState() {
     super.initState();
+    if (widget.pacienteNome != null) nomePaciente = widget.pacienteNome;
     Firestore.instance
         .collection('exames')
         .where('pacienteKey', isEqualTo: widget.pacienteKey)
@@ -66,37 +70,36 @@ class _ExamesPageState extends State<ExamesPage> {
         rows.add(new DataRow(cells: [
           DataCell(Text(exame.nome)),
           DataCell(Text(tamanhoStr)),
-          // DataCell(Text('cba')),
-          DataCell(IconButton(
-              icon: Icon(Icons.pageview),
-              onPressed: () async {
-                Exame.abrirAnexoExame(exame: exame);
-              }))
+          DataCell(Text(exame.extensao)),
+          DataCell(Row(
+            children: <Widget>[
+              IconButton(
+                  icon: Icon(Icons.pageview),
+                  onPressed: () async {
+                    if (exame.extensao != 'doc')
+                      Exame.abrirAnexoExame(exame: exame);
+                    else
+                      Exame.popupInsereDocumentoExame(context,
+                          pacienteKey: widget.pacienteKey,
+                          nome: exame.nome,
+                          descricao: exame.descricao,
+                          documentID: exame.key);
+                  })
+            ],
+          ))
         ]));
       }
     }
-    return ListView(
-      children: <Widget>[
-        Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: Tela.de(context).x(20.0),
-                vertical: Tela.de(context).y(5.0)),
-            child: Text(
-              'Paciente: teste',
-              style: TextStyle(fontSize: Tela.de(context).abs(15.0)),
-            )),
-        DataTable(
-          columns: <DataColumn>[
-            DataColumn(
-              label: Text('Descrição'),
-            ),
-            DataColumn(label: Text('Tamanho')),
-            // DataColumn(label: Text('Formato')),
-            DataColumn(label: Text('Ações')),
-          ],
-          rows: rows,
-        )
+    return DataTable(
+      columns: <DataColumn>[
+        DataColumn(
+          label: Text('Descrição'),
+        ),
+        DataColumn(label: Text('Tamanho')),
+        DataColumn(label: Text('Formato')),
+        DataColumn(label: Text('Ações')),
       ],
+      rows: rows,
     );
   }
 
@@ -113,15 +116,25 @@ class _ExamesPageState extends State<ExamesPage> {
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
-            Exame.criarAnexo(context, TipoExame.ANEXO, widget.pacienteKey);
+            Exame.popupInsereDocumentoExame(context,
+                pacienteKey: widget.pacienteKey);
           },
         ),
-        body: Padding(
-            padding: EdgeInsets.fromLTRB(
-                Tela.de(context).x(10.0),
-                Tela.de(context).y(10.0),
-                Tela.de(context).x(10.0),
-                Tela.de(context).y(10.0)),
-            child: body()));
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(height: Tela.de(context).y(10.0)),
+              Padding(
+                padding:
+                    EdgeInsets.symmetric(horizontal: Tela.de(context).x(24.0)),
+                child: Text('Paciente: $nomePaciente'),
+              ),
+              body()
+            ],
+          ),
+          scrollDirection: Axis.horizontal,
+        ));
   }
 }

@@ -21,18 +21,18 @@ class _MedicamentoDetalheState extends State<MedicamentoDetalhe> {
 
   @override
   void initState() {
-    carregarMedicamento().then((AplicacaoMedicamento aplicacao) {});
-    aplicacao = new AplicacaoMedicamento(
-        pacienteKey: widget.pacienteKey, key: widget.medicamentoKey);
-    if (widget.medicamentoKey != null && widget.medicamentoKey != "")
-      aplicacao.carregarDadosDoServidor().then((evento) {});
+    carregarMedicamento().then((AplicacaoMedicamento aplic) {
+      if (mounted) {
+        aplicacao = aplic;
+      }
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Tipo')),
+      appBar: AppBar(title: Text('Medicamento')),
       body: Padding(
         padding: EdgeInsets.fromLTRB(
           Tela.de(context).x(20.0),
@@ -68,7 +68,7 @@ class _MedicamentoDetalheState extends State<MedicamentoDetalhe> {
                 onChanged: (DateTime novaData) {
                   if (novaData != null) {
                     setState(() {
-                      aplicacao.salvarHorario(novaData);
+                      horario = novaData;
                     });
                   }
                 },
@@ -108,9 +108,11 @@ class _MedicamentoDetalheState extends State<MedicamentoDetalhe> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.done_outline),
         onPressed: () {
+          if(aplicacao == null)
+            aplicacao = AplicacaoMedicamento(pacienteKey: widget.pacienteKey);
           aplicacao.salvarTipo(_tipo.text);
           aplicacao.salvarDescricao(_descricao.text);
-
+          aplicacao.salvarHorario(horario);
           aplicacao.salvar();
           Navigator.pop(context);
         },
@@ -118,7 +120,25 @@ class _MedicamentoDetalheState extends State<MedicamentoDetalhe> {
     );
   }
 
-  Future<AplicacaoMedicamento> carregarMedicamento() {
-    return null;
+  Future<AplicacaoMedicamento> carregarMedicamento() async {
+    AplicacaoMedicamento medicamento;
+    Firestore.instance
+        .document('medicamentos/${widget.medicamentoKey}')
+        .snapshots()
+        .first
+        .then((snap) {
+      if (snap.data != null) {
+        DateTime data = snap.data['horario'] != null
+            ? DateTime.fromMillisecondsSinceEpoch(snap.data['horario'])
+            : DateTime.now();
+        medicamento = AplicacaoMedicamento(
+            descricao: snap.data['descricao'],
+            horario: data,
+            key: snap.documentID,
+            pacienteKey: snap.data['pacienteKey'],
+            tipo: snap.data['tipo']);
+      }
+    });
+    return medicamento;
   }
 }

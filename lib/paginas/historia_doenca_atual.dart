@@ -18,9 +18,15 @@ class _HistoriaDoencaAtualPageState extends State<HistoriaDoencaAtualPage> {
 
   @override
   void initState() {
-    nomePaciente = 'Aguarde, carregando...';
+    nomePaciente = 'carregando...';
     carregarPaciente().then((Paciente pac) {
-      paciente = pac;
+      if (mounted) {
+        setState(() {
+          paciente = pac;
+          nomePaciente = paciente.nome;
+          _historiaDoencaAtual.text = paciente.historiaDoencaAtual;
+        });
+      }
     });
     super.initState();
   }

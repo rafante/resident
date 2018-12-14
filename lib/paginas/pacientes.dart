@@ -93,11 +93,8 @@ class _PacientesPageState extends State<PacientesPage> {
   }
 
   void _criaPaciente() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return BaseWindow(
-        conteudo: PacienteDetalhe(grupoKey: widget.grupoKey, pacienteKey: null),
-      );
-    }));
+    Navegador.de(context).navegar(Tag.PACIENTE_DETALHE,
+        {'grupoKey': widget.grupoKey, 'pacienteKey': null});
   }
 
   List<Card> _pacientesCard() {
@@ -146,14 +143,10 @@ class _PacientesPageState extends State<PacientesPage> {
                 ],
               ),
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (BuildContext context) {
-                  return BaseWindow(
-                      conteudo: PacienteDetalhe(
-                          app: widget.app,
-                          pacienteKey: paciente.key,
-                          grupoKey: paciente.grupoKey));
-                }));
+                Navegador.de(context).navegar(Tag.PACIENTE_DETALHE, {
+                  'pacienteKey': paciente.key,
+                  'grupoKey': paciente.grupoKey
+                });
               },
             ),
             dense: true,
@@ -164,16 +157,8 @@ class _PacientesPageState extends State<PacientesPage> {
                 : Text(''),
             onTap: () {
               setState(() {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => BaseWindow(
-                                conteudo: PacientePage(
-                              app: widget.app,
-                              paciente: paciente,
-                              grupoKey: widget.grupoKey,
-                              pacienteKey: paciente.key,
-                            ))));
+                Navegador.de(context).navegar(Tag.PACIENTE,
+                    {'grupoKey': widget.grupoKey, 'pacienteKey': paciente.key});
               });
             }),
       ));
@@ -195,7 +180,7 @@ class _PacientesPageState extends State<PacientesPage> {
       ),
       body: ListView(
         children: _pacientesCard(),
-        itemExtent: Tela.de(context).abs(80.0),
+        // itemExtent: Tela.de(context).abs(80.0),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),

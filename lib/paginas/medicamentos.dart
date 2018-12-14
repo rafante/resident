@@ -45,6 +45,11 @@ class _MedicamentosPageState extends State<MedicamentosPage> {
     nomePaciente = 'Aguarde, carregando...';
     carregarPaciente().then((Paciente pac) {
       paciente = pac;
+      if (mounted) {
+        setState(() {
+          nomePaciente = paciente.nome;
+        });
+      }
     });
     Firestore.instance
         .collection('medicamentos')
@@ -76,7 +81,7 @@ class _MedicamentosPageState extends State<MedicamentosPage> {
         }
       }
     });
-    
+
     super.initState();
   }
 
@@ -102,11 +107,8 @@ class _MedicamentosPageState extends State<MedicamentosPage> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return new BaseWindow(
-              conteudo: new MedicamentoDetalhe(pacienteKey: widget.pacienteKey),
-            );
-          }));
+          Navegador.de(context).navegar(
+              Tag.MEDICAMENTO_DETALHE, {'pacienteKey': widget.pacienteKey});
         },
       ),
     );

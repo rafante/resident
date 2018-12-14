@@ -32,6 +32,7 @@ class Usuario {
       return null;
     }
     uid = user.uid;
+
     await Banco.criarUsuario(user.uid, {
       'nome': user.displayName,
       'email': user.email,
@@ -44,6 +45,34 @@ class Usuario {
       eu = usuarioLogado;
       manterUsuarioLogado();
     });
+  }
+
+  static void setarUsuarioLocal() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setStringList('usuario_logado', [
+      eu['nome'],
+      eu['email'],
+      eu['telefone'],
+      eu['urlFoto'],
+      eu['idResidente'],
+      eu['uid']
+    ]);
+    prefs.setStringList('contatos', eu['contatos']);
+  }
+
+  static Future<Null> carregarUsuarioLocal() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> userData = prefs.getStringList('usuario_logado');
+    List<String> contatos = prefs.getStringList('contatos');
+    eu = {
+      'nome': userData[0],
+      'email': userData[1],
+      'telefone': userData[2],
+      'urlFoto': userData[3],
+      'idResidente': userData[4],
+      'uid': userData[5],
+      'contatos': contatos
+    };
   }
 
   static void manterUsuarioLogado() {

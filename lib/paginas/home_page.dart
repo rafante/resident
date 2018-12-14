@@ -6,18 +6,23 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
+  void initState() {
+    super.initState();
+    // WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
   Widget build(BuildContext context) {
     verificarUsuario();
-    Navigator.of(context).pushNamed(GruposPage.tag);
     return Scaffold();
   }
 
   void verificarUsuario() {
     if (!Usuario.estaLogado()) {
-      Navigator.of(context).pushNamed(LoginPage.tag);
+      Navegador.de(context).navegar(Tag.LOGIN, null);
     } else {
       if (Usuario.eu['idResidente'] == null || Usuario.eu['telefone'] == null) {
-        Navigator.of(context).pushNamed(PerfilPage.tag);
+        Navegador.de(context).navegar(Tag.PERFIL, null);
       }
     }
   }

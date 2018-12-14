@@ -16,12 +16,22 @@ class _PacientePageState extends State<PacientePage> {
   List<Mensagem> _mensagens = <Mensagem>[];
 
   TextEditingController _textController = TextEditingController(text: '');
-  bool _isWriting;
+  bool _isWriting = false;
   Future<File> _imageFile;
+  String nomePaciente = '';
+  Paciente paciente;
 
   @override
   void initState() {
     super.initState();
+    Paciente.buscar(widget.pacienteKey).then((Paciente pac) {
+      if (pac != null && mounted) {
+        paciente = pac;
+        setState(() {
+          nomePaciente = paciente.nome;
+        });
+      }
+    });
     Firestore.instance
         .collection('mensagens')
         .where('pacienteKey', isEqualTo: widget.pacienteKey)
@@ -63,7 +73,7 @@ class _PacientePageState extends State<PacientePage> {
           backgroundColor: Colors.purpleAccent,
           title: Padding(
             padding: EdgeInsets.only(top: Tela.de(context).x(20.0)),
-            child: Text(widget.paciente.nome),
+            child: Text(nomePaciente),
           )),
       body: Column(
         children: <Widget>[
@@ -111,84 +121,61 @@ class _PacientePageState extends State<PacientePage> {
               trailing: Icon(Icons.assignment),
               title: Text('Exames'),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: ((context) {
-                  return BaseWindow(
-                    conteudo: ExamesPage(
-                        app: widget.app,
-                        pacienteKey: widget.pacienteKey,
-                        grupoKey: widget.grupoKey),
-                  );
-                })));
+                Navegador.de(context).navegar(Tag.EXAMES, {
+                  'pacienteKey': widget.pacienteKey,
+                  'grupoKey': widget.grupoKey,
+                  'pacienteNome': paciente.nome
+                });
               },
             ),
             ListTile(
               trailing: Icon(FontAwesomeIcons.pills),
               title: Text('Medicamentos'),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: ((context) {
-                  return BaseWindow(
-                    conteudo: MedicamentosPage(
-                        app: widget.app,
-                        grupoKey: widget.grupoKey,
-                        pacienteKey: widget.pacienteKey),
-                  );
-                })));
+                Navegador.de(context).navegar(Tag.MEDICAMENTOS, {
+                  'grupoKey': widget.grupoKey,
+                  'pacienteKey': widget.pacienteKey
+                });
               },
             ),
             ListTile(
               trailing: Icon(FontAwesomeIcons.stethoscope),
               title: Text('História de Doença Atual'),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: ((context) {
-                  return BaseWindow(
-                    conteudo: HistoriaDoencaAtualPage(
-                        app: widget.app,
-                        pacienteKey: widget.pacienteKey,
-                        grupoKey: widget.grupoKey),
-                  );
-                })));
+                Navegador.de(context).navegar(Tag.HISTORIA_DOENCA_ATUAL, {
+                  'pacienteKey': widget.pacienteKey,
+                  'grupoKey': widget.grupoKey
+                });
               },
             ),
             ListTile(
               trailing: Icon(FontAwesomeIcons.scroll),
               title: Text('História Pregressa'),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: ((context) {
-                  return BaseWindow(
-                    conteudo: HistoriaPregressaPage(
-                        app: widget.app,
-                        pacienteKey: widget.pacienteKey,
-                        grupoKey: widget.grupoKey),
-                  );
-                })));
+                Navegador.de(context).navegar(Tag.HISTORIA_PREGRESSA, {
+                  'pacienteKey': widget.pacienteKey,
+                  'grupoKey': widget.grupoKey
+                });
               },
             ),
             ListTile(
               trailing: Icon(FontAwesomeIcons.edit),
               title: Text('Hipótese Diagnóstica'),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: ((context) {
-                  return BaseWindow(
-                    conteudo: HipoteseDiagnosticaPage(
-                        app: widget.app,
-                        pacienteKey: widget.pacienteKey,
-                        grupoKey: widget.grupoKey),
-                  );
-                })));
+                Navegador.de(context).navegar(Tag.HIPOTESE_DIAGNOSTICA, {
+                  'pacienteKey': widget.pacienteKey,
+                  'grupoKey': widget.grupoKey
+                });
               },
             ),
             ListTile(
               trailing: Icon(FontAwesomeIcons.hospital),
               title: Text('Alta do paciente'),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: ((context) {
-                  return BaseWindow(
-                    conteudo: AltaPacientePage(
-                        app: widget.app,
-                        pacienteKey: widget.pacienteKey,
-                        grupoKey: widget.grupoKey),
-                  );
-                })));
+                Navegador.de(context).navegar(Tag.ALTA_PACIENTE, {
+                  'pacienteKey': widget.pacienteKey,
+                  'grupoKey': widget.grupoKey
+                });
               },
             ),
           ],
@@ -243,7 +230,11 @@ class _PacientePageState extends State<PacientePage> {
             new Flexible(
               child: TextField(
                   controller: _textController,
-                  onChanged: (String textoDigitado) {},
+                  onChanged: (String textoDigitado) {
+                    setState(() {
+                      _isWriting = _textController.text.length > 0;
+                    });
+                  },
                   decoration:
                       InputDecoration.collapsed(hintText: 'Digite aqui')),
             ),
@@ -252,23 +243,25 @@ class _PacientePageState extends State<PacientePage> {
               child: Row(
                 children: <Widget>[
                   _botaoAnexar(),
-                  IconButton(
-                    icon: Icon(
-                      Icons.message,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      if (_textController.text == '') return;
-                      criarMensagem(
-                          Usuario.uid, _textController.text, DateTime.now());
+                  _isWriting
+                      ? IconButton(
+                          icon: Icon(
+                            Icons.play_circle_filled,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            if (_textController.text == '') return;
+                            criarMensagem(Usuario.uid, _textController.text,
+                                DateTime.now());
 
-                      setState(() {
-                        // _mensagens.add(mensagem);
-                        // _mensagens = _mensagens.reversed.toList();
-                        _textController.text = '';
-                      });
-                    },
-                  )
+                            setState(() {
+                              // _mensagens.add(mensagem);
+                              // _mensagens = _mensagens.reversed.toList();
+                              _textController.text = '';
+                            });
+                          },
+                        )
+                      : Container()
                 ],
               ),
             )

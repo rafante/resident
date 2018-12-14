@@ -128,21 +128,20 @@ class AppResident extends StatelessWidget {
     //               BaseWindow(conteudo: PerfilPage(app: app))));
     // }
 
-    String rotaInicial = GruposPage.tag;
-    if (Usuario.eu == null) {
-      rotaInicial = LoginPage.tag;
-    } else if (Usuario.eu['idResidente'] == null ||
-        Usuario.eu['idResidente'] == "") {
-      rotaInicial = PerfilPage.tag;
-    }
+    // String rotaInicial = GruposPage.tag;
+    // if (Usuario.eu == null) {
+    //   rotaInicial = LoginPage.tag;
+    // } else if (Usuario.eu['idResidente'] == null ||
+    //     Usuario.eu['idResidente'] == "") {
+    //   rotaInicial = PerfilPage.tag;
+    // }
 
     return new MaterialApp(
       title: 'Resident',
       theme: new ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: rotaInicial,
-      home: new BaseWindow(conteudo: HomePage()),
+      home: new BaseWindow(conteudo: LoginPage()),
       routes: <String, WidgetBuilder>{
         LoginPage.tag: (context) => new BaseWindow(conteudo: LoginPage()),
         GruposPage.tag: (context) => new BaseWindow(conteudo: GruposPage()),

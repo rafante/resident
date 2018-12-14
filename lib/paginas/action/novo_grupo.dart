@@ -237,21 +237,30 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
                     child: Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: Tela.de(context).x(10.0),
-                          vertical: Tela.de(context).y(10.0)),
-                      child: Text('Não'),
+                          vertical: Tela.de(context).y(15.0)),
+                      child: Text(
+                        'Não',
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold),
+                      ),
                     ),
                     onPressed: () {
                       Navigator.pop(context, 'nao');
                     },
                   ),
+                  SizedBox(
+                    height: Tela.de(context).y(20.0),
+                  ),
                   SimpleDialogOption(
-                    child: Padding(
+                    child: Container(
                       padding: EdgeInsets.symmetric(
                           horizontal: Tela.de(context).x(10.0),
                           vertical: Tela.de(context).y(10.0)),
-                      child: Container(
-                        color: Colors.redAccent,
-                        child: Text('Sim'),
+                      color: Colors.redAccent,
+                      child: Text(
+                        'Sim',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
                       ),
                     ),
                     onPressed: () {

@@ -20,6 +20,7 @@ class _GruposPageState extends State<GruposPage> {
   @override
   void initState() {
     super.initState();
+
     Firestore.instance
         .collection('grupos')
         .where('contatos', arrayContains: Usuario.eu['uid'])
@@ -38,6 +39,32 @@ class _GruposPageState extends State<GruposPage> {
         _grupos = grps;
       });
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: new AppBar(
+        title: Padding(
+          padding: EdgeInsets.only(top: Tela.de(context).y(20.0)),
+          child: new Text('Resident'),
+        ),
+      ),
+      body: new ListView(
+        children: _gruposCards(),
+      ),
+      drawer: Drawer(
+        child: getDrawer(),
+      ),
+      floatingActionButton: new FloatingActionButton(
+        onPressed: () {
+          Navegador.de(context).navegar(Tag.GRUPO_DETALHE, null);
+        },
+        backgroundColor: Colors.blueAccent,
+        tooltip: 'Increment',
+        child: new Icon(Icons.add),
+      ),
+    );
   }
 
   List<Card> _gruposCards() {
@@ -79,12 +106,8 @@ class _GruposPageState extends State<GruposPage> {
               ],
             ),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return BaseWindow(
-                    conteudo: DadosGrupoPage(
-                  grupoChave: grupo['key'],
-                ));
-              }));
+              Navegador.de(context)
+                  .navegar(Tag.GRUPO_DETALHE, {'grupoChave': grupo['key']});
             },
           ),
           dense: true,
@@ -92,12 +115,8 @@ class _GruposPageState extends State<GruposPage> {
           subtitle:
               new Text(grupo['descricao'] != null ? grupo['descricao'] : ''),
           onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => BaseWindow(
-                        conteudo: PacientesPage(
-                            app: widget.app, grupoKey: grupo['key']))));
+            Navegador.de(context)
+                .navegar(Tag.PACIENTES, {'grupoKey': grupo['key']});
           },
         ),
       ));
@@ -112,43 +131,20 @@ class _GruposPageState extends State<GruposPage> {
           title: Text('Editar perfil'),
           leading: Icon(Icons.assignment_ind),
           onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        BaseWindow(conteudo: PerfilPage(app: widget.app))));
+            Navegador.de(context).navegar(Tag.PERFIL, null);
           },
         ),
         ListTile(
             title: Text('Contatos'),
             leading: Icon(Icons.contacts),
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          BaseWindow(conteudo: ContatosPage(app: widget.app))));
+              Navegador.de(context).navegar(Tag.CONTATOS, null);
             }),
-        ListTile(
-          title: Text('Configurações'),
-          leading: Icon(Icons.settings),
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => BaseWindow(
-                        conteudo: ConfiguracoesPage(app: widget.app))));
-          },
-        ),
         ListTile(
           title: Text('Seja Premium!'),
           leading: Icon(Icons.monetization_on),
           onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        BaseWindow(conteudo: PremiumPage(app: widget.app))));
+            Navegador.de(context).navegar(Tag.PREMIUM, null);
           },
         ),
         ListTile(
@@ -156,9 +152,7 @@ class _GruposPageState extends State<GruposPage> {
           leading: Icon(Icons.cancel),
           onTap: () {
             Usuarios.deslogar().then((r) {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return LoginPage(app: widget.app);
-              }));
+              Navegador.de(context).navegar(Tag.LOGIN, null);
             });
           },
         )
@@ -238,7 +232,7 @@ class _GruposPageState extends State<GruposPage> {
   void _validarUsuario() {
     FirebaseAuth.instance.currentUser().then((FirebaseUser usuario) {
       if (usuario == null) {
-        Navigator.pushNamed(context, LoginPage.tag);
+        Navegador.de(context).navegar(Tag.LOGIN, null);
       }
     });
   }
@@ -251,12 +245,7 @@ class _GruposPageState extends State<GruposPage> {
       eu = Usuario.logado();
       if (eu != null) {
         if (eu.idResidente == null || eu.idResidente == "") {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-            return BaseWindow(
-                conteudo: PerfilPage(
-              app: widget.app,
-            ));
-          }));
+          Navegador.de(context).navegar(Tag.PERFIL, null);
         }
       } else {
         if (Usuario.logado() != null) {
@@ -267,35 +256,5 @@ class _GruposPageState extends State<GruposPage> {
         }
       }
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: new AppBar(
-        title: Padding(
-          padding: EdgeInsets.only(top: Tela.de(context).y(20.0)),
-          child: new Text('Resident'),
-        ),
-      ),
-      body: new ListView(
-        children: _gruposCards(),
-      ),
-      drawer: Drawer(
-        child: getDrawer(),
-      ),
-      floatingActionButton: new FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return new BaseWindow(
-              conteudo: DadosGrupoPage(),
-            );
-          }));
-        },
-        backgroundColor: Colors.blueAccent,
-        tooltip: 'Increment',
-        child: new Icon(Icons.add),
-      ),
-    );
   }
 }

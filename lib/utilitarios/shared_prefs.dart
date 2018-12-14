@@ -1,6 +1,4 @@
-import 'dart:async';
-
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:resident/imports.dart';
 
 class Prefs {
   static Future<Null> salvarNotificacao(

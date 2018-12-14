@@ -33,11 +33,16 @@ dependencies:
   cached_network_image:
   rounded_modal:
   firebase_ml_vision:
+  flutter_launcher_icons:
   
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
+flutter_icons:
+  image_path: "images/icone_r.png" 
+  android: true
+  ios: true
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
@@ -54,6 +59,7 @@ flutter:
   assets:
    - images/icone.png
    - images/icone_r.jpg
+   - images/icone_r.png
    - images/ic_launcher.jpg
   #  - images/a_dot_ham.jpeg
 

@@ -14,13 +14,18 @@ class HipoteseDiagnosticaPage extends StatefulWidget {
 class _HipoteseDiagnosticaPageState extends State<HipoteseDiagnosticaPage> {
   TextEditingController _hipoteseDiagnostica = TextEditingController(text: '');
   Paciente paciente;
+  String nomePaciente = 'carregando...';
 
   @override
   void initState() {
     carregarPaciente().then((Paciente pac) {
-      setState(() {
-        paciente = pac;
-      });
+      if (mounted) {
+        setState(() {
+          paciente = pac;
+          nomePaciente = paciente.nome;
+          _hipoteseDiagnostica.text = paciente.hipoteseDiagnostica;
+        });
+      }
     });
     // paciente.carregaDadosDoServidor(carregarDadosExtras: true).then((event) {
     //   _hipoteseDiagnostica.text = paciente.hipoteseDiagnostica;
@@ -34,6 +39,17 @@ class _HipoteseDiagnosticaPageState extends State<HipoteseDiagnosticaPage> {
         appBar: AppBar(title: Text('História Diagnostica')),
         body: ListView(
           children: <Widget>[
+            Padding(
+              padding: EdgeInsets.fromLTRB(
+                  Tela.de(context).x(25.0),
+                  Tela.de(context).x(15.0),
+                  Tela.de(context).x(15.0),
+                  Tela.de(context).x(0.0)),
+              child: Text(
+                'Paciente: $nomePaciente',
+                style: TextStyle(fontSize: Tela.de(context).abs(17.0)),
+              ),
+            ),
             Padding(
               padding: EdgeInsets.fromLTRB(
                   Tela.de(context).x(20.0),

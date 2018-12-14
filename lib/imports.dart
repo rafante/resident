@@ -3,6 +3,7 @@ export 'package:firebase_admob/firebase_admob.dart';
 export 'package:firebase_auth/firebase_auth.dart';
 export 'package:firebase_storage/firebase_storage.dart';
 // export 'package:firebase_database/firebase_database.dart';
+export 'package:shared_preferences/shared_preferences.dart';
 export 'package:cloud_firestore/cloud_firestore.dart';
 export 'package:firebase_messaging/firebase_messaging.dart';
 export 'package:firebase_analytics/firebase_analytics.dart';

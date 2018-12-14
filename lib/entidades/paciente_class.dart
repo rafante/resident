@@ -37,21 +37,27 @@ class Paciente {
   }
 
   static Future<Paciente> buscar(String documentId) async {
+    if (documentId == null) return null;
     DocumentReference ref =
         Firestore.instance.document('pacientes/$documentId');
     Paciente paciente;
     await ref.get().then((snap) {
-      paciente = Paciente(
-          key: snap.documentID,
-          grupoKey: snap.data['grupoKey'],
-          nome: snap.data['nome'],
-          entrada: snap.data['entrada'],
-          telefone: snap.data['telefone'],
-          notificacoes: snap.data['notificacoes'],
-          historiaPregressa: snap.data['historiaPregressa'],
-          hipoteseDiagnostica: snap.data['hipoteseDiagnostica'],
-          historiaDoencaAtual: snap.data['historiaDoencaAtual']);
+      if (snap == null && snap.data == null) {
+        paciente = Paciente();
+      } else {
+        paciente = Paciente(
+            key: snap.documentID,
+            grupoKey: snap.data['grupoKey'],
+            nome: snap.data['nome'],
+            entrada: snap.data['entrada'],
+            telefone: snap.data['telefone'],
+            notificacoes: snap.data['notificacoes'],
+            historiaPregressa: snap.data['historiaPregressa'],
+            hipoteseDiagnostica: snap.data['hipoteseDiagnostica'],
+            historiaDoencaAtual: snap.data['historiaDoencaAtual']);
+      }
     });
+
     return paciente;
   }
 

@@ -31,7 +31,7 @@ class _PerfilPageState extends State<PerfilPage> {
   void _validarUsuario() {
     FirebaseAuth.instance.currentUser().then((FirebaseUser usuario) {
       if (usuario == null) {
-        Navigator.pushNamed(context, LoginPage.tag);
+        Navegador.de(context).navegar(Tag.LOGIN, null);
       }
     });
   }
@@ -46,13 +46,14 @@ class _PerfilPageState extends State<PerfilPage> {
           if (user == null) {
             Usuario.eu['idResidente'] = _idResidente.text;
             Usuario.salvar();
-            Fluttertoast.showToast(
-                msg: "Usuario salvo",
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.BOTTOM,
-                timeInSecForIos: 1,
-                bgcolor: "#e74c3c",
-                textcolor: '#ffffff');
+            // await Fluttertoast.showToast(
+            //     msg: "Usuario salvo",
+            //     toastLength: Toast.LENGTH_SHORT,
+            //     gravity: ToastGravity.BOTTOM,
+            //     timeInSecForIos: 1,
+            //     bgcolor: "#e74c3c",
+            //     textcolor: '#ffffff');
+            Navegador.de(context).navegar(Tag.GRUPOS, null);
           } else {
             Fluttertoast.showToast(
                 msg: "Esse usuário já existe",
@@ -67,12 +68,15 @@ class _PerfilPageState extends State<PerfilPage> {
         Usuario.eu['idResidente'] = _idResidente.text;
         Usuario.salvar();
         Fluttertoast.showToast(
-            msg: "Usuario salvo",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIos: 1,
-            bgcolor: "#e74c3c",
-            textcolor: '#ffffff');
+                msg: "Usuario salvo",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIos: 1,
+                bgcolor: "#e74c3c",
+                textcolor: '#ffffff')
+            .then((mensagem) {
+          Navegador.de(context).navegar(Tag.GRUPOS, null);
+        });
       }
     });
   }
@@ -128,7 +132,7 @@ class _PerfilPageState extends State<PerfilPage> {
               child: SizedBox(
                 height: Tela.de(context).y(150.0),
                 child: CachedNetworkImage(
-                  imageUrl: Usuario.eu['urlFoto'],
+                  imageUrl: Usuario.eu != null ? Usuario.eu['urlFoto'] : "",
                 ),
               ),
             ),

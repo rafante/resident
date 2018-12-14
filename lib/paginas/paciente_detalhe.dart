@@ -24,12 +24,14 @@ class _PacienteDetalheState extends State<PacienteDetalhe> {
   @override
   void initState() {
     super.initState();
-    paciente = Paciente(grupoKey: widget.grupoKey);
+    // paciente = Paciente(grupoKey: widget.grupoKey);
     carregarPaciente().then((Paciente pac) {
-      setState(() {
-        paciente = pac;
-        carregaDadosTela();
-      });
+      if (pac != null && mounted) {
+        setState(() {
+          paciente = pac;
+          carregaDadosTela();
+        });
+      }
     });
   }
 

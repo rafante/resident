@@ -6,33 +6,21 @@ class AplicacaoMedicamento {
   String descricao;
   String tipo;
   DateTime horario;
-  // DatabaseReference ref;
-
-  Future<Null> carregarDadosDoServidor() async {
-    // await ref
-    //     .child('pacientes')
-    //     .child(pacienteKey)
-    //     .child('medicamentos')
-    //     .child(key)
-    //     .once()
-    //     .then((snapshot) {
-    //   Map medicamento = snapshot.value;
-    //   descricao = medicamento['descricao'];
-    //   tipo = medicamento['tipo'];
-    //   horario = DateTime.fromMillisecondsSinceEpoch(medicamento['horario']);
-    // });
-  }
 
   void salvar() {
-    // var medicamento = ref
-    //     .child('pacientes')
-    //     .child(pacienteKey)
-    //     .child('medicamentos')
-    //     .child(key);
-    // medicamento.child('descricao').set(descricao);
-    // medicamento.child('tipo').set(tipo);
-    // if (horario != null)
-    //   medicamento.child('horario').set(horario.millisecondsSinceEpoch);
+    DocumentReference ref = key != null
+        ? Firestore.instance.document('medicamentos/$key')
+        : Firestore.instance.collection('medicamentos').document();
+    if (key == null) key = ref.documentID;
+    ref.setData({
+      'key': key,
+      'pacienteKey': pacienteKey,
+      'descricao': descricao,
+      'tipo': tipo,
+      'horario': horario != null
+          ? horario.millisecondsSinceEpoch
+          : DateTime.now().millisecondsSinceEpoch
+    });
   }
 
   AplicacaoMedicamento(
@@ -41,19 +29,7 @@ class AplicacaoMedicamento {
       this.pacienteKey,
       this.descricao,
       this.tipo,
-      this.horario}) {
-    // if (ref == null) ref = Banco.ref();
-    if (key == null || key == '') {
-      // key = ref
-      //     .child('pacientes')
-      //     .child(pacienteKey)
-      //     .child('medicamentos')
-      //     .push()
-      //     .key;
-    } else {
-      if (forcarOnline) carregarDadosDoServidor();
-    }
-  }
+      this.horario});
 
   void salvarTipo(String text) {
     tipo = text;

@@ -204,7 +204,7 @@ class Exame {
           if (fonteImagem != null) file = await colheVideo(fonteImagem);
           break;
         case TipoAnexo.DOCUMENTO:
-          await popupInsereDocumentoExame(context);
+          await popupInsereDocumentoExame(context, pacienteKey: pacienteKey);
           break;
       }
       if (file == null) return;
@@ -224,9 +224,14 @@ class Exame {
     }
   }
 
-  static Future<Null> popupInsereDocumentoExame(BuildContext context) async {
-    TextEditingController nome = TextEditingController(text: '');
-    TextEditingController descricao = TextEditingController(text: '');
+  static Future<Null> popupInsereDocumentoExame(BuildContext context,
+      {String pacienteKey,
+      String documentID,
+      String nome = '',
+      String descricao = ''}) async {
+    TextEditingController nomeController = TextEditingController(text: nome);
+    TextEditingController descricaoController =
+        TextEditingController(text: descricao);
 
     await showDialog(
       context: context,
@@ -239,7 +244,7 @@ class Exame {
                   horizontal: Tela.de(context).x(20.0),
                   vertical: Tela.de(context).y(10.0)),
               child: TextFormField(
-                controller: nome,
+                controller: nomeController,
                 decoration: InputDecoration(
                   hintText: 'Nome',
                   border: OutlineInputBorder(),
@@ -251,7 +256,7 @@ class Exame {
                   horizontal: Tela.de(context).x(20.0),
                   vertical: Tela.de(context).y(10.0)),
               child: TextFormField(
-                controller: descricao,
+                controller: descricaoController,
                 maxLines: 10,
                 maxLengthEnforced: true,
                 decoration: InputDecoration(
@@ -262,7 +267,26 @@ class Exame {
             ),
             FloatingActionButton(
               child: Icon(Icons.done),
-              onPressed: () {},
+              onPressed: () async {
+                DocumentReference exameRef;
+                if (documentID == null)
+                  exameRef = Firestore.instance.collection('exames').document();
+                else
+                  exameRef = Firestore.instance.document('exames/$documentID');
+
+                await exameRef.setData({
+                  'nome': nomeController.text,
+                  'pacienteKey': pacienteKey,
+                  'anexo': null,
+                  'key': exameRef.documentID,
+                  'extensao': 'doc',
+                  'descricao': descricaoController.text,
+                  'tamanho': nomeController.text.length +
+                      descricaoController.text.length,
+                  'downloadLink': null,
+                }); //
+                Navigator.pop(context);
+              },
             )
           ],
         );
