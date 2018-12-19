@@ -25,16 +25,18 @@ class _PacientesPageState extends State<PacientesPage> {
       List<Paciente> lista = <Paciente>[];
 
       if (snap.documents != null) {
-        snap.documents.forEach((documento) {
+        snap.documents.forEach((documento) async {
+          int nots = await Prefs.verificarNotificacoes(documento.documentID);
+          FirebaseMessaging().subscribeToTopic(documento.documentID);
           lista.add(Paciente(
-            key: documento.documentID,
-            entrada: documento.data['entrada'],
-            nome: documento.data['nome'],
-            telefone: documento.data['telefone'],
-            hipoteseDiagnostica: documento.data['hipoteseDiagnostica'],
-            historiaDoencaAtual: documento.data['historiaDoencaAtual'],
-            historiaPregressa: documento.data['historiaPregressa'],
-          ));
+              key: documento.documentID,
+              entrada: documento.data['entrada'],
+              nome: documento.data['nome'],
+              telefone: documento.data['telefone'],
+              hipoteseDiagnostica: documento.data['hipoteseDiagnostica'],
+              historiaDoencaAtual: documento.data['historiaDoencaAtual'],
+              historiaPregressa: documento.data['historiaPregressa'],
+              notificacoes: nots));
         });
       }
       if (this.mounted) {
@@ -93,20 +95,18 @@ class _PacientesPageState extends State<PacientesPage> {
   }
 
   void _criaPaciente() {
-    Navegador.de(context).navegar(Tag.PACIENTE_DETALHE,
-        {'grupoKey': widget.grupoKey, 'pacienteKey': null});
+    Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext cont) {
+      return BaseWindow(
+          conteudo: PacienteDetalhe(
+        grupoKey: widget.grupoKey,
+        pacienteKey: null,
+      ));
+    }));
   }
 
   List<Card> _pacientesCard() {
     List<Card> lista = <Card>[];
     _pacientes.forEach((Paciente paciente) {
-      Prefs.checarNotificacoes(paciente: paciente.key).then((int nots) {
-        if (nots != paciente.notificacoes) {
-          setState(() {
-            paciente.notificacoes = nots;
-          });
-        }
-      });
       lista.add(new Card(
         child: ListTile(
             leading: Icon(Icons.airline_seat_flat_angled),
@@ -116,37 +116,16 @@ class _PacientesPageState extends State<PacientesPage> {
                 Tela.de(context).x(20.0),
                 Tela.de(context).y(20.0)),
             trailing: IconButton(
-              icon: Stack(
-                children: <Widget>[
-                  Icon(Icons.settings),
-                  Positioned(
-                    left: Tela.de(context).x(10.0),
-                    top: Tela.de(context).y(10.0),
-                    child: 1 <= 0
-                        ? ClipOval(
-                            child: Container(
-                              color: Colors.amberAccent,
-                              height: Tela.de(context).y(15.0),
-                              width: Tela.de(context).x(13.0),
-                              child: Center(
-                                child: Text(
-                                  paciente.notificacoes.toString(),
-                                  style: TextStyle(
-                                      color: Colors.blueAccent,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ),
-                          )
-                        : new Container(),
-                  )
-                ],
-              ),
+              icon: _iconesPaciente(paciente),
               onPressed: () {
-                Navegador.de(context).navegar(Tag.PACIENTE_DETALHE, {
-                  'pacienteKey': paciente.key,
-                  'grupoKey': paciente.grupoKey
-                });
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (BuildContext cont) {
+                  return BaseWindow(
+                      conteudo: PacienteDetalhe(
+                    pacienteKey: paciente.key,
+                    grupoKey: paciente.grupoKey,
+                  ));
+                }));
               },
             ),
             dense: true,
@@ -157,8 +136,14 @@ class _PacientesPageState extends State<PacientesPage> {
                 : Text(''),
             onTap: () {
               setState(() {
-                Navegador.de(context).navegar(Tag.PACIENTE,
-                    {'grupoKey': widget.grupoKey, 'pacienteKey': paciente.key});
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (BuildContext cont) {
+                  return BaseWindow(
+                      conteudo: PacientePage(
+                    grupoKey: widget.grupoKey,
+                    pacienteKey: paciente.key,
+                  ));
+                }));
               });
             }),
       ));
@@ -168,6 +153,7 @@ class _PacientesPageState extends State<PacientesPage> {
 
   @override
   Widget build(BuildContext context) {
+    Navegador.tagAtual = Tag.PACIENTES;
     return Scaffold(
       appBar: AppBar(
         // leading: new Icon(Icons.airline_seat_flat),
@@ -188,6 +174,34 @@ class _PacientesPageState extends State<PacientesPage> {
           _criaPaciente();
         },
       ),
+    );
+  }
+
+  Widget _iconesPaciente(Paciente paciente) {
+    print(
+        "paciente ${paciente.nome} está com ${paciente.notificacoes} notificações");
+    if (paciente.notificacoes == 0) return Icon(Icons.settings);
+    return Stack(
+      children: <Widget>[
+        Icon(Icons.settings),
+        Positioned(
+          right: Tela.de(context).x(9.0),
+          child: ClipOval(
+            child: Container(
+              color: Colors.amberAccent,
+              width: Tela.de(context).x(13),
+              height: Tela.de(context).y(13),
+              child: Center(
+                child: Text(
+                  paciente.notificacoes.toString(),
+                  style: TextStyle(
+                      color: Colors.blueAccent, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ),
+        )
+      ],
     );
   }
 }

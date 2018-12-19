@@ -2,6 +2,8 @@ import 'package:resident/imports.dart';
 
 class Navegador extends NavigatorObserver {
   BuildContext context;
+  static List<Tag> caminho = [];
+  static Tag tagAnterior = Tag.LOGIN;
   static Tag tagAtual = Tag.LOGIN;
   static Tag proximaTag = Tag.LOGIN;
   static StatefulWidget conteudo;
@@ -22,17 +24,25 @@ class Navegador extends NavigatorObserver {
     return Navegador(context: context);
   }
 
-  Future<Null> navegar(Tag proxima, Map args) {
+  static void voltar1(BuildContext context){
+    if(tagAtual != Tag.LOGIN && tagAtual != Tag.GRUPOS)
+      Navigator.pop(context);
+  }
+
+  Future<Null> navegar1(Tag proxima, Map args) {
+    if(args == null)
+    args = {};
     Tag interceptada = intercept(proxima);
     proxima = interceptada;
-    return Navigator.of(context)
+    tagAnterior = proxima;
+    conteudo = getConteudo(proxima, args);
+    return Navigator.of(context) 
         .push(MaterialPageRoute(builder: (BuildContext cont) {
-      return BaseWindow(conteudo: getConteudo(proxima, args));
+      return BaseWindow(conteudo: conteudo, popScope: args['popScope'],);
     }));
   }
 
   Tag intercept(Tag proxima) {
-    
     if (Usuario.uid == null || Usuario.eu == null) {
       if (tagAtual != Tag.LOGIN) 
       return Tag.LOGIN;
@@ -40,7 +50,6 @@ class Navegador extends NavigatorObserver {
         Usuario.eu['idResidente'] == "" ||
         Usuario.eu['telefone'] == null ||
         Usuario.eu['telefone'] == "") {
-      if (tagAtual != Tag.PERFIL) 
       return Tag.PERFIL;
     }
     return proxima;
@@ -128,9 +137,11 @@ class Navegador extends NavigatorObserver {
           break;
         case Tag.ALTA_PACIENTE:
           break;
+          case Tag.VISUALIZA_RECURSO:
+          conteudo = VisualizaRecurso(link: argumentos['link']);
+          break;
       }
     // }
-    tagAtual = proximaTag;
     return conteudo;
   }
 }
@@ -152,5 +163,6 @@ enum Tag {
   HISTORIA_DOENCA_ATUAL,
   HISTORIA_PREGRESSA,
   HIPOTESE_DIAGNOSTICA,
-  ALTA_PACIENTE
+  ALTA_PACIENTE,
+  VISUALIZA_RECURSO
 }

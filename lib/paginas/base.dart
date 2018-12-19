@@ -9,6 +9,8 @@ class BaseWindow extends StatefulWidget {
 }
 
 class _BaseWindowState extends State<BaseWindow> {
+  String _pagina;
+
   @override
   void initState() {
     super.initState();
@@ -16,18 +18,33 @@ class _BaseWindowState extends State<BaseWindow> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIOverlays([]);
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    _pagina = getConteudo().toString();
     return WillPopScope(
       onWillPop: () async {
-        if (widget.popScope != null) {
-          return widget.popScope.willPop();
-        }
+        if (_pagina == 'LoginPage') return false;
+
+        if (_pagina == 'GruposPage') return false;
+
+        if (_pagina == 'PerfilPage' && !Usuario.valido()) return false;
+
         return true;
       },
       child: Padding(
           padding: EdgeInsets.only(top: Tela.de(context).y(50.0)),
-          child: widget.conteudo),
+          child: getConteudo()),
     );
+  }
+
+  Widget getConteudo() {
+    if (widget.conteudo == null) {
+      if (Usuario.valido()) {
+        return GruposPage();
+      } else {
+        return PerfilPage();
+      }
+    } else
+      return widget.conteudo;
   }
 }
 

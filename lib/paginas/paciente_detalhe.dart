@@ -37,6 +37,7 @@ class _PacienteDetalheState extends State<PacienteDetalhe> {
 
   @override
   Widget build(BuildContext context) {
+    Navegador.tagAtual = Tag.PACIENTE_DETALHE;
     return Scaffold(
       appBar: AppBar(
         title: Text('Informações do paciente'),
@@ -173,5 +174,83 @@ class _PacienteDetalheState extends State<PacienteDetalhe> {
     return await Paciente.buscar(widget.pacienteKey);
     // else
     //   return await Paciente.criar(widget.grupoKey);
+  }
+
+  List<Widget> _getAcoes() {
+    List<Widget> lista = [];
+    if (widget.pacienteKey != null) {
+      lista.add(RaisedButton(
+        child: Icon(
+          FontAwesomeIcons.ban,
+          color: Colors.white,
+        ),
+        color: Colors.red,
+        elevation: 5.0,
+        onPressed: () async {
+          var resposta = await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return SimpleDialog(
+                title: Title(
+                  color: Colors.black,
+                  child: Text('Deseja excluir o paciente?'),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  // horizontal: Tela.de(context).x(3.0),
+                  vertical: Tela.de(context).y(10.0),
+                ),
+                children: <Widget>[
+                  SimpleDialogOption(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: Tela.de(context).x(10.0),
+                          vertical: Tela.de(context).y(15.0)),
+                      child: Text(
+                        'Não',
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context, 'nao');
+                    },
+                  ),
+                  SizedBox(
+                    height: Tela.de(context).y(20.0),
+                  ),
+                  SimpleDialogOption(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: Tela.de(context).x(10.0),
+                          vertical: Tela.de(context).y(10.0)),
+                      color: Colors.redAccent,
+                      child: Text(
+                        'Sim',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context, 'sim');
+                    },
+                  )
+                ],
+              );
+            },
+          );
+          if (resposta == 'sim') {
+            setState(() {
+              Firestore.instance
+                  .document('pacientes/${widget.pacienteKey}')
+                  .delete()
+                  .then((event) {
+                Navigator.pop(context);
+              });
+            });
+          }
+        },
+      ));
+    }
+    return lista;
   }
 }

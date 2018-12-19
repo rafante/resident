@@ -1,14 +1,14 @@
 import 'imports.dart';
 
 Future<void> main() async {
-  runApp(new MaterialApp(title: 'Resident', home: new AppResident()));
+  Usuario.carregarUsuarioLocal().then((event) {
+    runApp(new MaterialApp(title: 'Resident', home: new AppResident()));
+  });
 }
 
 class AppResident extends StatelessWidget {
-  bool firstTime = true;
   final FirebaseMessaging mensageiro = FirebaseMessaging();
-
-  MobileAdTargetingInfo targetingInfo = new MobileAdTargetingInfo(
+  final MobileAdTargetingInfo targetingInfo = new MobileAdTargetingInfo(
     keywords: <String>[
       'hospital',
       'hospitalar',
@@ -20,27 +20,26 @@ class AppResident extends StatelessWidget {
       'estetoscópio'
     ],
     contentUrl: 'https://flutter.io',
-    birthday: new DateTime.now(),
     childDirected: false,
-    designedForFamilies: false,
-    gender:
-        MobileAdGender.male, // or MobileAdGender.female, MobileAdGender.unknown
     testDevices: <String>[], // Android emulators are considered test devices
   );
 
-  BannerAd baner() {
-    return new BannerAd(
+  Future<Null> baner() async {
+    BannerAd baner = new BannerAd(
       // Replace the testAdUnitId with an ad unit id from the AdMob dash.
       // https://developers.google.com/admob/android/test-ads
       // https://developers.google.com/admob/ios/test-ads
-      adUnitId: BannerAd.testAdUnitId,
-      // adUnitId: 'ca-app-pub-1343647000894788/4156042098',
+      // adUnitId: BannerAd.testAdUnitId,
+      adUnitId: 'ca-app-pub-1343647000894788/4156042098',
       size: AdSize.banner,
       targetingInfo: targetingInfo,
       listener: (MobileAdEvent event) {
-        // print("BannerAd event is $event");
+        print("BannerAd event is $event");
       },
     );
+    baner.load().then((event) {
+      baner.show(anchorType: AnchorType.top);
+    });
   }
 
   NavigatorObserver navegador() {
@@ -49,27 +48,28 @@ class AppResident extends StatelessWidget {
 
   void notificacoes() {
     mensageiro.configure(onMessage: (Map<String, dynamic> mensagem) {
-      // print('caiu no mensageiro:\n $mensagem');
-      if (mensagem.containsKey('grupo') && mensagem.containsKey('paciente')) {
-        Prefs.salvarNotificacao(mensagem['grupo'], mensagem['paciente']);
-      }
+      String paciente = mensagem["data"]["paciente"];
+      print('o paciente é o $paciente');
+      Prefs.notificacaoPaciente(paciente);
+      // if (mensagem.containsKey('grupo') && mensagem.containsKey('paciente')) {
+      //   // Prefs.salvarNotificacao(mensagem['grupo'], mensagem['paciente']);
+      // }
     }, onLaunch: (Map<String, dynamic> mensagem) {
-      // print('caiu no mensageiro:\n $mensagem');
+      print('caiu no mensageiro:\n $mensagem');
       if (mensagem.containsKey('grupo') && mensagem.containsKey('paciente')) {
-        Prefs.salvarNotificacao(mensagem['grupo'], mensagem['paciente']);
+        // Prefs.salvarNotificacao(mensagem['grupo'], mensagem['paciente']);
       }
     }, onResume: (Map<String, dynamic> mensagem) {
-      // print('caiu no mensageiro:\n $mensagem');
+      print('caiu no mensageiro:\n $mensagem');
       if (mensagem.containsKey('grupo') && mensagem.containsKey('paciente')) {
-        Prefs.salvarNotificacao(mensagem['grupo'], mensagem['paciente']);
+        // Prefs.salvarNotificacao(mensagem['grupo'], mensagem['paciente']);
       }
     });
     mensageiro.requestNotificationPermissions();
-    mensageiro.subscribeToTopic('paciente');
-    mensageiro.getToken().then((String token) {
-      assert(token != null);
-      salvarToken(token);
-    });
+    // mensageiro.getToken().then((String token) {
+    //   assert(token != null);
+    //   salvarToken(token);
+    // });
   }
 
   Future<Null> salvarToken(String token) async {
@@ -99,8 +99,102 @@ class AppResident extends StatelessWidget {
     return app;
   }
 
+  void permissoes(BuildContext context) async {
+    Map<PermissionGroup, PermissionStatus> permissions =
+        await PermissionHandler().requestPermissions([
+      PermissionGroup.camera,
+      PermissionGroup.mediaLibrary,
+      PermissionGroup.photos,
+      PermissionGroup.storage
+    ]);
+
+    PermissionStatus camera =
+        await PermissionHandler().checkPermissionStatus(PermissionGroup.camera);
+
+    PermissionStatus mediaLibrary = await PermissionHandler()
+        .checkPermissionStatus(PermissionGroup.mediaLibrary);
+
+    PermissionStatus photos =
+        await PermissionHandler().checkPermissionStatus(PermissionGroup.photos);
+
+    PermissionStatus storage = await PermissionHandler()
+        .checkPermissionStatus(PermissionGroup.storage);
+
+    if (camera.index == 1 ||
+        mediaLibrary.index == 1 ||
+        photos.index == 1 ||
+        storage.index == 1) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return SimpleDialog(
+              contentPadding: EdgeInsets.symmetric(
+                  horizontal: Tela.de(context).x(20.0),
+                  vertical: Tela.de(context).y(20.0)),
+              titlePadding: EdgeInsets.symmetric(
+                  horizontal: Tela.de(context).x(20.0),
+                  vertical: Tela.de(context).y(20.0)),
+              children: <Widget>[
+                Text('Não é possível prosseguir sem conceder as permissões'),
+                RaisedButton(
+                  child: Text('Ok'),
+                  onPressed: () {
+                    exit(0);
+                  },
+                )
+              ],
+            );
+          }).then((a) {
+        exit(1);
+      });
+    }
+  }
+
+  // List<Permissions> permissions = await Permission.getPermissionStatus(
+  //     [PermissionName.Storage, PermissionName.Camera]);
+
+  // final result = await Permission.requestPermissions(
+  //     [PermissionName.Storage, PermissionName.Camera]);
+
+  // // final result =
+  // //     await Permission.requestSinglePermission(PermissionName.Calendar);
+
+  // Permission.openSettings;
+  // result.forEach((permission) {
+  //   if (permission.permissionStatus.index == 1) {
+  // showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return SimpleDialog(
+  //         contentPadding: EdgeInsets.symmetric(
+  //             horizontal: Tela.de(context).x(20.0),
+  //             vertical: Tela.de(context).y(20.0)),
+  //         titlePadding: EdgeInsets.symmetric(
+  //             horizontal: Tela.de(context).x(20.0),
+  //             vertical: Tela.de(context).y(20.0)),
+  //         children: <Widget>[
+  //           Text('Não é possível prosseguir sem conceder as permissões'),
+  //           RaisedButton(
+  //             child: Text('Ok'),
+  //             onPressed: () {
+  //               exit(0);
+  //             },
+  //           )
+  //         ],
+  //       );
+  //     }).then((a) {
+  //   exit(1);
+  // });
+  //   }
+  // });
+  // }
+
   @override
   Widget build(BuildContext context) {
+    permissoes(context);
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    SystemChrome.setEnabledSystemUIOverlays([]);
+
     inicializarFirebaseApp(context).then((FirebaseApp app) {});
     if (Theme.of(context).platform == TargetPlatform.android) {
       FirebaseAdMob.instance
@@ -109,11 +203,10 @@ class AppResident extends StatelessWidget {
       FirebaseAdMob.instance
           .initialize(appId: 'ca-app-pub-1343647000894788~3932657414');
     }
-    // baner()
-    //   ..load()
-    //   ..show(anchorType: AnchorType.top, anchorOffset: 0.0);
 
-    //notificacoes();
+    baner();
+
+    notificacoes();
     // if (Usuario.logado() == null) {
     //   Navigator.push(
     //       context,
@@ -128,19 +221,30 @@ class AppResident extends StatelessWidget {
     //               BaseWindow(conteudo: PerfilPage(app: app))));
     // }
 
-    // String rotaInicial = GruposPage.tag;
-    // if (Usuario.eu == null) {
-    //   rotaInicial = LoginPage.tag;
-    // } else if (Usuario.eu['idResidente'] == null ||
-    //     Usuario.eu['idResidente'] == "") {
-    //   rotaInicial = PerfilPage.tag;
-    // }
+    if (Usuario.eu != null && Usuario.uid == null)
+      Usuario.uid = Usuario.eu['uid'];
+    String rotaInicial = GruposPage.tag;
+    Tag primeiraTag = Tag.GRUPO;
+    if (Usuario.eu == null) {
+      rotaInicial = LoginPage.tag;
+      primeiraTag = Tag.LOGIN;
+    } else if (Usuario.eu['idResidente'] == null ||
+        Usuario.eu['idResidente'] == "") {
+      rotaInicial = PerfilPage.tag;
+      primeiraTag = Tag.PERFIL;
+    }
+    FirebaseAnalytics analytics = FirebaseAnalytics();
 
     return new MaterialApp(
       title: 'Resident',
       theme: new ThemeData(
         primarySwatch: Colors.blue,
       ),
+      initialRoute: rotaInicial,
+      navigatorObservers: [
+        NavegadorAnalitico(analytics: analytics),
+        Navegador(context: context)
+      ],
       home: new BaseWindow(conteudo: LoginPage()),
       routes: <String, WidgetBuilder>{
         LoginPage.tag: (context) => new BaseWindow(conteudo: LoginPage()),

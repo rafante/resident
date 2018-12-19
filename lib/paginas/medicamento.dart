@@ -31,6 +31,7 @@ class _MedicamentoDetalheState extends State<MedicamentoDetalhe> {
 
   @override
   Widget build(BuildContext context) {
+    Navegador.tagAtual = Tag.MEDICAMENTO_DETALHE;
     return Scaffold(
       appBar: AppBar(title: Text('Medicamento')),
       body: Padding(
@@ -108,7 +109,7 @@ class _MedicamentoDetalheState extends State<MedicamentoDetalhe> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.done_outline),
         onPressed: () {
-          if(aplicacao == null)
+          if (aplicacao == null)
             aplicacao = AplicacaoMedicamento(pacienteKey: widget.pacienteKey);
           aplicacao.salvarTipo(_tipo.text);
           aplicacao.salvarDescricao(_descricao.text);

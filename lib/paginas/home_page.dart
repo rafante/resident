@@ -19,10 +19,10 @@ class _HomePageState extends State<HomePage> {
 
   void verificarUsuario() {
     if (!Usuario.estaLogado()) {
-      Navegador.de(context).navegar(Tag.LOGIN, null);
+      // Navegador.de(context).navegar(Tag.LOGIN, null);
     } else {
       if (Usuario.eu['idResidente'] == null || Usuario.eu['telefone'] == null) {
-        Navegador.de(context).navegar(Tag.PERFIL, null);
+        // Navegador.de(context).navegar(Tag.PERFIL, null);
       }
     }
   }

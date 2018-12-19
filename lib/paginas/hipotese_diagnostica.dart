@@ -35,6 +35,7 @@ class _HipoteseDiagnosticaPageState extends State<HipoteseDiagnosticaPage> {
 
   @override
   Widget build(BuildContext context) {
+    Navegador.tagAtual = Tag.HIPOTESE_DIAGNOSTICA;
     return Scaffold(
         appBar: AppBar(title: Text('História Diagnostica')),
         body: ListView(

@@ -87,6 +87,7 @@ class _MedicamentosPageState extends State<MedicamentosPage> {
 
   @override
   Widget build(BuildContext context) {
+    Navegador.tagAtual = Tag.MEDICAMENTOS;
     return Scaffold(
       appBar: AppBar(
         title: Text('Medicamentos'),
@@ -107,8 +108,7 @@ class _MedicamentosPageState extends State<MedicamentosPage> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          Navegador.de(context).navegar(
-              Tag.MEDICAMENTO_DETALHE, {'pacienteKey': widget.pacienteKey});
+          Navigator.pop(context);
         },
       ),
     );

@@ -4,7 +4,7 @@ class Mensagem {
   String chave;
   String pacienteKey;
   String autor;
-  String autorNome;
+  String autorNome; 
   String texto;
   DateTime hora;
   String link;

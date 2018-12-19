@@ -14,10 +14,8 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _email = TextEditingController(text: '');
   TextEditingController _senha = TextEditingController(text: '');
   final GoogleSignIn googleSignIn = new GoogleSignIn();
-  String _erroMsg;
 
   Future<FirebaseUser> _signIn() async {
-    bool erro = false;
     FirebaseUser user;
     GoogleSignInAccount googleSignInAccount =
         await googleSignIn.signIn().then((signin) async {
@@ -62,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<FirebaseUser> _loginEmail() async {
     FirebaseUser usuario = await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: _email.text, password: _senha.text);
-    Usuario.setLogado(usuario);
+    Usuario.setLogado(context, usuario);
     return usuario;
   }
 
@@ -76,6 +74,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    Navegador.tagAtual = Tag.LOGIN;
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -102,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
 
       children: <Widget>[
         Image.asset(
-          'images/icone_r.png',
+          'images/ic_launcher.png',
           width: Tela.de(context).x(180.0),
           height: Tela.de(context).y(180.0),
         ),
@@ -122,17 +121,14 @@ class _LoginPageState extends State<LoginPage> {
               onPressed: () {
                 _signIn().then((user) {
                   if (user != null) {
-                    Usuario.setLogado(user).then((evento) {
+                    Usuario.setLogado(context, user).then((evento) {
                       Fluttertoast.showToast(
-                              msg: "Usuario ${user.displayName} logado",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                              timeInSecForIos: 1,
-                              bgcolor: "#e74c3c",
-                              textcolor: '#ffffff')
-                          .then((evento) {
-                        Navegador.de(context).navegar(Tag.GRUPOS, null);
-                      });
+                          msg: "Usuario ${user.displayName} logado",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIos: 1, 
+                          bgcolor: "#e74c3c",
+                          textcolor: '#ffffff');
                     });
                   }
                 });

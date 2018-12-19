@@ -33,6 +33,7 @@ class _HistoriaDoencaAtualPageState extends State<HistoriaDoencaAtualPage> {
 
   @override
   Widget build(BuildContext context) {
+    Navegador.tagAtual = Tag.HISTORIA_DOENCA_ATUAL;
     return Scaffold(
         appBar: AppBar(title: Text('História de Doença Atual')),
         body: ListView(

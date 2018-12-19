@@ -77,7 +77,7 @@ class _ExamesPageState extends State<ExamesPage> {
                   icon: Icon(Icons.pageview),
                   onPressed: () async {
                     if (exame.extensao != 'doc')
-                      Exame.abrirAnexoExame(exame: exame);
+                      Exame.abrirAnexoExame(context, exame: exame);
                     else
                       Exame.popupInsereDocumentoExame(context,
                           pacienteKey: widget.pacienteKey,
@@ -109,6 +109,7 @@ class _ExamesPageState extends State<ExamesPage> {
 
   @override
   Widget build(BuildContext context) {
+    Navegador.tagAtual = Tag.EXAMES;
     return Scaffold(
         appBar: AppBar(
           title: Text('Exames'),

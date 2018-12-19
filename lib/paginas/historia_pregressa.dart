@@ -30,6 +30,7 @@ class _HistoriaPregressaPageState extends State<HistoriaPregressaPage> {
 
   @override
   Widget build(BuildContext context) {
+    Navegador.tagAtual = Tag.HISTORIA_PREGRESSA;
     return Scaffold(
         appBar: AppBar(title: Text('História Pregressa')),
         body: ListView(

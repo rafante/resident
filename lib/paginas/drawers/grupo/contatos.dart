@@ -47,13 +47,14 @@ class _ContatosPageState extends State<ContatosPage> {
           );
         });
     setState(() {
-      // if (1 < 0) print('contatos');
+      _contatos = Usuario.eu['contatos'];
     });
     return null;
   }
 
   @override
   Widget build(BuildContext context) {
+    Navegador.tagAtual = Tag.CONTATOS;
     return Scaffold(
       appBar: AppBar(
         title: Text('Contatos'),
@@ -92,16 +93,18 @@ class _PopupContatosState extends State<PopupContatos> {
                 child: TextField(
                   onChanged: (valor) {
                     if (valor.length >= 3) {
-                      Usuario.lerResidente(valor).then((usuario) {
-                        setState(() {
-                          if (usuario != null) {
-                            _usuario = usuario;
-                          } else
-                            _usuario = null;
+                      if (valor != Usuario.eu['idResidente']) {
+                        Usuario.lerResidente(valor).then((usuario) {
+                          setState(() {
+                            if (usuario != null) {
+                              _usuario = usuario;
+                            } else
+                              _usuario = null;
+                          });
+                        }).catchError((erro) {
+                          print(erro.toString());
                         });
-                      }).catchError((erro) {
-                        print(erro.toString());
-                      });
+                      }
                     }
                   },
                   decoration: InputDecoration(

@@ -95,8 +95,8 @@ class Exame {
         .child('anexos')
         .child('$anexoName.$anexoExtensao');
     print('o Arquivo -> $anexoName.$anexoExtensao');
-    final http.Response downloadData =
-        await http.get(await ref.getDownloadURL()).catchError((erro) {
+    var uri = await ref.getDownloadURL();
+    final http.Response downloadData = await http.get(uri).catchError((erro) {
       print(erro);
       return null;
     });
@@ -108,13 +108,15 @@ class Exame {
     }
     await tempFile.create();
     assert(await tempFile.readAsString() == "");
-    final StorageFileDownloadTask task = ref.writeToFile(tempFile);
-    final int byteCount = (await task.future).totalByteCount;
-    final List<int> tempFileContents = await tempFile.readAsBytesSync();
-    print('baixado ${downloadData.body}');
+    tempFile.writeAsBytesSync(downloadData.bodyBytes);
+    // final StorageFileDownloadTask task = ref.writeToFile(tempFile);
+    // final int byteCount = (await task.future).totalByteCount;
+    // final List<int> tempFileContents = await tempFile.readAsBytesSync();
+    // tempFile.writeAsBytesSync(tempFileContents);
   }
 
-  static Future<Null> abrirAnexoExame({Exame exame, String ExameId}) async {
+  static Future<Null> abrirAnexoExame(BuildContext context,
+      {Exame exame, String ExameId}) async {
     if (exame == null) {
       print('exame veio nulo, carregando do banco');
       await Firestore.instance
@@ -139,6 +141,7 @@ class Exame {
     File file = new File(path);
     if (file.existsSync() && file.lengthSync() == exame.tamanho) {
       OpenFile.open(path);
+      // Navegador.de(context).navegar(Tag.VISUALIZA_RECURSO, {'link': path});
     } else {
       await _downloadFile(exame.anexo, exame.extensao);
       OpenFile.open(path);
@@ -204,7 +207,8 @@ class Exame {
           if (fonteImagem != null) file = await colheVideo(fonteImagem);
           break;
         case TipoAnexo.DOCUMENTO:
-          await popupInsereDocumentoExame(context, pacienteKey: pacienteKey);
+          file = await popupInsereDocumentoExame(context,
+              pacienteKey: pacienteKey);
           break;
       }
       if (file == null) return;
@@ -213,18 +217,35 @@ class Exame {
           await Mensagem.criar(pacienteKey, texto: 'Inserindo anexo... (0%)');
       await upload(file, pacienteKey, mensagem);
 
-      Fluttertoast.showToast(
-        msg: "Exame inserido",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIos: 1,
-        bgcolor: "#e74c3c",
-      );
+      // Fluttertoast.showToast(
+      //   msg: "Exame inserido",
+      //   toastLength: Toast.LENGTH_SHORT,
+      //   gravity: ToastGravity.BOTTOM,
+      //   timeInSecForIos: 1,
+      //   bgcolor: "#e74c3c",
+      // );
       // textcolor: '#ffffff');
     }
   }
 
-  static Future<Null> popupInsereDocumentoExame(BuildContext context,
+  static Future<File> popupInsereDocumentoExame(BuildContext context,
+      {String pacienteKey,
+      String documentID,
+      String nome = '',
+      String descricao = ''}) async {
+    try {
+      String filePath = await FilePicker.getFilePath(type: FileType.ANY);
+      if (filePath == '') {
+        return null;
+      }
+      return new File(filePath);
+    } on PlatformException catch (e) {
+      print("Error while picking the file: " + e.toString());
+    }
+    return null;
+  }
+
+  static Future<Null> popupInsereDocumentoExame1(BuildContext context,
       {String pacienteKey,
       String documentID,
       String nome = '',
@@ -332,10 +353,12 @@ class Exame {
           texto = 'pausa no upload removida';
           break;
         case StorageTaskEventType.success:
+          mensagem.setar(pacienteKey: pacienteKey, link: chave, texto: texto);
           texto = 'Anexo inserido';
           break;
       }
-      mensagem.setar(pacienteKey: pacienteKey, link: chave, texto: texto);
+
+      mensagem.setar(pacienteKey: pacienteKey, texto: texto);
       await mensagem.salvar();
     });
 

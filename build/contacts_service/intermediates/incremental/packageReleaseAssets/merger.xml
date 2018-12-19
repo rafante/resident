@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="C:\flutter\.pub-cache\hosted\pub.dartlang.org\contacts_service-0.0.9\android\src\main\assets"/><source path="C:\dev\Pessoal\resident\build\contacts_service\generated\assets\shaders\release"/></dataSet><dataSet config="release"><source path="C:\flutter\.pub-cache\hosted\pub.dartlang.org\contacts_service-0.0.9\android\src\release\assets"/></dataSet></merger>

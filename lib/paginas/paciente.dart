@@ -17,13 +17,13 @@ class _PacientePageState extends State<PacientePage> {
 
   TextEditingController _textController = TextEditingController(text: '');
   bool _isWriting = false;
-  Future<File> _imageFile;
   String nomePaciente = '';
   Paciente paciente;
 
   @override
   void initState() {
     super.initState();
+    paciente = Paciente();
     Paciente.buscar(widget.pacienteKey).then((Paciente pac) {
       if (pac != null && mounted) {
         paciente = pac;
@@ -66,11 +66,11 @@ class _PacientePageState extends State<PacientePage> {
 
   @override
   Widget build(BuildContext context) {
-    Prefs.lerNotificacao(widget.grupoKey, widget.pacienteKey);
+    Navegador.tagAtual = Tag.PACIENTE;
+    Prefs.lerNotificacoes(widget.pacienteKey);
     return Scaffold(
       appBar: AppBar(
           elevation: 1.0,
-          backgroundColor: Colors.purpleAccent,
           title: Padding(
             padding: EdgeInsets.only(top: Tela.de(context).x(20.0)),
             child: Text(nomePaciente),
@@ -89,7 +89,7 @@ class _PacientePageState extends State<PacientePage> {
                     link: msg.link != null,
                     onTap: () {
                       if (msg.link != null) {
-                        Exame.abrirAnexoExame(ExameId: msg.link);
+                        Exame.abrirAnexoExame(context, ExameId: msg.link);
                       }
                     },
                     isMe: msg.autor == Usuario.eu['uid'],
@@ -109,7 +109,6 @@ class _PacientePageState extends State<PacientePage> {
           ),
           Container(
             child: _construirComposer(),
-            decoration: BoxDecoration(color: Colors.purpleAccent),
           )
         ],
       ),
@@ -121,63 +120,83 @@ class _PacientePageState extends State<PacientePage> {
               trailing: Icon(Icons.assignment),
               title: Text('Exames'),
               onTap: () {
-                Navegador.de(context).navegar(Tag.EXAMES, {
-                  'pacienteKey': widget.pacienteKey,
-                  'grupoKey': widget.grupoKey,
-                  'pacienteNome': paciente.nome
-                });
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (BuildContext cont) {
+                  return BaseWindow(
+                      conteudo: ExamesPage(
+                    grupoKey: widget.grupoKey,
+                    pacienteKey: widget.pacienteKey,
+                    pacienteNome: paciente.nome,
+                  ));
+                }));
               },
             ),
             ListTile(
               trailing: Icon(FontAwesomeIcons.pills),
               title: Text('Medicamentos'),
               onTap: () {
-                Navegador.de(context).navegar(Tag.MEDICAMENTOS, {
-                  'grupoKey': widget.grupoKey,
-                  'pacienteKey': widget.pacienteKey
-                });
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (BuildContext cont) {
+                  return BaseWindow(
+                      conteudo: MedicamentosPage(
+                    grupoKey: widget.grupoKey,
+                    pacienteKey: widget.pacienteKey,
+                  ));
+                }));
               },
             ),
             ListTile(
               trailing: Icon(FontAwesomeIcons.stethoscope),
               title: Text('História de Doença Atual'),
               onTap: () {
-                Navegador.de(context).navegar(Tag.HISTORIA_DOENCA_ATUAL, {
-                  'pacienteKey': widget.pacienteKey,
-                  'grupoKey': widget.grupoKey
-                });
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (BuildContext cont) {
+                  return BaseWindow(
+                      conteudo: HistoriaDoencaAtualPage(
+                    pacienteKey: widget.pacienteKey,
+                    grupoKey: widget.grupoKey,
+                  ));
+                }));
               },
             ),
             ListTile(
               trailing: Icon(FontAwesomeIcons.scroll),
               title: Text('História Pregressa'),
               onTap: () {
-                Navegador.de(context).navegar(Tag.HISTORIA_PREGRESSA, {
-                  'pacienteKey': widget.pacienteKey,
-                  'grupoKey': widget.grupoKey
-                });
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (BuildContext cont) {
+                  return BaseWindow(
+                      conteudo: HistoriaPregressaPage(
+                    grupoKey: widget.grupoKey,
+                    pacienteKey: widget.pacienteKey,
+                  ));
+                }));
               },
             ),
             ListTile(
               trailing: Icon(FontAwesomeIcons.edit),
               title: Text('Hipótese Diagnóstica'),
               onTap: () {
-                Navegador.de(context).navegar(Tag.HIPOTESE_DIAGNOSTICA, {
-                  'pacienteKey': widget.pacienteKey,
-                  'grupoKey': widget.grupoKey
-                });
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (BuildContext cont) {
+                  return BaseWindow(
+                      conteudo: HipoteseDiagnosticaPage(
+                    grupoKey: widget.grupoKey,
+                    pacienteKey: widget.pacienteKey,
+                  ));
+                }));
               },
             ),
-            ListTile(
-              trailing: Icon(FontAwesomeIcons.hospital),
-              title: Text('Alta do paciente'),
-              onTap: () {
-                Navegador.de(context).navegar(Tag.ALTA_PACIENTE, {
-                  'pacienteKey': widget.pacienteKey,
-                  'grupoKey': widget.grupoKey
-                });
-              },
-            ),
+            // ListTile(
+            //   trailing: Icon(FontAwesomeIcons.hospital),
+            //   title: Text('Alta do paciente'),
+            //   onTap: () {
+            //     Navegador.de(context).navegar(Tag.ALTA_PACIENTE, {
+            //       'pacienteKey': widget.pacienteKey,
+            //       'grupoKey': widget.grupoKey
+            //     });
+            //   },
+            // ),
           ],
         ),
       ),
@@ -188,7 +207,7 @@ class _PacientePageState extends State<PacientePage> {
     return IconButton(
       icon: Icon(
         Icons.attach_file,
-        color: Colors.white,
+        color: Colors.black45,
       ),
       onPressed: () {
         Exame.criarAnexo(context, TipoExame.ANEXO, widget.pacienteKey);
@@ -247,7 +266,7 @@ class _PacientePageState extends State<PacientePage> {
                       ? IconButton(
                           icon: Icon(
                             Icons.play_circle_filled,
-                            color: Colors.white,
+                            color: Colors.black45,
                           ),
                           onPressed: () {
                             if (_textController.text == '') return;
@@ -255,9 +274,8 @@ class _PacientePageState extends State<PacientePage> {
                                 DateTime.now());
 
                             setState(() {
-                              // _mensagens.add(mensagem);
-                              // _mensagens = _mensagens.reversed.toList();
                               _textController.text = '';
+                              _isWriting = false;
                             });
                           },
                         )

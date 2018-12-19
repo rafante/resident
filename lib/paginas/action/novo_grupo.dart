@@ -75,6 +75,7 @@ class _DadosGrupoPageState extends State<DadosGrupoPage> {
 
   @override
   Widget build(BuildContext context) {
+    Navegador.tagAtual = Tag.GRUPO_DETALHE;
     return Scaffold(
       appBar: AppBar(
         title: Text(titulo),

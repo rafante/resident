@@ -1,39 +1,22 @@
 import 'package:resident/imports.dart';
 
 class Prefs {
-  static Future<Null> salvarNotificacao(
-      String grupoKey, String pacienteKey) async {
+  static Future<Null> notificacaoPaciente(String pacienteKey) async {
     final prefs = await SharedPreferences.getInstance();
-    String grupo = grupoKey;
-    String paciente = grupoKey + '|' + pacienteKey;
-    int grupoNots = prefs.getInt(grupo);
-    if(grupoNots == null)
-      grupoNots = 0;
-    int pacienteNots = prefs.getInt(paciente);
-    if(pacienteNots == null)
-      pacienteNots = 0;
-    prefs.setInt(paciente, ++pacienteNots);
-    prefs.setInt(grupo, ++grupoNots);
+    int nots = prefs.getInt(pacienteKey);
+    if (nots == null) nots = 0;
+    prefs.setInt(pacienteKey, ++nots);
   }
 
-  static Future<Null> lerNotificacao(
-      String grupoKey, String pacienteKey) async {
-    // final prefs = await SharedPreferences.getInstance();
-    // String grupo = grupoKey;
-    // String paciente = grupoKey + '|' + pacienteKey;
-    // prefs.setInt(paciente, 0);
-    // prefs.setInt(grupo, 0);
+  static Future<int> verificarNotificacoes(String pacienteKey) async {
+    final prefs = await SharedPreferences.getInstance();
+    int nots = prefs.getInt(pacienteKey);
+    if (nots == null) nots = 0;
+    return nots;
   }
 
-  static Future<int> checarNotificacoes({String grupo, String paciente = ''}) async {
-    // final prefs = await SharedPreferences.getInstance();
-    // var chave = grupo;
-    // if(paciente != ""){
-    //   chave += "|" + paciente;
-    // }
-    // var nots = await prefs.getInt(chave);
-    // if(nots == null)
-    //   nots = 0;
-    return 0;
+  static Future<Null> lerNotificacoes(String pacienteKey) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt(pacienteKey, 0);
   }
 }

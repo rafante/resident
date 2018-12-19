@@ -14,7 +14,6 @@ class _GruposPageState extends State<GruposPage> {
   // DatabaseReference db;
 
   Map<String, dynamic> _grupos = Map();
-  Map<String, dynamic> _notificacoes = Map();
   TextEditingController _grupoNome = TextEditingController(text: '');
 
   @override
@@ -43,6 +42,7 @@ class _GruposPageState extends State<GruposPage> {
 
   @override
   Widget build(BuildContext context) {
+    Navegador.tagAtual = Tag.GRUPOS;
     return Scaffold(
       appBar: new AppBar(
         title: Padding(
@@ -58,7 +58,10 @@ class _GruposPageState extends State<GruposPage> {
       ),
       floatingActionButton: new FloatingActionButton(
         onPressed: () {
-          Navegador.de(context).navegar(Tag.GRUPO_DETALHE, null);
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (BuildContext cont) {
+            return BaseWindow(conteudo: DadosGrupoPage());
+          }));
         },
         backgroundColor: Colors.blueAccent,
         tooltip: 'Increment',
@@ -106,8 +109,13 @@ class _GruposPageState extends State<GruposPage> {
               ],
             ),
             onPressed: () {
-              Navegador.de(context)
-                  .navegar(Tag.GRUPO_DETALHE, {'grupoChave': grupo['key']});
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (BuildContext cont) {
+                return BaseWindow(
+                    conteudo: DadosGrupoPage(
+                  grupoChave: grupo['key'],
+                ));
+              }));
             },
           ),
           dense: true,
@@ -115,8 +123,13 @@ class _GruposPageState extends State<GruposPage> {
           subtitle:
               new Text(grupo['descricao'] != null ? grupo['descricao'] : ''),
           onTap: () {
-            Navegador.de(context)
-                .navegar(Tag.PACIENTES, {'grupoKey': grupo['key']});
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (BuildContext cont) {
+              return BaseWindow(
+                  conteudo: PacientesPage(
+                grupoKey: grupo['key'],
+              ));
+            }));
           },
         ),
       ));
@@ -131,28 +144,35 @@ class _GruposPageState extends State<GruposPage> {
           title: Text('Editar perfil'),
           leading: Icon(Icons.assignment_ind),
           onTap: () {
-            Navegador.de(context).navegar(Tag.PERFIL, null);
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (BuildContext cont) {
+              return BaseWindow(conteudo: PerfilPage());
+            }));
           },
         ),
         ListTile(
             title: Text('Contatos'),
             leading: Icon(Icons.contacts),
             onTap: () {
-              Navegador.de(context).navegar(Tag.CONTATOS, null);
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (BuildContext cont) {
+                return BaseWindow(conteudo: ContatosPage());
+              }));
             }),
-        ListTile(
-          title: Text('Seja Premium!'),
-          leading: Icon(Icons.monetization_on),
-          onTap: () {
-            Navegador.de(context).navegar(Tag.PREMIUM, null);
-          },
-        ),
+        // ListTile(
+        //   title: Text('Seja Premium!'),
+        //   leading: Icon(Icons.monetization_on),
+        //   onTap: () {
+        //     Navegador.de(context).navegar(Tag.PREMIUM, null);
+        //   },
+        // ),
         ListTile(
           title: Text('Sair'),
           leading: Icon(Icons.cancel),
           onTap: () {
             Usuarios.deslogar().then((r) {
-              Navegador.de(context).navegar(Tag.LOGIN, null);
+              Usuario.limparUsuarioLocal();
+              Navigator.popAndPushNamed(context, LoginPage.tag);
             });
           },
         )
@@ -229,32 +249,27 @@ class _GruposPageState extends State<GruposPage> {
     });
   }
 
-  void _validarUsuario() {
-    FirebaseAuth.instance.currentUser().then((FirebaseUser usuario) {
-      if (usuario == null) {
-        Navegador.de(context).navegar(Tag.LOGIN, null);
-      }
-    });
-  }
-
-  void checarUsuario() {
-    Usuario eu = Usuario.logado();
-    Usuario.carregar().catchError((erro) {
-      print(erro);
-    }).then((evento) {
-      eu = Usuario.logado();
-      if (eu != null) {
-        if (eu.idResidente == null || eu.idResidente == "") {
-          Navegador.de(context).navegar(Tag.PERFIL, null);
-        }
-      } else {
-        if (Usuario.logado() != null) {
-          Future.delayed(Duration(seconds: 1)).then((evento) {
-            print('Não encontrou chave do usuário. Tentando de novo...');
-            checarUsuario();
-          });
-        }
-      }
-    });
-  }
+  // void checarUsuario() {
+  //   Usuario eu = Usuario.logado();
+  //   Usuario.carregar().catchError((erro) {
+  //     print(erro);
+  //   }).then((evento) {
+  //     eu = Usuario.logado();
+  //     if (eu != null) {
+  //       if (eu.idResidente == null || eu.idResidente == "") {
+  //         Navigator.of(context)
+  //             .push(MaterialPageRoute(builder: (BuildContext cont) {
+  //           return BaseWindow(conteudo: PerfilPage());
+  //         }));
+  //       }
+  //     } else {
+  //       if (Usuario.logado() != null) {
+  //         Future.delayed(Duration(seconds: 1)).then((evento) {
+  //           print('Não encontrou chave do usuário. Tentando de novo...');
+  //           checarUsuario();
+  //         });
+  //       }
+  //     }
+  //   });
+  // }
 }
