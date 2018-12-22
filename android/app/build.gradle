@@ -32,9 +32,13 @@ android {
         applicationId "br.com.oconselho.resident"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+		
+		ndk {
+			abiFilters "armeabi-v7a", "x86", "armeabi", "mips"
+		}
     }
 
     signingConfigs {

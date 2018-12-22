@@ -79,7 +79,7 @@ class _ExamesPageState extends State<ExamesPage> {
                     if (exame.extensao != 'doc')
                       Exame.abrirAnexoExame(context, exame: exame);
                     else
-                      Exame.popupInsereDocumentoExame(context,
+                      Exame.popupInsereDocumentoExame1(context,
                           pacienteKey: widget.pacienteKey,
                           nome: exame.nome,
                           descricao: exame.descricao,
@@ -117,7 +117,7 @@ class _ExamesPageState extends State<ExamesPage> {
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
-            Exame.popupInsereDocumentoExame(context,
+            Exame.popupInsereDocumentoExame1(context,
                 pacienteKey: widget.pacienteKey);
           },
         ),

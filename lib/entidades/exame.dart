@@ -100,9 +100,9 @@ class Exame {
       print(erro);
       return null;
     });
-
-    final File tempFile =
-        File('${Directory.systemTemp.path}/$anexoName.$anexoExtensao');
+    Directory tempDir = await getTemporaryDirectory();
+    String tempPath = tempDir.path;
+    final File tempFile = File('$tempPath/$anexoName.$anexoExtensao');
     if (tempFile.existsSync()) {
       await tempFile.delete();
     }
@@ -135,9 +135,9 @@ class Exame {
             downloadLink: documento.data['downloadLink']);
       });
     }
-
-    String path =
-        '${Directory.systemTemp.path}/${exame.anexo}.${exame.extensao}';
+    Directory tempDir = await getTemporaryDirectory();
+    String tempPath = tempDir.path;
+    String path = '$tempPath/${exame.anexo}.${exame.extensao}';
     File file = new File(path);
     if (file.existsSync() && file.lengthSync() == exame.tamanho) {
       OpenFile.open(path);
@@ -327,59 +327,77 @@ class Exame {
         .ref()
         .child('anexos')
         .child('$chave.$extensao');
-    final File arquivo =
-        await new File('${Directory.systemTemp.path}/$chave.$extensao')
-            .create();
+    Directory tempDir = await getTemporaryDirectory();
+    String tempPath = tempDir.path;
 
-    List<int> imagemBytes = file.readAsBytesSync();
-    arquivo.writeAsBytesSync(imagemBytes);
+    final File arquivo = new File('$tempPath/$chave.$extensao');
 
-    StorageUploadTask task = sRef.putFile(arquivo);
-    task.events.listen((evento) async {
-      String texto = '';
-      switch (evento.type) {
-        case StorageTaskEventType.progress:
-          int bytes = evento.snapshot.bytesTransferred;
-          double porcentagem = (bytes * 100) / imagemBytes.length;
-          texto = 'Inserindo anexo... (${porcentagem.toInt()}%)';
-          break;
-        case StorageTaskEventType.failure:
-          texto = 'upload falhou';
-          break;
-        case StorageTaskEventType.pause:
-          texto = 'upload pausado';
-          break;
-        case StorageTaskEventType.resume:
-          texto = 'pausa no upload removida';
-          break;
-        case StorageTaskEventType.success:
-          mensagem.setar(pacienteKey: pacienteKey, link: chave, texto: texto);
-          texto = 'Anexo inserido';
-          break;
-      }
-
-      mensagem.setar(pacienteKey: pacienteKey, texto: texto);
-      await mensagem.salvar();
+    bool erro = false;
+    await arquivo.create().catchError((erro) {
+      Fluttertoast.showToast(
+        msg: erro.toString(),
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIos: 1,
+        bgcolor: "#e74c3c",
+      );
+      mensagem.deletar();
     });
 
-    final Uri downloadUrl = (await task.onComplete).uploadSessionUri;
-    final File downloadFile =
-        new File('${Directory.systemTemp.path}/$chave.$extensao');
+    if (!erro) {
+      List<int> imagemBytes = file.readAsBytesSync();
+      arquivo.writeAsBytesSync(imagemBytes);
 
-    StorageFileDownloadTask dTask = sRef.writeToFile(downloadFile);
-    FileDownloadTaskSnapshot downloadSnap = await dTask.future;
+      StorageUploadTask task = sRef.putFile(arquivo);
+      task.events.listen((evento) async {
+        String texto = '';
+        switch (evento.type) {
+          case StorageTaskEventType.progress:
+            int bytes = evento.snapshot.bytesTransferred;
+            double porcentagem = (bytes * 100) / imagemBytes.length;
+            texto = 'Inserindo anexo... (${porcentagem.toInt()}%)';
+            break;
+          case StorageTaskEventType.failure:
+            texto = 'upload falhou';
+            break;
+          case StorageTaskEventType.pause:
+            texto = 'upload pausado';
+            break;
+          case StorageTaskEventType.resume:
+            texto = 'pausa no upload removida';
+            break;
+          case StorageTaskEventType.success:
+            mensagem.setar(pacienteKey: pacienteKey, link: chave, texto: texto);
+            texto = 'Anexo inserido';
+            break;
+        }
 
-    await exameRef.setData({
-      'nome': 'Anexo',
-      'pacienteKey': pacienteKey,
-      'anexo': chave,
-      'extensao': extensao,
-      'descricao': 'Anexo',
-      'tamanho': imagemBytes.length,
-      'downloadLink': downloadUrl.toString(),
-    });
+        mensagem.setar(pacienteKey: pacienteKey, texto: texto);
+        await mensagem.salvar();
+      });
 
-    return downloadUrl.toString();
+      final Uri downloadUrl = (await task.onComplete).uploadSessionUri;
+      Directory tempDir = await getTemporaryDirectory();
+      String tempPath = tempDir.path;
+
+      final File downloadFile = new File('$tempPath/$chave.$extensao');
+
+      StorageFileDownloadTask dTask = sRef.writeToFile(downloadFile);
+      FileDownloadTaskSnapshot downloadSnap = await dTask.future;
+
+      await exameRef.setData({
+        'nome': 'Anexo',
+        'pacienteKey': pacienteKey,
+        'anexo': chave,
+        'extensao': extensao,
+        'descricao': 'Anexo',
+        'tamanho': imagemBytes.length,
+        'downloadLink': downloadUrl.toString(),
+      });
+
+      return downloadUrl.toString();
+    }
+    return null;
   }
 
   static Future<File> colheVideo(ImageSource fonteImagem) async {

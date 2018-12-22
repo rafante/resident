@@ -108,7 +108,11 @@ class _MedicamentosPageState extends State<MedicamentosPage> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          Navigator.pop(context);
+          Navigator.push(context,
+              MaterialPageRoute(builder: (BuildContext context) {
+            return BaseWindow(
+                conteudo: MedicamentoDetalhe(pacienteKey: widget.pacienteKey));
+          }));
         },
       ),
     );

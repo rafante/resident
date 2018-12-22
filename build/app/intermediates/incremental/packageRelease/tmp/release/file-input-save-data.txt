@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Wed Dec 19 04:16:50 BRST 2018
+#Thu Dec 20 10:28:03 BRST 2018
 17.baseType=DIRECTORY
 4.path=lib/x86/libclassifier_jni.so
 22.set=ASSET

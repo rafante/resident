@@ -4,7 +4,7 @@ class Mensagem {
   String chave;
   String pacienteKey;
   String autor;
-  String autorNome; 
+  String autorNome;
   String texto;
   DateTime hora;
   String link;
@@ -83,6 +83,11 @@ class Mensagem {
       }
     });
     return this;
+  }
+
+  Future<Null> deletar() async {
+    DocumentReference ref = Firestore.instance.document('mensagens/$chave');
+    await ref.delete();
   }
 
   Future<Null> salvar() async {

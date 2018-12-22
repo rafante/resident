@@ -1,4 +1,4 @@
-#Wed Dec 19 04:16:47 BRST 2018
+#Thu Dec 20 10:27:59 BRST 2018
 base.0=C\:\\dev\\Pessoal\\resident\\build\\app\\intermediates\\transforms\\dexMerger\\release\\0
 path.1=classes2.dex
 renamed.1=classes2.dex

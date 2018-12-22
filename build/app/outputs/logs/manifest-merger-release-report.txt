@@ -1,25 +1,25 @@
 -- Merging decision tree log ---
 provider#android.support.v4.content.FileProvider
-INJECTED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:49:9-59:20
+INJECTED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:28:9-38:20
 MERGED from [:open_file] C:\dev\Pessoal\resident\build\open_file\intermediates\manifests\full\release\AndroidManifest.xml:10:9-18:20
 MERGED from [:open_file] C:\dev\Pessoal\resident\build\open_file\intermediates\manifests\full\release\AndroidManifest.xml:10:9-18:20
 	android:grantUriPermissions
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:53:17-51
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:32:17-51
 	android:authorities
 		INJECTED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:51:17-68
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:30:17-68
 		REJECTED from [:open_file] C:\dev\Pessoal\resident\build\open_file\intermediates\manifests\full\release\AndroidManifest.xml:12:13-64
 	android:exported
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:52:17-41
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:31:17-41
 	tools:replace
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:54:17-52
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:33:17-52
 	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:50:17-71
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:29:17-71
 manifest
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:1:1-80:12
-INJECTED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:1:1-80:12
-INJECTED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:1:1-80:12
-INJECTED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:1:1-80:12
+ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:1:1-59:12
+INJECTED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:1:1-59:12
+INJECTED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:1:1-59:12
+INJECTED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:1:1-59:12
 MERGED from [:cloud_firestore] C:\dev\Pessoal\resident\build\cloud_firestore\intermediates\manifests\full\release\AndroidManifest.xml:2:1-7:12
 MERGED from [:google_sign_in] C:\dev\Pessoal\resident\build\google_sign_in\intermediates\manifests\full\release\AndroidManifest.xml:2:1-9:12
 MERGED from [:file_picker] C:\dev\Pessoal\resident\build\file_picker\intermediates\manifests\full\release\AndroidManifest.xml:2:1-7:12
@@ -37,7 +37,6 @@ MERGED from [:open_file] C:\dev\Pessoal\resident\build\open_file\intermediates\m
 MERGED from [:fluttertoast] C:\dev\Pessoal\resident\build\fluttertoast\intermediates\manifests\full\release\AndroidManifest.xml:2:1-7:12
 MERGED from [:firebase_admob] C:\dev\Pessoal\resident\build\firebase_admob\intermediates\manifests\full\release\AndroidManifest.xml:2:1-14:12
 MERGED from [:firebase_analytics] C:\dev\Pessoal\resident\build\firebase_analytics\intermediates\manifests\full\release\AndroidManifest.xml:2:1-11:12
-MERGED from [:video_player] C:\dev\Pessoal\resident\build\video_player\intermediates\manifests\full\release\AndroidManifest.xml:2:1-7:12
 MERGED from [:path_provider] C:\dev\Pessoal\resident\build\path_provider\intermediates\manifests\full\release\AndroidManifest.xml:2:1-7:12
 MERGED from [com.google.firebase:firebase-messaging:17.3.3] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\firebase-messaging-17.3.3.aar\9d270420cace26b71ec4f7531e2432fa\AndroidManifest.xml:17:1-37:12
 MERGED from [com.google.firebase:firebase-firestore:17.1.1] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\firebase-firestore-17.1.1.aar\bd440f84cf9978c6554697b89c177549\AndroidManifest.xml:2:1-21:12
@@ -87,10 +86,6 @@ MERGED from [com.android.support:support-core-utils:27.1.1] C:\Users\rafan\.grad
 MERGED from [com.android.support:support-vector-drawable:27.1.1] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-27.1.1.aar\2d9cdd9203edba88e370bae7dfc629c7\AndroidManifest.xml:17:1-22:12
 MERGED from [com.android.support:support-media-compat:27.1.1] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\support-media-compat-27.1.1.aar\53d4507453a640d31e9f682456a2b3f4\AndroidManifest.xml:17:1-22:12
 MERGED from [com.android.support:support-compat:27.1.1] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\support-compat-27.1.1.aar\dddbd1c3eda7c66f720ce50d074c755e\AndroidManifest.xml:17:1-22:12
-MERGED from [com.google.android.exoplayer:exoplayer-hls:2.8.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\exoplayer-hls-2.8.0.aar\b8e046a94377adea89da35803ec38884\AndroidManifest.xml:17:1-24:12
-MERGED from [com.google.android.exoplayer:exoplayer-dash:2.8.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\exoplayer-dash-2.8.0.aar\aed508d055d3f2ac3cc122e0f6f52cb2\AndroidManifest.xml:17:1-24:12
-MERGED from [com.google.android.exoplayer:exoplayer-smoothstreaming:2.8.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\exoplayer-smoothstreaming-2.8.0.aar\2c15baf73e2ca167eda36c252ffe3d1a\AndroidManifest.xml:17:1-24:12
-MERGED from [com.google.android.exoplayer:exoplayer-core:2.8.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\exoplayer-core-2.8.0.aar\36f4d2b288337736cd592d9348fdc415\AndroidManifest.xml:17:1-26:12
 MERGED from [android.arch.lifecycle:livedata-core:1.1.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\livedata-core-1.1.0.aar\42ce577b6fd267d569150020c1fc049e\AndroidManifest.xml:17:1-22:12
 MERGED from [android.arch.lifecycle:runtime:1.1.1] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\runtime-1.1.1.aar\0f606427cd503bf53844e2d6ed4f166f\AndroidManifest.xml:17:1-22:12
 MERGED from [com.google.firebase:protolite-well-known-types:16.0.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\protolite-well-known-types-16.0.0.aar\b441fd2fef278f2ef43b7086ca85948a\AndroidManifest.xml:2:1-11:12
@@ -98,129 +93,49 @@ MERGED from [android.arch.core:runtime:1.1.1] C:\Users\rafan\.gradle\caches\tran
 MERGED from [com.google.android.gms:play-services-measurement-base:16.0.3] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\play-services-measurement-base-16.0.3.aar\e5a58c44d92116d2cd1b9ca2f8885f05\AndroidManifest.xml:2:1-9:12
 MERGED from [android.arch.lifecycle:viewmodel:1.1.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\viewmodel-1.1.0.aar\1924668d72b66a54a126e74dc93ff884\AndroidManifest.xml:17:1-22:12
 MERGED from [com.google.android.gms:play-services-ads-base:17.0.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\play-services-ads-base-17.0.0.aar\28bb141b673201c58d6e8d6edbd99de2\AndroidManifest.xml:2:1-9:12
-INJECTED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:1:1-80:12
-INJECTED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:1:1-80:12
-INJECTED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:1:1-80:12
+INJECTED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:1:1-59:12
+INJECTED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:1:1-59:12
+INJECTED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:1:1-59:12
 	package
 		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:3:5-40
 		INJECTED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml
 		INJECTED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml
 	android:versionName
 		INJECTED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:1:1-80:12
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:1:1-59:12
 		INJECTED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml
 	xmlns:tools
 		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:2:9-55
 	android:versionCode
 		INJECTED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:1:1-80:12
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:1:1-59:12
 		INJECTED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml
 	xmlns:android
 		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:1:11-69
-uses-permission#android.permission.READ_CALENDAR
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:9:5-72
-	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:9:22-69
-uses-permission#android.permission.WRITE_CALENDAR
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:10:5-73
-	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:10:22-70
 uses-permission#android.permission.CAMERA
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:11:5-65
+ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:9:5-65
 MERGED from [:image_picker] C:\dev\Pessoal\resident\build\image_picker\intermediates\manifests\full\release\AndroidManifest.xml:9:5-65
 MERGED from [:image_picker] C:\dev\Pessoal\resident\build\image_picker\intermediates\manifests\full\release\AndroidManifest.xml:9:5-65
 	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:11:22-62
-uses-permission#android.permission.READ_CONTACTS
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:12:5-72
-	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:12:22-69
-uses-permission#android.permission.WRITE_CONTACTS
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:13:5-73
-	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:13:22-70
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:9:22-62
 uses-permission#android.permission.GET_ACCOUNTS
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:14:5-71
+ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:10:5-71
 	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:14:22-68
-uses-permission#android.permission.ACCESS_FINE_LOCATION
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:15:5-79
-	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:15:22-76
-uses-permission#android.permission.ACCESS_COARSE_LOCATION
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:16:5-81
-	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:16:22-78
-uses-permission#android.permission.RECORD_AUDIO
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:17:5-71
-	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:17:22-68
-uses-permission#android.permission.READ_PHONE_STATE
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:18:5-75
-	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:18:22-72
-uses-permission#android.permission.CALL_PHONE
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:19:5-69
-	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:19:22-66
-uses-permission#android.permission.READ_CALL_LOG
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:20:5-72
-	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:20:22-69
-uses-permission#android.permission.WRITE_CALL_LOG
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:21:5-73
-	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:21:22-70
-uses-permission#android.permission.ADD_VOICEMAIL
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:23:5-72
-	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:23:22-69
-uses-permission#android.permission.USE_SIP
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:24:5-66
-	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:24:22-63
-uses-permission#android.permission.PROCESS_OUTGOING_CALLS
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:25:5-81
-	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:25:22-78
-uses-permission#android.permission.BODY_SENSORS
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:26:5-71
-	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:26:22-68
-uses-permission#android.permission.SEND_SMS
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:27:5-67
-	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:27:22-64
-uses-permission#android.permission.RECEIVE_SMS
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:28:5-70
-	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:28:22-67
-uses-permission#android.permission.READ_SMS
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:29:5-67
-	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:29:22-64
-uses-permission#android.permission.RECEIVE_WAP_PUSH
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:30:5-75
-	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:30:22-72
-uses-permission#android.permission.RECEIVE_MMS
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:31:5-70
-	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:31:22-67
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:10:22-68
 uses-permission#android.permission.READ_EXTERNAL_STORAGE
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:32:5-80
+ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:11:5-80
 MERGED from [:image_picker] C:\dev\Pessoal\resident\build\image_picker\intermediates\manifests\full\release\AndroidManifest.xml:7:5-80
 MERGED from [:image_picker] C:\dev\Pessoal\resident\build\image_picker\intermediates\manifests\full\release\AndroidManifest.xml:7:5-80
 	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:32:22-77
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:11:22-77
 uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:33:5-81
+ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:12:5-81
 MERGED from [:image_picker] C:\dev\Pessoal\resident\build\image_picker\intermediates\manifests\full\release\AndroidManifest.xml:8:5-81
 MERGED from [:image_picker] C:\dev\Pessoal\resident\build\image_picker\intermediates\manifests\full\release\AndroidManifest.xml:8:5-81
 	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:33:22-78
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:12:22-78
 application
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:40:5-79:19
+ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:19:5-58:19
 MERGED from [:image_picker] C:\dev\Pessoal\resident\build\image_picker\intermediates\manifests\full\release\AndroidManifest.xml:11:5-21:19
 MERGED from [:image_picker] C:\dev\Pessoal\resident\build\image_picker\intermediates\manifests\full\release\AndroidManifest.xml:11:5-21:19
 MERGED from [:firebase_messaging] C:\dev\Pessoal\resident\build\firebase_messaging\intermediates\manifests\full\release\AndroidManifest.xml:7:5-18:19
@@ -290,53 +205,53 @@ MERGED from [com.google.android.gms:play-services-measurement-base:16.0.3] C:\Us
 MERGED from [com.google.android.gms:play-services-ads-base:17.0.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\play-services-ads-base-17.0.0.aar\28bb141b673201c58d6e8d6edbd99de2\AndroidManifest.xml:7:5-20
 MERGED from [com.google.android.gms:play-services-ads-base:17.0.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\play-services-ads-base-17.0.0.aar\28bb141b673201c58d6e8d6edbd99de2\AndroidManifest.xml:7:5-20
 	android:label
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:42:9-33
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:21:9-33
 	android:icon
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:43:9-43
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:22:9-43
 	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:41:9-57
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:20:9-57
 meta-data#com.google.firebase.messaging.default_notification_icon
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:44:9-46:50
+ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:23:9-25:50
 	android:resource
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:46:9-47
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:25:9-47
 	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:45:9-79
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:24:9-79
 meta-data#com.google.android.gms.ads.APPLICATION_ID
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:47:9-48:65
+ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:26:9-27:65
 	android:value
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:48:9-63
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:27:9-63
 	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:47:20-76
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:26:20-76
 activity#br.com.oconselho.resident.MainActivity
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:60:9-78:20
+ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:39:9-57:20
 	android:launchMode
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:62:13-43
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:41:13-43
 	android:hardwareAccelerated
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:65:13-47
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:44:13-47
 	android:windowSoftInputMode
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:66:13-55
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:45:13-55
 	android:configChanges
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:64:13-137
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:43:13-137
 	android:theme
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:63:13-47
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:42:13-47
 	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:61:13-41
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:40:13-41
 meta-data#io.flutter.app.android.SplashScreenUntilFirstFrame
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:71:13-73:40
+ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:50:13-52:40
 	android:value
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:73:17-37
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:52:17-37
 	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:72:17-82
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:51:17-82
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:74:13-77:29
+ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:53:13-56:29
 action#android.intent.action.MAIN
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:75:17-68
+ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:54:17-68
 	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:75:25-66
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:54:25-66
 category#android.intent.category.LAUNCHER
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:76:17-76
+ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:55:17-76
 	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:76:27-74
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:55:27-74
 uses-sdk
 INJECTED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml
@@ -375,8 +290,6 @@ MERGED from [:firebase_admob] C:\dev\Pessoal\resident\build\firebase_admob\inter
 MERGED from [:firebase_admob] C:\dev\Pessoal\resident\build\firebase_admob\intermediates\manifests\full\release\AndroidManifest.xml:5:5-44
 MERGED from [:firebase_analytics] C:\dev\Pessoal\resident\build\firebase_analytics\intermediates\manifests\full\release\AndroidManifest.xml:5:5-44
 MERGED from [:firebase_analytics] C:\dev\Pessoal\resident\build\firebase_analytics\intermediates\manifests\full\release\AndroidManifest.xml:5:5-44
-MERGED from [:video_player] C:\dev\Pessoal\resident\build\video_player\intermediates\manifests\full\release\AndroidManifest.xml:5:5-44
-MERGED from [:video_player] C:\dev\Pessoal\resident\build\video_player\intermediates\manifests\full\release\AndroidManifest.xml:5:5-44
 MERGED from [:path_provider] C:\dev\Pessoal\resident\build\path_provider\intermediates\manifests\full\release\AndroidManifest.xml:5:5-44
 MERGED from [:path_provider] C:\dev\Pessoal\resident\build\path_provider\intermediates\manifests\full\release\AndroidManifest.xml:5:5-44
 MERGED from [com.google.firebase:firebase-messaging:17.3.3] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\firebase-messaging-17.3.3.aar\9d270420cace26b71ec4f7531e2432fa\AndroidManifest.xml:20:5-44
@@ -475,14 +388,6 @@ MERGED from [com.android.support:support-media-compat:27.1.1] C:\Users\rafan\.gr
 MERGED from [com.android.support:support-media-compat:27.1.1] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\support-media-compat-27.1.1.aar\53d4507453a640d31e9f682456a2b3f4\AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:support-compat:27.1.1] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\support-compat-27.1.1.aar\dddbd1c3eda7c66f720ce50d074c755e\AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:support-compat:27.1.1] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\support-compat-27.1.1.aar\dddbd1c3eda7c66f720ce50d074c755e\AndroidManifest.xml:20:5-44
-MERGED from [com.google.android.exoplayer:exoplayer-hls:2.8.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\exoplayer-hls-2.8.0.aar\b8e046a94377adea89da35803ec38884\AndroidManifest.xml:20:5-22:41
-MERGED from [com.google.android.exoplayer:exoplayer-hls:2.8.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\exoplayer-hls-2.8.0.aar\b8e046a94377adea89da35803ec38884\AndroidManifest.xml:20:5-22:41
-MERGED from [com.google.android.exoplayer:exoplayer-dash:2.8.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\exoplayer-dash-2.8.0.aar\aed508d055d3f2ac3cc122e0f6f52cb2\AndroidManifest.xml:20:5-22:41
-MERGED from [com.google.android.exoplayer:exoplayer-dash:2.8.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\exoplayer-dash-2.8.0.aar\aed508d055d3f2ac3cc122e0f6f52cb2\AndroidManifest.xml:20:5-22:41
-MERGED from [com.google.android.exoplayer:exoplayer-smoothstreaming:2.8.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\exoplayer-smoothstreaming-2.8.0.aar\2c15baf73e2ca167eda36c252ffe3d1a\AndroidManifest.xml:20:5-22:41
-MERGED from [com.google.android.exoplayer:exoplayer-smoothstreaming:2.8.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\exoplayer-smoothstreaming-2.8.0.aar\2c15baf73e2ca167eda36c252ffe3d1a\AndroidManifest.xml:20:5-22:41
-MERGED from [com.google.android.exoplayer:exoplayer-core:2.8.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\exoplayer-core-2.8.0.aar\36f4d2b288337736cd592d9348fdc415\AndroidManifest.xml:20:5-22:41
-MERGED from [com.google.android.exoplayer:exoplayer-core:2.8.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\exoplayer-core-2.8.0.aar\36f4d2b288337736cd592d9348fdc415\AndroidManifest.xml:20:5-22:41
 MERGED from [android.arch.lifecycle:livedata-core:1.1.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\livedata-core-1.1.0.aar\42ce577b6fd267d569150020c1fc049e\AndroidManifest.xml:20:5-44
 MERGED from [android.arch.lifecycle:livedata-core:1.1.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\livedata-core-1.1.0.aar\42ce577b6fd267d569150020c1fc049e\AndroidManifest.xml:20:5-44
 MERGED from [android.arch.lifecycle:runtime:1.1.1] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\runtime-1.1.1.aar\0f606427cd503bf53844e2d6ed4f166f\AndroidManifest.xml:20:5-44
@@ -510,16 +415,16 @@ INJECTED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml
 		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml
 		INJECTED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml
 meta-data#android.support.FILE_PROVIDER_PATHS
-ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:55:13-58:56
+ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:34:13-37:56
 MERGED from [:open_file] C:\dev\Pessoal\resident\build\open_file\intermediates\manifests\full\release\AndroidManifest.xml:15:13-17:53
 MERGED from [:open_file] C:\dev\Pessoal\resident\build\open_file\intermediates\manifests\full\release\AndroidManifest.xml:15:13-17:53
 	android:resource
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:57:21-54
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:36:21-54
 		REJECTED from [:open_file] C:\dev\Pessoal\resident\build\open_file\intermediates\manifests\full\release\AndroidManifest.xml:17:17-50
 	tools:replace
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:58:21-53
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:37:21-53
 	android:name
-		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:56:21-71
+		ADDED from C:\dev\Pessoal\resident\android\app\src\main\AndroidManifest.xml:35:21-71
 uses-permission#android.permission.INTERNET
 ADDED from [:google_sign_in] C:\dev\Pessoal\resident\build\google_sign_in\intermediates\manifests\full\release\AndroidManifest.xml:7:5-67
 MERGED from [:firebase_admob] C:\dev\Pessoal\resident\build\firebase_admob\intermediates\manifests\full\release\AndroidManifest.xml:12:5-67
@@ -600,8 +505,6 @@ MERGED from [com.google.android.gms:play-services-ads-lite:17.0.0] C:\Users\rafa
 MERGED from [com.google.android.gms:play-services-ads-lite:17.0.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\play-services-ads-lite-17.0.0.aar\6590d9a098581cbd1e24dcf99c4f17bc\AndroidManifest.xml:24:5-79
 MERGED from [com.google.android.gms:play-services-measurement-sdk-api:16.0.2] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\play-services-measurement-sdk-api-16.0.2.aar\377d9d5c9d0078bfd90d8fbd321633f4\AndroidManifest.xml:24:5-79
 MERGED from [com.google.android.gms:play-services-measurement-sdk-api:16.0.2] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\play-services-measurement-sdk-api-16.0.2.aar\377d9d5c9d0078bfd90d8fbd321633f4\AndroidManifest.xml:24:5-79
-MERGED from [com.google.android.exoplayer:exoplayer-core:2.8.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\exoplayer-core-2.8.0.aar\36f4d2b288337736cd592d9348fdc415\AndroidManifest.xml:24:5-79
-MERGED from [com.google.android.exoplayer:exoplayer-core:2.8.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\exoplayer-core-2.8.0.aar\36f4d2b288337736cd592d9348fdc415\AndroidManifest.xml:24:5-79
 	android:name
 		ADDED from [:firebase_analytics] C:\dev\Pessoal\resident\build\firebase_analytics\intermediates\manifests\full\release\AndroidManifest.xml:7:22-76
 uses-permission#android.permission.WAKE_LOCK

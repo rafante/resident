@@ -21,8 +21,7 @@ dependencies:
   firebase_storage: 
   google_sign_in:
   intl: 
-  image_picker: 
-  video_player: 
+  image_picker:
   path_provider:
   contacts_service: 
   open_file: 
