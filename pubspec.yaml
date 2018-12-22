@@ -23,7 +23,6 @@ dependencies:
   intl: 
   image_picker:
   path_provider:
-  contacts_service: 
   open_file: 
   datetime_picker_formfield: 
   font_awesome_flutter: 

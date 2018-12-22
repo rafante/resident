@@ -37,7 +37,6 @@ MERGED from [:open_file] C:\dev\Pessoal\resident\build\open_file\intermediates\m
 MERGED from [:fluttertoast] C:\dev\Pessoal\resident\build\fluttertoast\intermediates\manifests\full\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:firebase_admob] C:\dev\Pessoal\resident\build\firebase_admob\intermediates\manifests\full\debug\AndroidManifest.xml:2:1-14:12
 MERGED from [:firebase_analytics] C:\dev\Pessoal\resident\build\firebase_analytics\intermediates\manifests\full\debug\AndroidManifest.xml:2:1-11:12
-MERGED from [:video_player] C:\dev\Pessoal\resident\build\video_player\intermediates\manifests\full\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:path_provider] C:\dev\Pessoal\resident\build\path_provider\intermediates\manifests\full\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [com.google.firebase:firebase-messaging:17.3.3] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\firebase-messaging-17.3.3.aar\9d270420cace26b71ec4f7531e2432fa\AndroidManifest.xml:17:1-37:12
 MERGED from [com.google.firebase:firebase-firestore:17.1.1] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\firebase-firestore-17.1.1.aar\bd440f84cf9978c6554697b89c177549\AndroidManifest.xml:2:1-21:12
@@ -87,10 +86,6 @@ MERGED from [com.android.support:support-core-utils:27.1.1] C:\Users\rafan\.grad
 MERGED from [com.android.support:support-vector-drawable:27.1.1] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-27.1.1.aar\2d9cdd9203edba88e370bae7dfc629c7\AndroidManifest.xml:17:1-22:12
 MERGED from [com.android.support:support-media-compat:27.1.1] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\support-media-compat-27.1.1.aar\53d4507453a640d31e9f682456a2b3f4\AndroidManifest.xml:17:1-22:12
 MERGED from [com.android.support:support-compat:27.1.1] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\support-compat-27.1.1.aar\dddbd1c3eda7c66f720ce50d074c755e\AndroidManifest.xml:17:1-22:12
-MERGED from [com.google.android.exoplayer:exoplayer-hls:2.8.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\exoplayer-hls-2.8.0.aar\b8e046a94377adea89da35803ec38884\AndroidManifest.xml:17:1-24:12
-MERGED from [com.google.android.exoplayer:exoplayer-dash:2.8.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\exoplayer-dash-2.8.0.aar\aed508d055d3f2ac3cc122e0f6f52cb2\AndroidManifest.xml:17:1-24:12
-MERGED from [com.google.android.exoplayer:exoplayer-smoothstreaming:2.8.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\exoplayer-smoothstreaming-2.8.0.aar\2c15baf73e2ca167eda36c252ffe3d1a\AndroidManifest.xml:17:1-24:12
-MERGED from [com.google.android.exoplayer:exoplayer-core:2.8.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\exoplayer-core-2.8.0.aar\36f4d2b288337736cd592d9348fdc415\AndroidManifest.xml:17:1-26:12
 MERGED from [android.arch.lifecycle:livedata-core:1.1.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\livedata-core-1.1.0.aar\42ce577b6fd267d569150020c1fc049e\AndroidManifest.xml:17:1-22:12
 MERGED from [android.arch.lifecycle:runtime:1.1.1] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\runtime-1.1.1.aar\0f606427cd503bf53844e2d6ed4f166f\AndroidManifest.xml:17:1-22:12
 MERGED from [com.google.firebase:protolite-well-known-types:16.0.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\protolite-well-known-types-16.0.0.aar\b441fd2fef278f2ef43b7086ca85948a\AndroidManifest.xml:2:1-11:12
@@ -295,8 +290,6 @@ MERGED from [:firebase_admob] C:\dev\Pessoal\resident\build\firebase_admob\inter
 MERGED from [:firebase_admob] C:\dev\Pessoal\resident\build\firebase_admob\intermediates\manifests\full\debug\AndroidManifest.xml:5:5-44
 MERGED from [:firebase_analytics] C:\dev\Pessoal\resident\build\firebase_analytics\intermediates\manifests\full\debug\AndroidManifest.xml:5:5-44
 MERGED from [:firebase_analytics] C:\dev\Pessoal\resident\build\firebase_analytics\intermediates\manifests\full\debug\AndroidManifest.xml:5:5-44
-MERGED from [:video_player] C:\dev\Pessoal\resident\build\video_player\intermediates\manifests\full\debug\AndroidManifest.xml:5:5-44
-MERGED from [:video_player] C:\dev\Pessoal\resident\build\video_player\intermediates\manifests\full\debug\AndroidManifest.xml:5:5-44
 MERGED from [:path_provider] C:\dev\Pessoal\resident\build\path_provider\intermediates\manifests\full\debug\AndroidManifest.xml:5:5-44
 MERGED from [:path_provider] C:\dev\Pessoal\resident\build\path_provider\intermediates\manifests\full\debug\AndroidManifest.xml:5:5-44
 MERGED from [com.google.firebase:firebase-messaging:17.3.3] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\firebase-messaging-17.3.3.aar\9d270420cace26b71ec4f7531e2432fa\AndroidManifest.xml:20:5-44
@@ -395,14 +388,6 @@ MERGED from [com.android.support:support-media-compat:27.1.1] C:\Users\rafan\.gr
 MERGED from [com.android.support:support-media-compat:27.1.1] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\support-media-compat-27.1.1.aar\53d4507453a640d31e9f682456a2b3f4\AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:support-compat:27.1.1] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\support-compat-27.1.1.aar\dddbd1c3eda7c66f720ce50d074c755e\AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:support-compat:27.1.1] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\support-compat-27.1.1.aar\dddbd1c3eda7c66f720ce50d074c755e\AndroidManifest.xml:20:5-44
-MERGED from [com.google.android.exoplayer:exoplayer-hls:2.8.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\exoplayer-hls-2.8.0.aar\b8e046a94377adea89da35803ec38884\AndroidManifest.xml:20:5-22:41
-MERGED from [com.google.android.exoplayer:exoplayer-hls:2.8.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\exoplayer-hls-2.8.0.aar\b8e046a94377adea89da35803ec38884\AndroidManifest.xml:20:5-22:41
-MERGED from [com.google.android.exoplayer:exoplayer-dash:2.8.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\exoplayer-dash-2.8.0.aar\aed508d055d3f2ac3cc122e0f6f52cb2\AndroidManifest.xml:20:5-22:41
-MERGED from [com.google.android.exoplayer:exoplayer-dash:2.8.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\exoplayer-dash-2.8.0.aar\aed508d055d3f2ac3cc122e0f6f52cb2\AndroidManifest.xml:20:5-22:41
-MERGED from [com.google.android.exoplayer:exoplayer-smoothstreaming:2.8.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\exoplayer-smoothstreaming-2.8.0.aar\2c15baf73e2ca167eda36c252ffe3d1a\AndroidManifest.xml:20:5-22:41
-MERGED from [com.google.android.exoplayer:exoplayer-smoothstreaming:2.8.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\exoplayer-smoothstreaming-2.8.0.aar\2c15baf73e2ca167eda36c252ffe3d1a\AndroidManifest.xml:20:5-22:41
-MERGED from [com.google.android.exoplayer:exoplayer-core:2.8.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\exoplayer-core-2.8.0.aar\36f4d2b288337736cd592d9348fdc415\AndroidManifest.xml:20:5-22:41
-MERGED from [com.google.android.exoplayer:exoplayer-core:2.8.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\exoplayer-core-2.8.0.aar\36f4d2b288337736cd592d9348fdc415\AndroidManifest.xml:20:5-22:41
 MERGED from [android.arch.lifecycle:livedata-core:1.1.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\livedata-core-1.1.0.aar\42ce577b6fd267d569150020c1fc049e\AndroidManifest.xml:20:5-44
 MERGED from [android.arch.lifecycle:livedata-core:1.1.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\livedata-core-1.1.0.aar\42ce577b6fd267d569150020c1fc049e\AndroidManifest.xml:20:5-44
 MERGED from [android.arch.lifecycle:runtime:1.1.1] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\runtime-1.1.1.aar\0f606427cd503bf53844e2d6ed4f166f\AndroidManifest.xml:20:5-44
@@ -520,8 +505,6 @@ MERGED from [com.google.android.gms:play-services-ads-lite:17.0.0] C:\Users\rafa
 MERGED from [com.google.android.gms:play-services-ads-lite:17.0.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\play-services-ads-lite-17.0.0.aar\6590d9a098581cbd1e24dcf99c4f17bc\AndroidManifest.xml:24:5-79
 MERGED from [com.google.android.gms:play-services-measurement-sdk-api:16.0.2] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\play-services-measurement-sdk-api-16.0.2.aar\377d9d5c9d0078bfd90d8fbd321633f4\AndroidManifest.xml:24:5-79
 MERGED from [com.google.android.gms:play-services-measurement-sdk-api:16.0.2] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\play-services-measurement-sdk-api-16.0.2.aar\377d9d5c9d0078bfd90d8fbd321633f4\AndroidManifest.xml:24:5-79
-MERGED from [com.google.android.exoplayer:exoplayer-core:2.8.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\exoplayer-core-2.8.0.aar\36f4d2b288337736cd592d9348fdc415\AndroidManifest.xml:24:5-79
-MERGED from [com.google.android.exoplayer:exoplayer-core:2.8.0] C:\Users\rafan\.gradle\caches\transforms-1\files-1.1\exoplayer-core-2.8.0.aar\36f4d2b288337736cd592d9348fdc415\AndroidManifest.xml:24:5-79
 	android:name
 		ADDED from [:firebase_analytics] C:\dev\Pessoal\resident\build\firebase_analytics\intermediates\manifests\full\debug\AndroidManifest.xml:7:22-76
 uses-permission#android.permission.WAKE_LOCK
