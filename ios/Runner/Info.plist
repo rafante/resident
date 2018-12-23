@@ -54,5 +54,11 @@
 			</array>
 		</dict>
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Share images with other chat users</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Share images with other chat users</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Share images with other chat users</string>
 </dict>
 </plist>
