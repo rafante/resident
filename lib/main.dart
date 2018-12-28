@@ -99,56 +99,56 @@ class AppResident extends StatelessWidget {
     return app;
   }
 
-  void permissoes(BuildContext context) async {
-    Map<PermissionGroup, PermissionStatus> permissions =
-        await PermissionHandler().requestPermissions([
-      PermissionGroup.camera,
-      PermissionGroup.mediaLibrary,
-      PermissionGroup.photos,
-      PermissionGroup.storage
-    ]);
+  // void permissoes(BuildContext context) async {
+  //   Map<PermissionGroup, PermissionStatus> permissions =
+  //       await PermissionHandler().requestPermissions([
+  //     PermissionGroup.camera,
+  //     PermissionGroup.mediaLibrary,
+  //     PermissionGroup.photos,
+  //     PermissionGroup.storage
+  //   ]);
 
-    PermissionStatus camera =
-        await PermissionHandler().checkPermissionStatus(PermissionGroup.camera);
+  //   PermissionStatus camera =
+  //       await PermissionHandler().checkPermissionStatus(PermissionGroup.camera);
 
-    PermissionStatus mediaLibrary = await PermissionHandler()
-        .checkPermissionStatus(PermissionGroup.mediaLibrary);
+  //   PermissionStatus mediaLibrary = await PermissionHandler()
+  //       .checkPermissionStatus(PermissionGroup.mediaLibrary);
 
-    PermissionStatus photos =
-        await PermissionHandler().checkPermissionStatus(PermissionGroup.photos);
+  //   PermissionStatus photos =
+  //       await PermissionHandler().checkPermissionStatus(PermissionGroup.photos);
 
-    PermissionStatus storage = await PermissionHandler()
-        .checkPermissionStatus(PermissionGroup.storage);
+  //   PermissionStatus storage = await PermissionHandler()
+  //       .checkPermissionStatus(PermissionGroup.storage);
 
-    if (camera.index == 1 ||
-        mediaLibrary.index == 1 ||
-        photos.index == 1 ||
-        storage.index == 1) {
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return SimpleDialog(
-              contentPadding: EdgeInsets.symmetric(
-                  horizontal: Tela.de(context).x(20.0),
-                  vertical: Tela.de(context).y(20.0)),
-              titlePadding: EdgeInsets.symmetric(
-                  horizontal: Tela.de(context).x(20.0),
-                  vertical: Tela.de(context).y(20.0)),
-              children: <Widget>[
-                Text('Não é possível prosseguir sem conceder as permissões'),
-                RaisedButton(
-                  child: Text('Ok'),
-                  onPressed: () {
-                    exit(0);
-                  },
-                )
-              ],
-            );
-          }).then((a) {
-        exit(1);
-      });
-    }
-  }
+  //   if (camera.index == 1 ||
+  //       mediaLibrary.index == 1 ||
+  //       photos.index == 1 ||
+  //       storage.index == 1) {
+  //     showDialog(
+  //         context: context,
+  //         builder: (BuildContext context) {
+  //           return SimpleDialog(
+  //             contentPadding: EdgeInsets.symmetric(
+  //                 horizontal: Tela.de(context).x(20.0),
+  //                 vertical: Tela.de(context).y(20.0)),
+  //             titlePadding: EdgeInsets.symmetric(
+  //                 horizontal: Tela.de(context).x(20.0),
+  //                 vertical: Tela.de(context).y(20.0)),
+  //             children: <Widget>[
+  //               Text('Não é possível prosseguir sem conceder as permissões'),
+  //               RaisedButton(
+  //                 child: Text('Ok'),
+  //                 onPressed: () {
+  //                   exit(0);
+  //                 },
+  //               )
+  //             ],
+  //           );
+  //         }).then((a) {
+  //       exit(1);
+  //     });
+  //   }
+  // }
 
   // List<Permissions> permissions = await Permission.getPermissionStatus(
   //     [PermissionName.Storage, PermissionName.Camera]);
@@ -191,7 +191,7 @@ class AppResident extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    permissoes(context);
+    //permissoes(context);
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     SystemChrome.setEnabledSystemUIOverlays([]);
 
@@ -258,7 +258,6 @@ class AppResident extends StatelessWidget {
         MedicamentosPage.tag: (context) =>
             new BaseWindow(conteudo: MedicamentosPage()),
         PerfilPage.tag: (context) => new BaseWindow(conteudo: PerfilPage()),
-        VisionPage.tag: (context) => new BaseWindow(conteudo: VisionPage()),
       },
     );
   }

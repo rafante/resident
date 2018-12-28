@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:firebase_database/firebase_database.dart';
-import 'package:resident/entidades/banco.dart';
 import 'package:resident/entidades/usuarios.dart';
 
 class DadosGrupo {
@@ -9,24 +7,6 @@ class DadosGrupo {
   String nome;
   String descricao;
   List<Usuario> contatos;
-  DatabaseReference _ref;
-
-  void salvar() {
-    if (chave == null || chave == "") chave = _ref.child('grupos').push().key;
-    _ref.child('grupos').child(chave).child('nome').set(nome.trim());
-    _ref.child('grupos').child(chave).child('descricao').set(descricao.trim());
-    if (contatos != null) {
-      contatos.forEach((contato) {
-        _ref
-            .child('grupos')
-            .child(chave)
-            .child('contatos')
-            .push()
-            .child('uid')
-            .set(contato.chave);
-      });
-    } 
-  }
 
   Future<DadosGrupo> getDados() async {
     // await _ref
@@ -44,7 +24,6 @@ class DadosGrupo {
   }
 
   Future<bool> deletar() async {
-    await _ref.child('grupos').child('chave').remove();
     return true;
   }
 

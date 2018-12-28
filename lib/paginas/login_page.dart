@@ -88,8 +88,8 @@ class _LoginPageState extends State<LoginPage> {
   Widget _lista() {
     return Padding(
       padding: EdgeInsets.only(
-          left: Tela.de(context).x(24.0),
-          right: Tela.de(context).y(24.0),
+          left: Tela.de(context).x(20.0),
+          right: Tela.de(context).y(20.0),
           top: Tela.de(context).y(120.0)),
       child: _componentesLogin(),
     );
@@ -109,26 +109,26 @@ class _LoginPageState extends State<LoginPage> {
         Padding(
           padding: EdgeInsets.symmetric(
               vertical: Tela.de(context).x(16.0),
-              horizontal: Tela.de(context).y(16.0)),
+              horizontal: Tela.de(context).y(8.0)),
           child: Material(
             borderRadius: BorderRadius.circular(30.0),
             shadowColor: Colors.lightBlueAccent,
             // elevation: 5.0,
             child: MaterialButton(
-              minWidth: Tela.de(context).x(200.0),
+              minWidth: Tela.de(context).x(80.0),
               height: Tela.de(context).y(52.0),
               elevation: 4.0,
               onPressed: () {
                 _signIn().then((user) {
                   if (user != null) {
                     Usuario.setLogado(context, user).then((evento) {
-                      Fluttertoast.showToast(
-                          msg: "Usuario ${user.displayName} logado",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.BOTTOM,
-                          timeInSecForIos: 1, 
-                          bgcolor: "#e74c3c",
-                          textcolor: '#ffffff');
+                      // Fluttertoast.showToast(
+                      //     msg: "Usuario ${user.displayName} logado",
+                      //     toastLength: Toast.LENGTH_SHORT,
+                      //     gravity: ToastGravity.BOTTOM,
+                      //     timeInSecForIos: 1, 
+                      //     bgcolor: "#e74c3c",
+                      //     textcolor: '#ffffff');
                     });
                   }
                 });

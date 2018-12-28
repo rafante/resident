@@ -10,13 +10,11 @@ dependencies:
   # cupertino_icons: ^0.1.2
   http:
   package_resolver:
-  permission_handler:
   firebase_admob: 
   firebase_analytics: 
   firebase_auth: 
   firebase_core: 
-  firebase_database: 
-  cloud_firestore:
+  cloud_firestore: ^0.8.2+3
   firebase_messaging: 
   firebase_storage: 
   google_sign_in:
@@ -31,7 +29,6 @@ dependencies:
   flutter_cache_manager:
   cached_network_image:
   rounded_modal:
-  firebase_ml_vision:
   flutter_launcher_icons:
   synchronized:
   file_picker:

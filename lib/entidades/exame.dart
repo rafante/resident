@@ -334,13 +334,13 @@ class Exame {
 
     bool erro = false;
     await arquivo.create().catchError((erro) {
-      Fluttertoast.showToast(
-        msg: erro.toString(),
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIos: 1,
-        bgcolor: "#e74c3c",
-      );
+      // Fluttertoast.showToast(
+      //   msg: erro.toString(),
+      //   toastLength: Toast.LENGTH_SHORT,
+      //   gravity: ToastGravity.BOTTOM,
+      //   timeInSecForIos: 1,
+      //   bgcolor: "#e74c3c",
+      // );
       mensagem.deletar();
     });
 

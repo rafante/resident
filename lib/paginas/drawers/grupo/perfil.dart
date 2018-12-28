@@ -54,13 +54,13 @@ class _PerfilPageState extends State<PerfilPage> {
       }
     });
     if (mesmo) {
-      Fluttertoast.showToast(
-          msg: "Esse usuário já existe",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIos: 1,
-          bgcolor: "#e74c3c",
-          textcolor: '#ffffff');
+      // Fluttertoast.showToast(
+      //     msg: "Esse usuário já existe",
+      //     toastLength: Toast.LENGTH_SHORT,
+      //     gravity: ToastGravity.BOTTOM,
+      //     timeInSecForIos: 1,
+      //     bgcolor: "#e74c3c",
+      //     textcolor: '#ffffff');
       return false;
     }
     return !existe || !mesmo;
@@ -79,33 +79,33 @@ class _PerfilPageState extends State<PerfilPage> {
 
   Future<bool> verificarESalvar() async {
     if (_idResidente.text == null || _idResidente.text == "") {
-      Fluttertoast.showToast(
-          msg: "Para prosseguir favor inserir um nome de usuário válido",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIos: 1,
-          bgcolor: "#e74c3c",
-          textcolor: '#ffffff');
+      // Fluttertoast.showToast(
+      //     msg: "Para prosseguir favor inserir um nome de usuário válido",
+      //     toastLength: Toast.LENGTH_LONG,
+      //     gravity: ToastGravity.BOTTOM,
+      //     timeInSecForIos: 1,
+      //     bgcolor: "#e74c3c",
+      //     textcolor: '#ffffff');
       return false;
     }
     if (_telefone.text == null || _telefone.text == "") {
-      Fluttertoast.showToast(
-          msg: "Obrigatório preenchimento do telefone",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIos: 1,
-          bgcolor: "#e74c3c",
-          textcolor: '#ffffff');
+      // Fluttertoast.showToast(
+      //     msg: "Obrigatório preenchimento do telefone",
+      //     toastLength: Toast.LENGTH_LONG,
+      //     gravity: ToastGravity.BOTTOM,
+      //     timeInSecForIos: 1,
+      //     bgcolor: "#e74c3c",
+      //     textcolor: '#ffffff');
       return false;
     }
     if (_idResidente.text == null || _idResidente.text == '') {
-      Fluttertoast.showToast(
-          msg: "Obrigatório preenchimento do telefone",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIos: 1,
-          bgcolor: "#e74c3c",
-          textcolor: '#ffffff');
+      // Fluttertoast.showToast(
+      //     msg: "Obrigatório preenchimento do telefone",
+      //     toastLength: Toast.LENGTH_LONG,
+      //     gravity: ToastGravity.BOTTOM,
+      //     timeInSecForIos: 1,
+      //     bgcolor: "#e74c3c",
+      //     textcolor: '#ffffff');
       return false;
     }
     if (Usuario.eu['idResidente'] != _idResidente.text) {
