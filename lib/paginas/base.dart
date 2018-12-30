@@ -31,7 +31,7 @@ class _BaseWindowState extends State<BaseWindow> {
         return true;
       },
       child: Padding(
-          padding: EdgeInsets.only(top: Tela.de(context).y(50.0)),
+          padding: EdgeInsets.only(top: Tela.de(context).y(0.0)),
           child: getConteudo()),
     );
   }

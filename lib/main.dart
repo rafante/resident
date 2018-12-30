@@ -31,7 +31,7 @@ class AppResident extends StatelessWidget {
       // https://developers.google.com/admob/ios/test-ads
       // adUnitId: BannerAd.testAdUnitId,
       adUnitId: 'ca-app-pub-1343647000894788/4156042098',
-      size: AdSize.banner,
+      size: AdSize.smartBanner,
       targetingInfo: targetingInfo,
       listener: (MobileAdEvent event) {
         print("BannerAd event is $event");

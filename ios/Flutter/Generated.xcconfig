@@ -5,3 +5,4 @@ FLUTTER_TARGET=/Users/macresidente/DEV/teste8/release/resident/lib/main.dart
 FLUTTER_BUILD_DIR=build
 SYMROOT=${SOURCE_ROOT}/../build/ios
 FLUTTER_FRAMEWORK_DIR=/Users/macresidente/DEV/flutter/bin/cache/artifacts/engine/ios
+TRACK_WIDGET_CREATION=true

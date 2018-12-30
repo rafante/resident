@@ -74,13 +74,19 @@ class Usuario {
 
   static void setarUsuarioLocal() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    String nome = eu['nome'] != null ? eu['nome'] : "";
+    String email = eu['email'] != null ? eu['email'] : "";
+    String telefone = eu['telefone'] != null ? eu['telefone'] : "";
+    String urlFoto = eu['urlFoto'] != null ? eu['urlFoto'] : "";
+    String idResidente = eu['idResidente'] != null ? eu['idResidente'] : "";
+    String uid = eu['uid'] != null ? eu['uid'] : "";
     prefs.setStringList('usuario_logado', [
-      eu['nome'],
-      eu['email'],
-      eu['telefone'],
-      eu['urlFoto'],
-      eu['idResidente'],
-      eu['uid']
+      nome,
+      email,
+      telefone,
+      urlFoto,
+      idResidente,
+      uid
     ]);
     List<String> contatos = [];
     if (eu['contatos'] != null) {
