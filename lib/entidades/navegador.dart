@@ -55,7 +55,7 @@ class Navegador extends NavigatorObserver {
     return proxima;
   }
 
-  Widget getConteudo(Tag proxima Map argumentos) {
+  Widget getConteudo(Tag proxima, Map argumentos) {
     Widget conteudo;
     if(argumentos == null){
       argumentos = {
