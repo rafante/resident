@@ -15,22 +15,39 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(FLUTTER_BUILD_NAME)</string>
+	<string>0.0.1</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.371558675525-tuk17lven4vfl1h652uo3stu1l8tppb6</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Share images with other chat users</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Share images with other chat users</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Share images with other chat users</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>UIStatusBarHidden</key>
+	<true/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
@@ -41,24 +58,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<!-- TODO Replace this value: -->
-				<!-- Copied from GoogleServices-Info.plist key REVERSED_CLIENT_ID -->
-				<string>com.googleusercontent.apps.371558675525-tuk17lven4vfl1h652uo3stu1l8tppb6</string>
-			</array>
-		</dict>
-	</array>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Share images with other chat users</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Share images with other chat users</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Share images with other chat users</string>
 </dict>
 </plist>
