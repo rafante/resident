@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">371558675525-ptng7t7s95g5j2kibmfqanh22bpslrbq.apps.googleusercontent.com</string>
+    <string name="firebase_database_url" translatable="false">https://resident-cadu.firebaseio.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">371558675525</string>
+    <string name="google_api_key" translatable="false">AIzaSyALgCciEuzBzQeG8Hw7iXUA-Ctdxs_9u_M</string>
+    <string name="google_app_id" translatable="false">1:371558675525:android:f3f9323fc4060503</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyALgCciEuzBzQeG8Hw7iXUA-Ctdxs_9u_M</string>
+    <string name="google_storage_bucket" translatable="false">resident-cadu.appspot.com</string>
+    <string name="project_id" translatable="false">resident-cadu</string>
+</resources>

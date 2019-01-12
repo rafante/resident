@@ -14,9 +14,11 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _email = TextEditingController(text: '');
   TextEditingController _senha = TextEditingController(text: '');
   final GoogleSignIn googleSignIn = new GoogleSignIn();
+  bool carregando = false;
 
   Future<FirebaseUser> _signIn() async {
     FirebaseUser user;
+    loading(true);
     GoogleSignInAccount googleSignInAccount =
         await googleSignIn.signIn().then((signin) async {
       if (signin != null) {
@@ -27,9 +29,17 @@ class _LoginPageState extends State<LoginPage> {
       }
     }).catchError((erro) {
       erro = true;
+      loading(false);
     });
 
+    loading(false);
     return user;
+  }
+
+  void loading(bool _carregando) {
+    setState(() {
+      carregando = _carregando;
+    });
   }
 
   static Future<String> _testSignInAnonymously() async {
@@ -86,13 +96,29 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _lista() {
-    return Padding(
+    List<Widget> widgets = [];
+    widgets.add(Padding(
       padding: EdgeInsets.only(
           left: Tela.de(context).x(20.0),
           right: Tela.de(context).y(20.0),
           top: Tela.de(context).y(120.0)),
       child: _componentesLogin(),
-    );
+    ));
+    if (carregando) {
+      widgets.add(Opacity(
+          opacity: 0.7,
+          child: ModalBarrier(
+            color: Colors.black,
+            dismissible: true,
+          )));
+      widgets.add(Center(
+        child: CircularProgressIndicator(
+          backgroundColor: Colors.amberAccent,
+          strokeWidth: 8,
+        ),
+      ));
+    }
+    return Stack(children: widgets);
   }
 
   Widget _componentesLogin() {
@@ -126,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
                       //     msg: "Usuario ${user.displayName} logado",
                       //     toastLength: Toast.LENGTH_SHORT,
                       //     gravity: ToastGravity.BOTTOM,
-                      //     timeInSecForIos: 1, 
+                      //     timeInSecForIos: 1,
                       //     bgcolor: "#e74c3c",
                       //     textcolor: '#ffffff');
                     });

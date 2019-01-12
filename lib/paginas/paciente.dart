@@ -14,7 +14,7 @@ class PacientePage extends StatefulWidget {
 
 class _PacientePageState extends State<PacientePage> {
   List<Mensagem> _mensagens = <Mensagem>[];
-
+  bool carregando = false;
   TextEditingController _textController = TextEditingController(text: '');
   bool _isWriting = false;
   String nomePaciente = '';
@@ -75,43 +75,7 @@ class _PacientePageState extends State<PacientePage> {
             padding: EdgeInsets.only(top: Tela.de(context).x(20.0)),
             child: Text(nomePaciente),
           )),
-      body: Column(
-        children: <Widget>[
-          Flexible(
-            child: ListView.builder(
-              itemBuilder: (context, int indice) {
-                Mensagem msg = _mensagens[indice];
-                String horaFormatada = DateFormat('HH:mm').format(msg.hora);
-                return Bubble(
-                    message: msg.texto,
-                    time: horaFormatada,
-                    autor: msg.autorNome,
-                    link: msg.link != null,
-                    onTap: () {
-                      if (msg.link != null) {
-                        Exame.abrirAnexoExame(context, ExameId: msg.link);
-                      }
-                    },
-                    isMe: msg.autor == Usuario.eu['uid'],
-                    delivered: true);
-              },
-              itemCount: _mensagens.length,
-              reverse: true,
-              padding: EdgeInsets.fromLTRB(
-                  Tela.de(context).x(10.0),
-                  Tela.de(context).y(10.0),
-                  Tela.de(context).x(10.0),
-                  Tela.de(context).y(10.0)),
-            ),
-          ),
-          Divider(
-            height: Tela.de(context).y(1.0),
-          ),
-          Container(
-            child: _construirComposer(),
-          )
-        ],
-      ),
+      body: _body(),
       endDrawer: Drawer(
         elevation: 1.0,
         child: ListView(
@@ -201,6 +165,74 @@ class _PacientePageState extends State<PacientePage> {
         ),
       ),
     );
+  }
+
+  Widget _body() {
+    List<Widget> widgets = [];
+    widgets.add(Column(
+      children: <Widget>[
+        Flexible(
+          child: ListView.builder(
+            itemBuilder: (context, int indice) {
+              Mensagem msg = _mensagens[indice];
+              String horaFormatada = DateFormat('HH:mm').format(msg.hora);
+              return Bubble(
+                  message: msg.texto,
+                  time: horaFormatada,
+                  autor: msg.autorNome,
+                  link: msg.link != null,
+                  onTap: () {
+                    if (msg.link != null) {
+                      loading(true);
+                      Exame.abrirAnexoExame(context, ExameId: msg.link)
+                          .then((_) {
+                        loading(false);
+                      })
+                            ..catchError((_) {
+                              loading(false);
+                            });
+                    }
+                  },
+                  isMe: msg.autor == Usuario.eu['uid'],
+                  delivered: true);
+            },
+            itemCount: _mensagens.length,
+            reverse: true,
+            padding: EdgeInsets.fromLTRB(
+                Tela.de(context).x(10.0),
+                Tela.de(context).y(10.0),
+                Tela.de(context).x(10.0),
+                Tela.de(context).y(10.0)),
+          ),
+        ),
+        Divider(
+          height: Tela.de(context).y(1.0),
+        ),
+        Container(
+          child: _construirComposer(),
+        )
+      ],
+    ));
+    if (carregando) {
+      widgets.add(Opacity(
+        opacity: 0.8,
+        child: ModalBarrier(dismissible: false, color: Colors.black),
+      ));
+      widgets.add(Center(
+        child: CircularProgressIndicator(
+          strokeWidth: 5,
+        ),
+      ));
+    }
+    return Stack(
+      children: widgets,
+    );
+  }
+
+  void loading(bool _carregando) {
+    setState(() {
+      carregando = _carregando;
+    });
   }
 
   IconButton _botaoAnexar() {
