@@ -1,5 +1,4 @@
 import 'package:resident/imports.dart';
-import 'package:http/http.dart' as http;
 
 class Exame {
   String key;
@@ -88,27 +87,28 @@ class Exame {
         });
   }
 
-  static Future<Null> _downloadFile(
+  static Future<File> _downloadFile(
       String anexoName, String anexoExtensao) async {
-    StorageReference ref = FirebaseStorage.instance
-        .ref()
-        .child('anexos')
-        .child('$anexoName.$anexoExtensao');
-    print('o Arquivo -> $anexoName.$anexoExtensao');
-    var uri = await ref.getDownloadURL();
-    final http.Response downloadData = await http.get(uri).catchError((erro) {
-      print(erro);
-      return null;
-    });
-    Directory tempDir = await getTemporaryDirectory();
-    String tempPath = tempDir.path;
-    final File tempFile = File('$tempPath/$anexoName.$anexoExtensao');
-    if (tempFile.existsSync()) {
-      await tempFile.delete();
-    }
-    await tempFile.create();
-    assert(await tempFile.readAsString() == "");
-    tempFile.writeAsBytesSync(downloadData.bodyBytes);
+    return DownloadUpload.download('anexos', '$anexoName.$anexoExtensao');
+    // StorageReference ref = FirebaseStorage.instance
+    //     .ref()
+    //     .child('anexos')
+    //     .child('$anexoName.$anexoExtensao');
+    // print('o Arquivo -> $anexoName.$anexoExtensao');
+    // var uri = await ref.getDownloadURL();
+    // final http.Response downloadData = await http.get(uri).catchError((erro) {
+    //   print(erro);
+    //   return null;
+    // });
+    // Directory tempDir = await getTemporaryDirectory();
+    // String tempPath = tempDir.path;
+    // final File tempFile = File('$tempPath/$anexoName.$anexoExtensao');
+    // if (tempFile.existsSync()) {
+    //   await tempFile.delete();
+    // }
+    // await tempFile.create();
+    // assert(await tempFile.readAsString() == "");
+    // tempFile.writeAsBytesSync(downloadData.bodyBytes);
     // final StorageFileDownloadTask task = ref.writeToFile(tempFile);
     // final int byteCount = (await task.future).totalByteCount;
     // final List<int> tempFileContents = await tempFile.readAsBytesSync();

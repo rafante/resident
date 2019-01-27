@@ -19,6 +19,8 @@ class _PacientePageState extends State<PacientePage> {
   bool _isWriting = false;
   String nomePaciente = '';
   Paciente paciente;
+  bool _gravando = false;
+  FlutterSound flutterSound = new FlutterSound();
 
   @override
   void initState() {
@@ -50,6 +52,7 @@ class _PacientePageState extends State<PacientePage> {
             autorNome: documento.data['autorNome'],
             hora: data,
             link: documento.data['link'],
+            audio: documento.data['audio'],
             texto: documento.data['texto'],
           );
           mensagens.add(mensagem);
@@ -175,12 +178,21 @@ class _PacientePageState extends State<PacientePage> {
           child: ListView.builder(
             itemBuilder: (context, int indice) {
               Mensagem msg = _mensagens[indice];
+              if (msg.audio != null) {
+                //Se é uma mensagem de áudio, verifica se ela já foi baixada, caso contrário, baixa-a
+                String colecao = msg.audio.split('\/')[1];
+                String arquivoNome = msg.audio.split('\/').last;
+                DownloadUpload.download(colecao, arquivoNome);
+              }
               String horaFormatada = DateFormat('HH:mm').format(msg.hora);
               return Bubble(
-                  message: msg.texto,
+                  message: msg.audio != null
+                      ? msg.audio.split('\/').last
+                      : msg.texto,
                   time: horaFormatada,
                   autor: msg.autorNome,
-                  link: msg.link != null,
+                  audio: msg.audio != null,
+                  link: msg.link,
                   onTap: () {
                     if (msg.link != null) {
                       loading(true);
@@ -233,6 +245,43 @@ class _PacientePageState extends State<PacientePage> {
     setState(() {
       carregando = _carregando;
     });
+  }
+
+  StreamSubscription _streamGravacao;
+
+  Widget _botaoAudio() {
+    return GestureDetector(
+      onTapCancel: () {
+        flutterSound.stopRecorder();
+        if (_streamGravacao != null) {
+          _streamGravacao.cancel();
+          _streamGravacao = null;
+          criarMensagem(Usuario.uid, 'enviando audio...', DateTime.now())
+              .then((mensagem) {
+            DownloadUpload.upload(widget.pacienteKey, 'gravacao', 'mp4',
+                    nomeNoBucket: mensagem.chave)
+                .then((task) async {
+              String link = await task.ref.getPath();
+              mensagem.setar(audio: link, link: link);
+              mensagem.salvar();
+            });
+          });
+        }
+      },
+      onTapDown: (tap) async {
+        var tempDir = await getTemporaryDirectory();
+        String p = '${tempDir.path}/gravacao.mp4';
+        String path = await flutterSound.startRecorder(p);
+        print('startRecorder: $path');
+
+        _streamGravacao = flutterSound.onRecorderStateChanged.listen((_) {});
+      },
+      child: IconButton(
+        icon: Icon(Icons.keyboard_voice),
+        color: Colors.black,
+        onPressed: () {},
+      ),
+    );
   }
 
   IconButton _botaoAnexar() {
@@ -294,6 +343,7 @@ class _PacientePageState extends State<PacientePage> {
               child: Row(
                 children: <Widget>[
                   _botaoAnexar(),
+                  _botaoAudio(),
                   _isWriting
                       ? IconButton(
                           icon: Icon(

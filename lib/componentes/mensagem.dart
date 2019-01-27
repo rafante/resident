@@ -8,6 +8,7 @@ class Mensagem {
   String texto;
   DateTime hora;
   String link;
+  String audio;
 
   Mensagem(
       {this.autor,
@@ -16,14 +17,16 @@ class Mensagem {
       this.texto,
       this.hora,
       this.chave,
-      this.link});
+      this.link,
+      this.audio});
 
   static Future<Mensagem> criar(String pacienteKey,
       {String autor,
       String autorNome,
       String texto,
       DateTime hora,
-      String link}) async {
+      String link,
+      String audio}) async {
     DocumentReference ref =
         Firestore.instance.collection('mensagens').document();
     if (autor == null) autor = Usuario.eu['uid'];
@@ -38,7 +41,8 @@ class Mensagem {
         hora: hora,
         link: link,
         pacienteKey: pacienteKey,
-        texto: texto);
+        texto: texto,
+        audio: audio);
     ref.setData({
       'chave': mensagem.chave,
       'pacienteKey': mensagem.pacienteKey,
@@ -47,6 +51,7 @@ class Mensagem {
       'texto': mensagem.texto,
       'hora': mensagem.hora.millisecondsSinceEpoch,
       'link': mensagem.link,
+      'audio': mensagem.audio
     });
     return mensagem;
   }
@@ -58,7 +63,8 @@ class Mensagem {
       String autorNome,
       String texto,
       DateTime hora,
-      String link}) {
+      String link,
+      String audio}) {
     if (chave != null) this.chave = chave;
     if (pacienteKey != null) this.pacienteKey = pacienteKey;
     if (autor != null) this.autor = autor;
@@ -66,6 +72,7 @@ class Mensagem {
     if (hora != null) this.hora = hora;
     if (link != null) this.link = link;
     if (texto != null) this.texto = texto;
+    if (audio != null) this.audio = audio;
   }
 
   Future<Mensagem> carregar() async {
@@ -80,6 +87,7 @@ class Mensagem {
             ? DateTime.fromMillisecondsSinceEpoch(documento.data['hora'])
             : DateTime.now();
         this.link = documento.data['link'];
+        this.audio = documento.data['audio'];
       }
     });
     return this;
@@ -100,6 +108,7 @@ class Mensagem {
       'texto': texto,
       'hora': hora.millisecondsSinceEpoch,
       'link': link,
+      'audio': audio
     });
   }
 }

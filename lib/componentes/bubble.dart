@@ -1,6 +1,6 @@
 import 'package:resident/imports.dart';
 
-class Bubble extends StatelessWidget {
+class Bubble extends StatefulWidget {
   Bubble(
       {this.message,
       this.time,
@@ -8,20 +8,44 @@ class Bubble extends StatelessWidget {
       this.isMe,
       this.autor,
       this.onTap,
-      this.link});
+      this.link,
+      this.audio});
 
   final String message, time;
   final String autor;
   final Function onTap;
   final delivered, isMe;
-  final bool link;
+  final String link;
+  final bool audio;
+  _BubbleState createState() => _BubbleState();
+}
+
+class _BubbleState extends State<Bubble> {
+  StreamSubscription soundStream;
+  static FlutterSound flutterSound = new FlutterSound();
+  AudioPlayer player;
+  double pontoAudio = 0;
+  int duracao = 0;
+  AudioPlayerState playerState = AudioPlayerState.STOPPED;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    AudioPlayer.logEnabled = false;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final bg = isMe ? Colors.greenAccent.shade100 : Colors.white;
-    final align = isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start;
-    final icon = delivered ? Icons.done_all : Icons.done;
-    final radius = isMe
+    return _body();
+  }
+
+  Widget _body() {
+    final bg = widget.isMe ? Colors.greenAccent.shade100 : Colors.white;
+    final align =
+        widget.isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start;
+    final icon = widget.delivered ? Icons.done_all : Icons.done;
+    final radius = widget.isMe
         ? BorderRadius.only(
             topRight: Radius.circular(5.0),
             bottomLeft: Radius.circular(10.0),
@@ -48,135 +72,207 @@ class Bubble extends StatelessWidget {
             color: bg,
             borderRadius: radius,
           ),
-          child: InkWell(
-            onTap: onTap,
-            child: Stack(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(
-                      right: Tela.de(context).x(48.0),
-                      top: Tela.de(context).y(15.0)),
-                  child: Text(
-                    message,
-                    style: TextStyle(
-                        color: link ? Colors.blueAccent : Colors.black,
-                        decoration: link
-                            ? TextDecoration.underline
-                            : TextDecoration.none),
-                  ),
-                ),
-                Positioned(
-                  bottom: Tela.de(context).y(0.0),
-                  right: Tela.de(context).x(0.0),
-                  child: Row(
-                    children: <Widget>[
-                      Text(time,
-                          style: TextStyle(
-                            color: Colors.black38,
-                            fontSize: Tela.de(context).abs(10.0),
-                          )),
-                      SizedBox(width: Tela.de(context).x(3.0)),
-                      Icon(
-                        icon,
-                        size: Tela.de(context).abs(12.0),
-                        color: Colors.black38,
-                      )
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      right: Tela.de(context).x(48.0),
-                      top: Tela.de(context).y(0.0)),
-                  child: Text(
-                    autor,
-                    style: TextStyle(color: Colors.blueGrey),
-                  ),
-                )
-              ],
-            ),
-          ),
-        )
+          child: _conteudo(),
+        ),
       ],
     );
   }
-}
 
-class BubbleScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.blueGrey.shade50,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: .9,
-        title: Text(
-          'Putra',
-          style: TextStyle(color: Colors.green),
+  List<Widget> _audioContent() {
+    IconButton botao = botaoAudio();
+
+    return [
+      Padding(
+        padding: EdgeInsets.only(
+            right: Tela.de(context).x(48.0), top: Tela.de(context).y(0.0)),
+        child: Text(
+          widget.autor,
+          style: TextStyle(color: Colors.blueGrey),
         ),
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Colors.green,
-          ),
-          onPressed: () {},
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.videocam,
-              color: Colors.green,
-            ),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.call,
-              color: Colors.green,
-            ),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.more_vert,
-              color: Colors.green,
-            ),
-            onPressed: () {},
-          )
-        ],
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+      Container(
+        width: Tela.de(context).x(264),
+        child: Row(
           children: <Widget>[
-            Bubble(
-              message: 'Hi there, this is a message',
-              time: '12:00',
-              delivered: true,
-              isMe: false,
-            ),
-            Bubble(
-              message: 'Whatsapp like bubble talk',
-              time: '12:01',
-              delivered: true,
-              isMe: false,
-            ),
-            Bubble(
-              message: 'Nice one, Flutter is awesome',
-              time: '12:00',
-              delivered: true,
-              isMe: true,
-            ),
-            Bubble(
-              message: 'I\'ve told you so dude!',
-              time: '12:00',
-              delivered: true,
-              isMe: false,
-            ),
+            botao,
+            Slider(
+                onChanged: (_) {
+                  controleAudio(_);
+                },
+                min: 0,
+                max: 1,
+                value: pontoAudio,
+                label: pontoAudio.toString())
           ],
         ),
-      ),
+      )
+    ];
+  }
+
+  List<Widget> _linkContent() {
+    return [
+      Stack(
+        children: <Widget>[
+          Text(
+            widget.autor,
+            style: TextStyle(color: Colors.blueGrey),
+          ),
+          Column(
+            children: <Widget>[
+              SizedBox(
+                height: Tela.de(context).y(5),
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.image,
+                  size: 40,
+                ),
+                onPressed: widget.onTap,
+              ),
+              Text(
+                'Abrir',
+                style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    fontSize: Tela.de(context).abs(12),
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue),
+              )
+            ],
+          )
+        ],
+      )
+    ];
+  }
+
+  List<Widget> _simpleContent() {
+    return [
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            widget.autor,
+            style: TextStyle(color: Colors.blueGrey),
+          ),
+          Text(widget.message)
+        ],
+      )
+    ];
+  }
+
+  Widget _conteudo() {
+    List<Widget> widgs = [];
+    if (widget.audio)
+      widgs = _audioContent();
+    else if (widget.link != null)
+      widgs = _linkContent();
+    else
+      widgs = _simpleContent();
+
+    return Stack(
+      children: widgs,
     );
+  }
+
+  void controleAudio(double _) async {
+    setState(() {
+      pontoAudio = _;
+      if (playerState == AudioPlayerState.PLAYING) {
+        pausarAudio();
+        resumirAudio();
+      }
+    });
+  }
+
+  void pararAudio() async {
+    player.stop();
+  }
+
+  void resumirAudio() async {
+    player.seek(Duration(milliseconds: (pontoAudio * duracao).toInt()));
+    player.resume();
+  }
+
+  void pausarAudio() async {
+    player.pause();
+  }
+
+  void tocarAudio() async {
+    player = new AudioPlayer();
+    player.audioPlayerStateChangeHandler = (_) {
+      setState(() {
+        playerState = _;
+      });
+    };
+    String tempDir = await DownloadUpload.tempDir();
+    String audioPath = '$tempDir/${widget.message}';
+
+    int resultado = await player.play(audioPath, isLocal: true);
+    if (pontoAudio > 0 &&
+        pontoAudio < 1 &&
+        playerState != AudioPlayerState.COMPLETED) {
+      player.seek(Duration(milliseconds: (pontoAudio * duracao).toInt()));
+    }
+    print('deu? $resultado');
+    if (resultado == 1) {
+      player.durationHandler = (_) {
+        if (duracao != _.inMilliseconds) {
+          setState(() {
+            duracao = _.inMilliseconds;
+          });
+        }
+      };
+      player.completionHandler = () {
+        setState(() {
+          pontoAudio = 0;
+        });
+      };
+      player.positionHandler = (_) {
+        setState(() {
+          if (duracao != 0)
+            pontoAudio = _.inMilliseconds / duracao;
+          else
+            pontoAudio = 0;
+        });
+      };
+    }
+  }
+
+  Widget botaoAudio() {
+    IconButton botao;
+    switch (playerState) {
+      case AudioPlayerState.STOPPED:
+        botao = IconButton(
+          icon: Icon(Icons.play_circle_filled),
+          onPressed: () {
+            tocarAudio();
+          },
+        );
+        break;
+      case AudioPlayerState.PAUSED:
+        botao = IconButton(
+          icon: Icon(Icons.play_circle_filled),
+          onPressed: () {
+            resumirAudio();
+          },
+        );
+        break;
+      case AudioPlayerState.PLAYING:
+        botao = IconButton(
+          icon: Icon(Icons.pause_circle_filled),
+          onPressed: () {
+            pausarAudio();
+          },
+        );
+        break;
+      case AudioPlayerState.COMPLETED:
+        botao = IconButton(
+          icon: Icon(Icons.play_circle_filled),
+          onPressed: () {
+            tocarAudio();
+          },
+        );
+        break;
+    }
+    return botao;
   }
 }

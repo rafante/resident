@@ -32,6 +32,8 @@ dependencies:
   flutter_launcher_icons:
   synchronized:
   file_picker:
+  flutter_sound: 1.2.1
+  audioplayers: ^0.8.0
   
 dev_dependencies:
   flutter_test:
